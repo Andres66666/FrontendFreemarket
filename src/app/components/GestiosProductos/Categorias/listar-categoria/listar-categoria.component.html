@@ -1,11 +1,10 @@
-<div class="container mt-5">
-  <div class="card shadow rounded-4">
+<div class="container-fluid container-md container-lg">
     <div class="card-body">
-      <h2 class="text-center my-4">Lista de Categorías</h2>
+      <h2 class="text-center mb-4">Lista de Categorías</h2>
+      <!-- Buscador -->
+      <div class="row g-3 mb-3">
 
-      <!-- Campo de búsqueda -->
-      <div class="row mb-4 gy-3">
-        <div class="col-12 col-md-10">
+        <div class="col-12 col-md-9">
           <input
             type="text"
             class="form-control"
@@ -13,36 +12,48 @@
             [(ngModel)]="searchNombreCategoria"
           />
         </div>
-        <div class="col-12 col-md-2 d-flex align-items-end">
+
+        <div class="col-12 col-md-3">
           <button
-            class="btn btn-success w-100 d-flex align-items-center justify-content-center"
+            class="btn btn-success w-100"
             (click)="registrarCategoriaClick()"
           >
-            <i class="bi bi-journal-plus fs-5 me-2"></i>
+            <i class="bi bi-journal-plus me-2"></i>
             Registrar
           </button>
         </div>
+
       </div>
 
-      <!-- Mensajes -->
+      <!-- MENSAJES -->
+
       <div *ngIf="!categorias.length && !loading" class="text-center">
         No hay categorías disponibles.
       </div>
 
-      <div *ngIf="loading" class="text-center">Cargando...</div>
+      <div *ngIf="loading" class="text-center">
+        Cargando...
+      </div>
 
-      <!-- Tabla -->
-      <div *ngIf="!loading" class="table-responsive">
-        <table class="table table-striped table-bordered">
+      <!-- ========================= -->
+      <!-- TABLA SOLO PARA PC -->
+      <!-- ========================= -->
+
+      <div class="table-responsive d-none d-md-block" *ngIf="!loading">
+
+        <table class="table table-striped table-bordered align-middle">
+
           <thead class="text-center">
             <tr>
-              <th>Nombre de la Categoría</th>
+              <th>Nombre</th>
               <th>Descripción</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
+
           <tbody>
+
             <tr
               *ngFor="let categoria of filteredCategorias()"
               [ngClass]="{
@@ -50,46 +61,105 @@
                 'table-success': categoria.estado_categoria
               }"
             >
-              <td class="text-start">{{ categoria.nombre_categoria }}</td>
-              <td class="text-start">{{ categoria.descripcion }}</td>
+
+              <td>{{ categoria.nombre_categoria }}</td>
+
+              <td>{{ categoria.descripcion }}</td>
+
               <td class="text-center">
                 {{ categoria.estado_categoria ? "Activo" : "Inactivo" }}
               </td>
+
               <td class="text-center">
+
                 <button
-                  class="btn btn-primary me-2"
+                  class="btn btn-primary btn-sm me-2"
                   (click)="editarCategoriaClick(categoria.id)"
                 >
-                  <i class="bi bi-pencil-square me-1"></i> Editar
+                  Editar
                 </button>
+
                 <button
-                  class="btn"
-                  [ngClass]="
-                    categoria.estado_categoria ? 'btn-danger' : 'btn-success'
-                  "
+                  class="btn btn-sm"
+                  [ngClass]="categoria.estado_categoria ? 'btn-danger' : 'btn-success'"
                   (click)="toggleCategoriaActivo(categoria)"
                 >
-                  <i
-                    [ngClass]="
-                      categoria.estado_categoria
-                        ? 'fas fa-toggle-off'
-                        : 'fas fa-toggle-on'
-                    "
-                    class="me-1"
-                  ></i>
                   {{ categoria.estado_categoria ? "Desactivar" : "Activar" }}
                 </button>
+
               </td>
+
             </tr>
+
           </tbody>
+
         </table>
+
       </div>
 
-      <!-- Paginación -->
+      <!-- ========================= -->
+      <!-- CARDS PARA CELULAR -->
+      <!-- ========================= -->
+
+      <div class="d-md-none">
+
+        <div
+          class="card mb-3 shadow-sm"
+          *ngFor="let categoria of filteredCategorias()"
+        >
+
+          <div class="card-body">
+
+            <h5 class="card-title">
+              {{ categoria.nombre_categoria }}
+            </h5>
+
+            <p class="card-text">
+              {{ categoria.descripcion }}
+            </p>
+
+            <p class="mb-2">
+              <strong>Estado:</strong>
+              <span
+                class="badge"
+                [ngClass]="categoria.estado_categoria ? 'bg-success' : 'bg-danger'"
+              >
+                {{ categoria.estado_categoria ? "Activo" : "Inactivo" }}
+              </span>
+            </p>
+
+            <div class="d-grid gap-2">
+
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="editarCategoriaClick(categoria.id)"
+              >
+                Editar
+              </button>
+
+              <button
+                class="btn btn-sm"
+                [ngClass]="categoria.estado_categoria ? 'btn-danger' : 'btn-success'"
+                (click)="toggleCategoriaActivo(categoria)"
+              >
+                {{ categoria.estado_categoria ? "Desactivar" : "Activar" }}
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PAGINACIÓN -->
+
       <div
-        class="d-flex flex-wrap justify-content-center justify-content-md-between align-items-center mt-3 gap-2 text-center"
+        class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3 gap-2"
         *ngIf="categorias.length > 0"
       >
+
         <button
           class="btn btn-secondary"
           (click)="previousPage()"
@@ -97,7 +167,11 @@
         >
           Anterior
         </button>
-        <span class="px-2">Página {{ page }}</span>
+
+        <span class="fw-semibold">
+          Página {{ page }}
+        </span>
+
         <button
           class="btn btn-secondary"
           (click)="nextPage()"
@@ -105,7 +179,10 @@
         >
           Siguiente
         </button>
+
       </div>
+
     </div>
-  </div>
+
+
 </div>
