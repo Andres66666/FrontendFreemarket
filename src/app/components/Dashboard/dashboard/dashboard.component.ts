@@ -1,9 +1,14 @@
+// dashboard.component.ts
 import { Component } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
+type ImageItem = {
+  src: string;
+  category: 'bancos' | 'juegos' | string;
+  alt: string;
+};
 
 @Component({
   selector: 'app-dashboard',
@@ -11,56 +16,98 @@ import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
   imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxChartsModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  
 })
 export class DashboardComponent {
-  
-  // 🔹 Colección de imágenes (solo rutas)
-  images = [
+  images: ImageItem[] = [
     { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918463/BCP_rchxxv.jpg', category: 'bancos', alt: 'BCP' },
     { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918463/CUENTA_UNION_1_svdgdo.jpg', category: 'bancos', alt: 'Cuenta Unión 0' },
     { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918464/CUENTA_UNION_0_kih6zp.jpg', category: 'bancos', alt: 'Cuenta Unión 1' },
     { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918464/YAPE_shmdtn.jpg', category: 'bancos', alt: 'Yape' },
-    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767919557/WhatsApp_Image_2026-01-08_at_20.30.31_nddphn.jpg', category: 'bancos', alt: 'Yape' },
-    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767919783/yasta_g63rgq.jpg', category: 'bancos', alt: 'Yape' },
-
+    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767919783/yasta_g63rgq.jpg', category: 'bancos', alt: 'Yasta' },
+    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1771986339/takenos_b8aba9.jpg', category: 'bancos', alt: 'Takenos' },
 
   ];
 
   selectedCategory = '';
-  filteredImages = [...this.images];
+  filteredImages: ImageItem[] = [...this.images];
 
   currentIndex = 0;
   showModal = false;
 
-  // 🔹 Filtro dinámico
-  filterImages() {
+  whatsappNumber = '';
+
+  get currentImage(): ImageItem | null {
+
+    return this.filteredImages?.length
+      ? this.filteredImages[this.currentIndex]
+      : null;
+
+  }
+
+  filterImages(): void {
+
     this.filteredImages = this.selectedCategory
       ? this.images.filter(img => img.category === this.selectedCategory)
       : [...this.images];
 
     this.currentIndex = 0;
+
   }
 
-  // 🔹 Modal
-  openModal(index: number) {
+  openModal(index: number): void {
+
     this.currentIndex = index;
     this.showModal = true;
+
   }
 
-  closeModal() {
+  closeModal(): void {
+
     this.showModal = false;
+
   }
 
-  prevImage() {
-    this.currentIndex =
-      (this.currentIndex - 1 + this.filteredImages.length) %
-      this.filteredImages.length;
+  sendToWhatsapp(): void {
+
+    const img = this.currentImage;
+
+    if (!img) return;
+
+    const phone = (this.whatsappNumber || '').replace(/\D/g, '');
+
+    const msg = `Imagen: ${img.alt}\n${img.src}`;
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+
+    window.open(url, '_blank');
+
   }
 
-  nextImage() {
-    this.currentIndex =
-      (this.currentIndex + 1) %
-      this.filteredImages.length;
+  sendGameToWhatsapp(): void {
+
+    const phone = (this.whatsappNumber || '').replace(/\D/g, '');
+
+    const gameLink =
+      'https://www.canva.com/design/DAGyyFxind4/EQtCcchUR3V2dc-3_OJgDQ/view';
+
+    const msg = `🎮 Te comparto este juego:\n${gameLink}`;
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+
+    window.open(url, '_blank');
+
   }
+
+  async copyImageLink(): Promise<void> {
+
+    const img = this.currentImage;
+
+    if (!img) return;
+
+    await navigator.clipboard.writeText(img.src);
+
+    alert('Link copiado');
+
+  }
+
 }

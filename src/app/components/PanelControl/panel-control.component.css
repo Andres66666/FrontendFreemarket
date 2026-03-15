@@ -1,121 +1,33 @@
-/* Layout general */
-.layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-/* Navbar fijo en la parte superior */
-.header {
-    position: sticky;
-    top: 0;
-    z-index: 1030;
-    height: 56px;
-    /* Altura estándar de navbar */
-}
-
-/* Sidebar debajo del navbar */
 .leftSide {
-    position: fixed;
-    top: 56px;
-    /* Debajo del navbar */
-    left: 0;
-    height: calc(100vh - 56px);
-    width: 250px;
-    background-color: #f8f9fa;
-    transition: transform 0.3s ease-in-out;
-    z-index: 1020;
-    overflow-y: auto;
+  width: 290px;
+  background: #6CC9BE;
+  min-height: calc(100vh - 56px);
+  transition: transform 0.3s ease-in-out;
 }
 
-/* Estados del sidebar */
-.sidebar-open {
-    transform: translateX(0);
-}
-
-.sidebar-closed {
-    transform: translateX(-100%);
-}
-
-/* Contenido principal */
-.main-content {
-    margin-top: 56px;
-    /* Compensa el navbar */
-    flex: 1;
-    transition: margin-left 0.3s ease-in-out;
-}
-
-.content-shifted {
-    margin-left: 250px;
-}
-
-/* Overlay para móvil */
-.overlay {
-    position: fixed;
-    top: 56px;
-    left: 0;
-    width: 100%;
-    height: calc(100% - 56px);
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1019;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-        opacity 0.3s,
-        visibility 0.3s;
-}
-
-.overlay-visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Responsive para desktop */
+/* En desktop siempre visible */
 @media (min-width: 768px) {
-    .leftSide {
-        transform: translateX(0);
-    }
-
-    .sidebar-closed {
-        transform: translateX(-250px);
-    }
-
-    .main-content {
-        margin-left: 0;
-    }
-
-    .content-shifted {
-        margin-left: 250px;
-    }
+  .leftSide {
+    transform: translateX(0) !important;
+    position: relative;
+  }
 }
 
-.toggle-button {
-    background-color: transparent;
-    color: rgb(1, 148, 4);
-    padding: 10px 10px; /* Aumenta el tamaño del botón */
-    border-radius: 10px; /* Más redondeado */
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem; /* Aumenta el tamaño base del ícono */
-}
+/* En móvil */
+@media (max-width: 767.98px) {
+  .leftSide {
+    position: fixed;
+    top: 87px; /* altura navbar */
+    left: 0;
+    z-index: 1050;
+    height: 100%;
+  }
 
-.toggle-button i {
-    font-size: 1.5em; /* Escala 3 veces más grande el ícono */
-}
+  .sidebar-closed {
+    transform: translateX(-100%);
+  }
 
-.toggle-button:hover {
-    background-color: rgb(255, 255, 255);
-}
-
-/* Para todos los items de la lista dentro del sidebar */
-aside.leftSide .list-group li.d-flex {
-  transition: background-color 0.3s; /* Suaviza la transición del fondo */
-  cursor: pointer;
-  border-radius: 8px; /* Esquinas redondeadas */
-  padding: 5px 10px; /* Un poco de espacio interno */
-}
-
-/* Efecto hover: fondo semi-transparente verde */
-aside.leftSide .list-group li.d-flex:hover {
-  background-color: rgba(0, 128, 0, 0.15); /* Verde suave y transparente */
+  .sidebar-open {
+    transform: translateX(0);
+  }
 }

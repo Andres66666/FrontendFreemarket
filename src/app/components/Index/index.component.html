@@ -1,214 +1,291 @@
-<header class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow" id="navbar">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <img src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png" width="150"
-        height="70" class="d-inline-block align-top" alt="Logo" />
+<!-- NAVBAR PROFESIONAL -->
+<header class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+
+  <div class="container">
+
+    <a class="navbar-brand d-flex align-items-center">
+      <img src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
+           width="120">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+    <button class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#menu">
+
       <span class="navbar-toggler-icon"></span>
+
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto flex-column flex-md-row align-items-start align-items-md-center">
+    <div class="collapse navbar-collapse" id="menu">
 
-              <li class="d-flex align-items-center">
-          <div class="col-auto text-center pe-2">
-            <i class="fas fa-sign-in-alt"></i>
-          </div>
-          <div class="col text-start">
-            <a class="btn" (click)="navigateToLogin()">
-              <strong>Iniciar Sesión</strong>
-            </a>
-          </div>
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+
+        <li class="nav-item me-3">
+          <a class="nav-link text-dark">Inicio</a>
+        </li>
+
+        <li class="nav-item me-3">
+          <a class="nav-link text-dark">Productos</a>
+        </li>
+
+        <li class="nav-item me-3">
+          <a class="nav-link text-dark">Contacto</a>
+        </li>
+
+        <li class="nav-item">
+          <button class="btn btn-warning px-4" (click)="navigateToLogin()">
+            Iniciar Sesión
+          </button>
         </li>
 
       </ul>
+
     </div>
+
   </div>
+
 </header>
 
 
-<main class="container-fluid main-background">
-  <div class="text-center-titulo mt-5">
-    <h2 data-heading="¡Free market!" contenteditable spellcheck="false">
-      ¡Free market!
-      <span class="animation" aria-hidden="true">¡Free market!</span>
-    </h2>
-  </div>
-</main>
 
-<section class="container-fluid my-5">
+<!-- HERO PRINCIPAL -->
+<section class="hero-section">
+
   <div class="container">
-    <div class="row align-items-center justify-content-center mb-5">
-      <div class="col-12 col-md-5 text-center mb-4 mb-md-0">
-        <img
-          src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124479/perfil_pyer5j.png"
-          alt="Perfil del Propietario"
-          class="img-fluid rounded-circle"
-          style="max-width: 100%; height: auto"
-        />
-      </div>
-      <div class="col-12 col-md-7">
-        <p class="text-dark fs-5 text-justify" style="text-align: justify">
-          En Freemarket, somos tu tienda virtual de confianza, donde la variedad
-          y la calidad se encuentran al alcance de un clic. Con más de 10 años
-          en el mercado, ofrecemos una amplia gama de productos, desde
-          tecnología de vanguardia hasta artículos de uso diario, todos
-          disponibles para ser personalizados según tus necesidades. Nuestro
-          compromiso es brindarte una experiencia de compra excepcional, con
-          envíos a nivel nacional y atención al cliente dedicada. Descubre un
-          mundo de posibilidades y haz tus pedidos con la certeza de que en
-          Freemarket, ¡tu satisfacción es nuestra prioridad!
+
+    <div class="row align-items-center">
+
+      <div class="col-lg-6 text-white">
+
+        <h1 class="hero-title">
+          Accesorios para celulares
+        </h1>
+
+        <p class="hero-text">
+          Encuentra cargadores, audífonos, protectores, cables, power banks
+          y los mejores accesorios tecnológicos al mejor precio.
         </p>
+
       </div>
+
+
+      <!-- CARRUSEL -->
+<!-- CARRUSEL -->
+<div class="col-lg-6">
+
+  <div id="carouselProductos" class="carousel slide" data-bs-ride="carousel">
+
+    <div class="carousel-inner">
+
+      <div class="carousel-item active">
+        <div class="carousel-frame">
+          <img src="https://storage.comprasmartphone.com/smartphones/samsung-galaxy-s23.png">
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-frame">
+          <img src="https://d13pvy8xd75yde.cloudfront.net/global/phones/spark10/blue.png">
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-frame">
+          <img src="https://www.honor.com/content/dam/honor/common/product-list/product-series/honor-400/honor-400-gold-list.png">
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-frame">
+          <img src="https://storage.googleapis.com/images-production-egx/products/elgeniox-store/2025-07-28-audifonos-huavi-over-ear-fh710-pro--471756--2620250728T185014212.jpg">
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-frame">
+          <img src="https://shop-cdncname.huawei.com/mx/uomcdn/MXHW/pms/202412/gbom/6942103138768/428_428_CC37797D4978E945A7AAAA50DD9EAA81mp.png">
+        </div>
+      </div>
+
+     
+
     </div>
+
+    <!-- BOTONES -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselProductos" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselProductos" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+
+  </div>
+
+</div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- SECCION INFORMACION -->
+<section class="container my-5">
+
+  <div class="row align-items-center">
+
+    <div class="col-lg-5 text-center">
+
+      <img
+      src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124479/perfil_pyer5j.png"
+      class="img-fluid rounded-circle shadow"
+      width="250">
+
+    </div>
+
+    <div class="col-lg-7">
+
+      <h2 class="mb-4">Sobre Nosotros</h2>
+
+      <p class="text-muted">
+
+        En Freemarket somos una tienda especializada en
+        accesorios para celulares y tecnología.
+        Nuestro objetivo es ofrecer productos de calidad
+        con precios accesibles y un servicio confiable.
+
+      </p>
+
+      <p class="text-muted">
+
+        Contamos con cargadores, audífonos, fundas,
+        cables USB, power banks, soportes para autos
+        y muchos más accesorios tecnológicos.
+
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- MISION Y VISION -->
+<section class="bg-light py-5">
+
+  <div class="container">
 
     <div class="row g-4">
-      <div class="col-12 col-md-6" id="mision">
-        <div class="card h-100">
-          <div class="row g-0 h-100">
-            <div class="col-12 col-md-4">
-              <img
-                src="https://storage.googleapis.com/a1aa/image/RLj7lIXnGoahJ1cfWud6fjrTmwojJTdrAlJRBBVZIFrgIfinA.jpg"
-                class="img-fluid rounded-start w-100 h-100"
-                alt="Misión"
-                style="object-fit: cover"
-              />
-            </div>
-            <div class="col-12 col-md-8 d-flex align-items-center">
-              <div class="card-body">
-                <h5 class="card-title text-center">Misión</h5>
-                <p class="card-text text-justify" style="text-align: justify">
-                  En Freemarket, nuestra misión es ofrecer a nuestros clientes
-                  una experiencia de compra excepcional, con una amplia variedad
-                  de productos de calidad. Nos comprometemos a satisfacer sus
-                  necesidades mediante un servicio personalizado y un enfoque en
-                  la sostenibilidad.
-                </p>
-              </div>
-            </div>
+
+      <div class="col-lg-6">
+
+        <div class="card shadow h-100 border-0">
+
+          <div class="card-body text-center">
+
+            <h3 class="mb-3">Misión</h3>
+
+            <p class="text-muted">
+
+              Brindar a nuestros clientes accesorios
+              tecnológicos de calidad con precios
+              accesibles y excelente atención.
+
+            </p>
+
           </div>
+
         </div>
+
       </div>
 
-      <div class="col-12 col-md-6" id="vision">
-        <div class="card h-100">
-          <div class="row g-0 h-100">
-            <div class="col-12 col-md-4">
-              <img
-                src="https://storage.googleapis.com/a1aa/image/kUZq7G2AIi65KZKYhsnJOjdQeIYfr02Cldl8xy58h0eaQeFPB.jpg"
-                class="img-fluid rounded-start w-100 h-100"
-                alt="Visión"
-                style="object-fit: cover"
-              />
-            </div>
-            <div class="col-12 col-md-8 d-flex align-items-center">
-              <div class="card-body">
-                <h5 class="card-title text-center">Visión</h5>
-                <p class="card-text text-justify" style="text-align: justify">
-                  Ser la tienda virtual de referencia, reconocida por nuestra
-                  diversidad de productos, atención al cliente excepcional y
-                  compromiso con la sostenibilidad. Aspiramos a transformar la
-                  forma en que las personas compran en línea, creando un espacio
-                  de calidad y confianza.
-                </p>
-              </div>
-            </div>
+      <div class="col-lg-6">
+
+        <div class="card shadow h-100 border-0">
+
+          <div class="card-body text-center">
+
+            <h3 class="mb-3">Visión</h3>
+
+            <p class="text-muted">
+
+              Convertirnos en una tienda líder en
+              venta de accesorios para celulares
+              ofreciendo innovación y confianza.
+
+            </p>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
-<!-- footer -->
-<footer class="container-fluid mt-4 bg-light text-white text-dark">
-  <div class="row px-4 py-5 text-dark">
-    <!-- Logo y Descripción -->
-    <div class="col-lg-3 col-md-6 col-12 mb-4">
-      <div class="footer-widget text-center text-md-start">
-        <a href="index.html">
-          <img src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
-            class="img-fluid mb-3" alt="logo" />
-        </a>
-        <p style="text-align: justify;" >
-          En Freemarket, tu tienda virtual de confianza, ofrecemos calidad y variedad. Con más de 10 años de
-          experiencia, garantizamos una compra excepcional y un servicio al cliente dedicado, siempre enfocados en la
-          ética y la sostenibilidad.
+
+
+
+<!-- FOOTER -->
+<footer class="bg-dark text-white mt-5">
+
+  <div class="container py-5">
+
+    <div class="row">
+
+      <div class="col-lg-4">
+
+        <img src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
+        width="140"
+        class="mb-3">
+
+        <p>
+
+          Tu tienda confiable de accesorios
+          para celulares y tecnología.
+
         </p>
+
       </div>
+
+
+      <div class="col-lg-4">
+
+        <h5>Contacto</h5>
+
+        <p>Email: freemarket0620gmail.com</p>
+        <p>Tel: +591 72937437</p>
+        <p>Beni - Bolivia</p>
+
+      </div>
+
+
+      <div class="col-lg-4">
+
+        <h5>Redes Sociales</h5>
+
+        <div class="d-flex gap-3 mt-3">
+
+          <i class="fab fa-facebook fa-2x"></i>
+          <i class="fab fa-instagram fa-2x"></i>
+          <i class="fab fa-whatsapp fa-2x"></i>
+          <i class="fab fa-tiktok fa-2x"></i>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- Redes Sociales -->
-    <div class="col-lg-3 col-md-6 col-12 mb-4">
-      <div class="footer-widget text-center">
-        <h3 class="mb-3">Síguenos</h3>
-        <div class="d-flex justify-content-center flex-wrap gap-3">
-          <a class="d-flex align-items-center justify-content-center rounded-circle"
-            style="background-color: #1791e8; width: 60px; height: 60px; color: white;"
-            href="https://www.facebook.com/profile.php?id=100083028147578" aria-label="Facebook">
-            <i class="fab fa-facebook-f fa-2x"></i>
-          </a>
-          <a class="d-flex align-items-center justify-content-center rounded-circle"
-            style="background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); width: 60px; height: 60px; color: white;"
-            href="#" aria-label="Instagram">
-            <i class="fab fa-instagram fa-2x"></i>
-          </a>
-          <a class="d-flex align-items-center justify-content-center rounded-circle"
-            style="background-color: #25d366; width: 60px; height: 60px; color: white;" href="#" aria-label="WhatsApp">
-            <i class="fab fa-whatsapp fa-2x"></i>
-          </a>
-          <a class="d-flex align-items-center justify-content-center rounded-circle"
-            style="background-color: #000; width: 60px; height: 60px; color: white;" href="#" aria-label="TikTok">
-            <i class="fab fa-tiktok fa-2x"></i>
-          </a>
-          <a class="d-flex align-items-center justify-content-center rounded-circle"
-            style="background-color: #5165f6; width: 60px; height: 60px; color: white;" href="#" aria-label="Discord">
-            <i class="fab fa-discord fa-2x"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Información de Contacto -->
-    <div class="col-lg-3 col-md-6 col-12 mb-4">
-      <div class="footer-widget text-center text-md-start">
-        <h3 class="mb-3">Contáctanos</h3>
-        <div class="mb-3 d-flex align-items-center">
-          <i class="bi bi-envelope-fill text-primary fs-4 me-2"></i>
-          <div>
-            <h6 class="mb-0">Escríbenos</h6>
-            <small>benitoandrescalle035&#64;gmail.com</small>
-          </div>
-        </div>
-        <div class="mb-3 d-flex align-items-center">
-          <i class="bi bi-telephone-fill text-success fs-4 me-2"></i>
-          <div>
-            <h6 class="mb-0">Llámame</h6>
-            <small>+591 72937437</small>
-          </div>
-        </div>
-        <div class="d-flex align-items-center">
-          <i class="bi bi-geo-alt-fill text-danger fs-4 me-2"></i>
-          <div>
-            <h6 class="mb-0">Encuéntranos</h6>
-            <small>1010 Avenida, SW 54321, Chandigarh</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mapa de Ubicación -->
-    <div class="col-lg-3 col-md-6 col-12 mb-4">
-      <div class="footer-widget text-center text-md-start">
-        <h3 class="mb-3">Nuestra Ubicación</h3>
-        <div class="map-container">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d635.9553212006339!2d-67.03540545407371!3d-15.14618889537657!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x93dfe7ba3963fe3b%3A0xd0b0ff015e9c6a00!2sYucumo!5e1!3m2!1ses-419!2sbo!4v1731749227930!5m2!1ses-419!2sbo"
-            width="100%" height="300" style="border: 0" allowfullscreen="" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-    </div>
   </div>
+
 </footer>

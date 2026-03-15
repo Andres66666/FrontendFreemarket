@@ -1,69 +1,252 @@
-<div class="container mt-4">
-  <h2 class="mb-3">Ver Imágenes</h2>
+<div class="container py-4">
 
-  <!-- FILTRO -->
-  <div class="mb-3">
-    <select
-      class="form-select"
-      [(ngModel)]="selectedCategory"
-      (change)="filterImages()"
-    >
-      <option value="">Todas las imágenes</option>
-      <option value="bancos">🏦 Bancos</option>
-      <option value="juegos">🎮 Juegos</option>
-    </select>
-  </div>
+  <!-- HEADER -->
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
 
-  <!-- GRID -->
-  <div class="row">
-    <div
-      class="col-6 col-md-3 mb-4"
-      *ngFor="let img of filteredImages; let i = index"
-    >
-      <img
-        [src]="img.src"
-        [alt]="img.alt"
-        class="img-fluid image-thumb"
-        (click)="openModal(i)"
-      />
+    <div>
+      <h3 class="fw-bold mb-1">
+        <i class="bi bi-images me-2 text-primary"></i>
+        Panel de Galería
+      </h3>
+
+      <small class="text-muted">
+        Filtra imágenes o accede a juegos interactivos
+      </small>
     </div>
+
+    <!-- FILTRO -->
+    <div class="d-flex align-items-center gap-2">
+
+      <label class="small text-muted mb-0 d-none d-md-inline">
+        Categoría
+      </label>
+
+      <select
+        class="form-select shadow-sm"
+        style="min-width:220px"
+        [(ngModel)]="selectedCategory"
+        (change)="filterImages()">
+
+        <option value="">📂 Todas</option>
+        <option value="bancos">🏦 Bancos</option>
+        <option value="juegos">🎮 Juegos</option>
+
+      </select>
+
+    </div>
+
   </div>
+
+
+  <!-- SECCIÓN JUEGOS -->
+  <div *ngIf="selectedCategory === 'juegos'" class="mt-4 d-flex justify-content-center">
+
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white" style="max-width:600px;width:100%;">
+
+      <div class="card-header text-center bg-white">
+        <h5 class="mb-0">🎮 Juego interactivo</h5>
+      </div>
+
+      <div class="card-body bg-white">
+
+        <!-- JUEGO -->
+        <div style="
+        position:relative;
+        width:100%;
+        height:0;
+        padding-top:140%;
+        border-radius:10px;
+        overflow:hidden;
+        background:white;
+        ">
+
+        <iframe
+        loading="lazy"
+        style="
+        position:absolute;
+        width:90%;
+        height:100%;
+        left:5%;
+        top:0;
+        border:none;
+        background:white;
+        "
+        src="https://www.canva.com/design/DAGyyFxind4/EQtCcchUR3V2dc-3_OJgDQ/view?embed"
+        allowfullscreen>
+
+        </iframe>
+
+        </div>
+
+
+        <!-- BOTONES -->
+        <div class="text-center mt-3">
+
+          <button
+          class="btn btn-success btn-sm"
+          (click)="sendGameToWhatsapp()">
+
+          <i class="bi bi-whatsapp me-1"></i>
+          Enviar juego
+          </button>
+
+          <a
+          href="https://www.canva.com/design/DAGyyFxind4/EQtCcchUR3V2dc-3_OJgDQ/view"
+          target="_blank"
+          class="btn btn-primary btn-sm ms-2">
+
+          Abrir en Canva
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ESTADO VACIO -->
+  <div
+  *ngIf="filteredImages.length === 0 && selectedCategory !== 'juegos'"
+  class="alert alert-light border">
+
+  No hay imágenes en esta categoría
+
+  </div>
+
+
+  <!-- GALERÍA -->
+  <div *ngIf="selectedCategory !== 'juegos'" class="row g-4">
+
+    <div
+    class="col-6 col-md-4 col-lg-3"
+    *ngFor="let img of filteredImages; let i = index">
+
+    <button
+    class="btn p-0 w-100 border-0"
+    (click)="openModal(i)"
+    style="background:transparent">
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+    <img
+    [src]="img.src"
+    [alt]="img.alt"
+    class="img-fluid"
+    style="aspect-ratio:1/1;object-fit:cover">
+
+    <div class="card-body py-2">
+
+    <div class="fw-semibold text-truncate">
+    {{ img.alt }}
+    </div>
+
+    <small class="text-muted">
+    {{ img.category }}
+    </small>
+
+    </div>
+
+    </div>
+
+    </button>
+
+    </div>
+
+  </div>
+
 </div>
+
 
 <!-- MODAL -->
 <div
-  class="modal fade show d-block"
-  *ngIf="showModal"
-  style="background: rgba(0, 0, 0, 0.8)"
->
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content bg-transparent border-0">
-      <div class="modal-body text-center position-relative p-0">
-        <!-- PREV -->
-        <button class="btn btn-light nav-btn start" (click)="prevImage()">
-          ‹
-        </button>
+class="modal fade show d-block"
+*ngIf="showModal"
+style="background: rgba(0,0,0,0.8)"
+(click)="closeModal()">
 
-        <!-- IMAGE -->
-        <img
-          [src]="filteredImages[currentIndex].src"
-          [alt]="filteredImages[currentIndex].alt"
-          class="img-fluid modal-image"
-        />
+<div
+class="modal-dialog modal-xl modal-dialog-centered"
+(click)="$event.stopPropagation()">
 
-        <!-- NEXT -->
-        <button class="btn btn-light nav-btn end" (click)="nextImage()">
-          ›
-        </button>
+<div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
 
-        <!-- CLOSE -->
-        <button
-          class="btn btn-danger position-absolute top-0 end-0 m-2"
-          (click)="closeModal()"
-        >
-          ✕
-        </button>
-      </div>
-    </div>
-  </div>
+
+<!-- HEADER -->
+<div class="modal-header border-0 bg-light">
+
+<h6 class="fw-bold mb-0">
+
+{{ currentImage?.alt }}
+
+</h6>
+
+<button
+class="btn btn-outline-secondary btn-sm"
+(click)="closeModal()">
+
+✕
+</button>
+
+</div>
+
+
+<!-- BODY -->
+<div class="modal-body text-center bg-dark">
+
+<img
+[src]="currentImage?.src"
+class="img-fluid"
+style="max-height:72vh;object-fit:contain">
+
+</div>
+
+
+<!-- FOOTER -->
+<div class="modal-footer border-0 bg-light">
+
+<div class="w-100 d-flex justify-content-between">
+
+<div class="d-flex gap-2">
+
+<input
+type="tel"
+class="form-control form-control-sm"
+placeholder="5917XXXXXXX"
+[(ngModel)]="whatsappNumber">
+
+<button
+class="btn btn-success btn-sm"
+(click)="sendToWhatsapp()">
+
+Enviar
+</button>
+
+<button
+class="btn btn-outline-secondary btn-sm"
+(click)="copyImageLink()">
+
+Copiar link
+</button>
+
+</div>
+
+<a
+class="btn btn-outline-primary btn-sm"
+[href]="currentImage?.src"
+target="_blank">
+
+Abrir
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div>

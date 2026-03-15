@@ -29,8 +29,8 @@ export interface Usuario {
 
 export interface UsuarioRol {
   id: number;
-  usuario: Usuario; // Debe ser un objeto completo de Usuario
-  rol: Role; // Debe ser un objeto completo de Role
+  usuario: Usuario; 
+  rol: Role;
 }
 
 export interface RolePermiso {
@@ -38,8 +38,6 @@ export interface RolePermiso {
   rol: Role;
   permiso: Permiso;
 }
-
-/* esta es la seccion de de ventas  */
 
 export interface Categoria {
   id: number;
@@ -67,45 +65,21 @@ export interface Producto {
 export interface Venta {
   id: number;
   fecha_venta: Date;
-  usuario: Usuario; // Relación con el Usuario que hizo la venta
-  estado: string; // Nueva variable 'estado'
-  total: number; // Nueva variable 'total'
+  usuario: Usuario; 
+  estado: string; 
+  total: number; 
 }
 
 export interface DetalleVenta {
   id: number;
   venta: Venta;
-  producto: Producto; // Relación con el producto
+  producto: Producto; 
   cantidad: number;
   precio: number;
-  subtotal: number; // Nueva variable 'subtotal'
-  tipo_venta: string; // Tipo de venta (detalle o mayor)
+  subtotal: number; 
+  tipo_venta: string;
 }
 
-/* dato de ventas de jeugos completar */
-export interface RecargaProducto {
-  id: number;
-  nombre: string;
-  cantidad: number;
-  precio_compra: number;
-  precio_venta: number;
-  estado: boolean;
-  categoria: Categoria;
-}
-
-export interface DetalleVentaRecarga {
-  id: number;
-  recarga: RecargaProducto;
-  usuario_juego_id: string;
-  nombre_jugador?: string;
-  password_jugador?: string;
-  cantidad: number;
-  precio: number;
-  subtotal: number;
-  estado: string; 
-}
-
-/* nuevas tablas: Efectivo y RecargaMax */
 
 export interface Efectivo {
   id: number;
@@ -120,16 +94,7 @@ export interface Efectivo {
   M0_50Bs: number;
   M0_20Bs: number;
   M0_10Bs: number;
-  total: number; // calculado automáticamente en el backend
+  total: number;
   fecha_creacion: Date;
 }
 
-export interface RecargaMax {
-  id: number;
-  numero_origen: string;
-  numero_destino: string;
-  saldo_total: number;
-  monto_carga: number;
-  estado: "PENDIENTE" | "COMPLETADO" | "CANCELADO"; // usar union type de los choices
-  fecha_creacion: Date;
-}

@@ -1,0 +1,12 @@
+ Frontend
+ cd .\FrontendFreemarket\
+
+ng serve
+
+
+
+
+
+backend
+cd .\BackendFreemarket\
+python manage.py runserver

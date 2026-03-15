@@ -3,12 +3,9 @@ import { Injectable } from '@angular/core';
 import {
   Categoria,
   DetalleVenta,
-  DetalleVentaRecarga,
   Efectivo,
   Permiso,
   Producto,
-  RecargaMax,
-  RecargaProducto,
   Role,
   RolePermiso,
   Usuario,
@@ -34,8 +31,8 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class ServicesService {
-/*   private apiUrl = 'http://localhost:8000/api/'; */
-  private apiUrl = 'https://backendfreemarket.onrender.com/api/';
+  private apiUrl = 'http://localhost:8000/api/';
+/*   private apiUrl = 'https://backendfreemarket.onrender.com/api/'; */
   /* ESTOS SON LOS CAMBIO NUEVOS  */
 
   private productosSubject = new BehaviorSubject<Producto[]>([]);
@@ -374,71 +371,13 @@ export class ServicesService {
     const roles = this.getRolesFromLocalStorage();
     return roles.includes('AdministraciónYucumo'); // Verifica si el usuario tiene el rol de AdministraciónYucumo
   }
-  /* ---------------------------- SERVICIOS DE RECARGAS ---------------------------- */
-
-  getRecargaProductos(): Observable<RecargaProducto[]> {
-    return this.http.get<RecargaProducto[]>(`${this.apiUrl}RecargaProducto/`);
-  }
-
-  getRecargaProductoById(id: number): Observable<RecargaProducto> {
-    return this.http.get<RecargaProducto>(`${this.apiUrl}RecargaProducto/${id}/`);
-  }
-
-  crearRecargaProducto(recarga: RecargaProducto): Observable<RecargaProducto> {
-    return this.http.post<RecargaProducto>(`${this.apiUrl}RecargaProducto/`, recarga);
-  }
-
-  actualizarRecargaProducto(
-    id: number,
-    recarga: RecargaProducto
-  ): Observable<RecargaProducto> {
-    return this.http.put<RecargaProducto>(`${this.apiUrl}RecargaProducto/${id}/`, recarga);
-  }
+  
 
   actualizarEstadoRecargaProducto(id: number, estado: boolean): Observable<any> {
     return this.http.put(`${this.apiUrl}RecargaProducto/${id}/`, {
       estado: estado ? 'true' : 'false',
     });
   }
-
-  /* ---------------------------- DETALLES DE VENTAS DE RECARGA ---------------------------- */
-
-  getDetalleVentasRecarga(): Observable<DetalleVentaRecarga[]> {
-    return this.http.get<DetalleVentaRecarga[]>(`${this.apiUrl}DetalleVentaRecarga/`);
-  }
-
-  getDetalleVentaRecargaById(id: number): Observable<DetalleVentaRecarga> {
-    return this.http.get<DetalleVentaRecarga>(`${this.apiUrl}DetalleVentaRecarga/${id}/`);
-  }
-  crearDetalleVentaRecarga(detalle: any) {
-    const payload = {
-      ...detalle,
-      recarga: detalle.recarga // ya es el ID
-    };
-    return this.http.post<DetalleVentaRecarga>(`${this.apiUrl}DetalleVentaRecarga/`, payload);
-  }
-
-  actualizarDetalleVentaRecarga(
-    id: number,
-    detalle: DetalleVentaRecarga
-  ): Observable<DetalleVentaRecarga> {
-    return this.http.put<DetalleVentaRecarga>(
-      `${this.apiUrl}DetalleVentaRecarga/${id}/`,
-      detalle
-    );
-  }
-  
-  /* ---------------------------- FUNCIONES AUXILIARES ---------------------------- */
-
-  // Buscar recarga por usuario_juego_id o nombre_jugador
-  buscarDetalleRecarga(usuario_juego_id?: string, nombre_jugador?: string): Observable<DetalleVentaRecarga[]> {
-    let query = '';
-    if (usuario_juego_id) query += `usuario_juego_id=${usuario_juego_id}&`;
-    if (nombre_jugador) query += `nombre_jugador=${nombre_jugador}&`;
-    return this.http.get<DetalleVentaRecarga[]>(`${this.apiUrl}DetalleVentaRecarga/?${query}`);
-  }
-    
-
 
   /* ---------------------------- SERVICIOS DE EFECTIVO ---------------------------- */
 
@@ -458,22 +397,7 @@ actualizarEfectivo(id: number, efectivo: Efectivo): Observable<Efectivo> {
   return this.http.put<Efectivo>(`${this.apiUrl}efectivo/${id}/`, efectivo);
 }
 
-/* ---------------------------- SERVICIOS DE RECARGA MAX ---------------------------- */
-getRecargaMax(): Observable<RecargaMax[]> {
-  return this.http.get<RecargaMax[]>(`${this.apiUrl}recarga-max/`);
-}
 
-getRecargaMaxById(id: number): Observable<RecargaMax> {
-  return this.http.get<RecargaMax>(`${this.apiUrl}recarga-max/${id}/`);
-}
-
-crearRecargaMax(recarga: RecargaMax): Observable<RecargaMax> {
-  return this.http.post<RecargaMax>(`${this.apiUrl}recarga-max/`, recarga);
-}
-
-actualizarRecargaMax(id: number, recarga: RecargaMax): Observable<RecargaMax> {
-  return this.http.put<RecargaMax>(`${this.apiUrl}recarga-max/${id}/`, recarga);
-}
 
 
 }

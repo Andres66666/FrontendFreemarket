@@ -4,6 +4,13 @@ import { Router, RouterModule } from '@angular/router';
 import { StorageService } from '../../Services/Storage.service';
 import { ServicesService } from '../../Services/services.service';
 
+type UsuarioLS = {
+  nombre_usuario?: string;
+  apellido?: string;
+  imagen_url?: string | null;
+  usuario_id?: number;
+};
+
 @Component({
   selector: 'app-panel-control',
   standalone: true,
@@ -12,18 +19,18 @@ import { ServicesService } from '../../Services/services.service';
   styleUrls: ['./panel-control.component.css'],
 })
 export class PanelControlComponent implements OnInit {
-  // Propiedades esenciales, alineadas con la respuesta del login
   isSidebarOpen = false;
-  windowWidth: number = 0;
-  userName: string = '';
-  userPermissions: string[] = [];
-  roles: string[] = [];  // Array de roles (leer de 'roles' en localStorage)
-  nombre_usuario: string = '';
-  apellido: string = '';
-  imagen_url: string | null = null;
-  usuario_id: number = 0;
+  windowWidth = 0;
 
-  // Para submenús
+  userName = '';
+  userPermissions: string[] = [];
+  roles: string[] = [];
+
+  nombre_usuario = '';
+  apellido = '';
+  imagen_url: string | null = null;
+  usuario_id = 0;
+
   openSubmenu: string | null = null;
 
   constructor(
@@ -34,71 +41,69 @@ export class PanelControlComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('PanelControlComponent: ngOnInit ejecutado');  // Log para depuración
+    this.loadSessionFromStorage();
+    this.checkScreenSize();
+  }
 
-    // Leer datos del usuario de 'usuario'
-    const usuarioStr = this.storageService.getItem('usuario');
-    let datosUsuario: any = {};
+  private safeParse<T>(raw: string | null, fallback: T): T {
+    if (!raw) return fallback;
     try {
-      datosUsuario = usuarioStr ? JSON.parse(usuarioStr) : {};
-    } catch (error) {
-      console.error('Error al parsear usuario desde localStorage', error);
-      datosUsuario = {};
+      return JSON.parse(raw) as T;
+    } catch {
+      return fallback;
     }
+  }
 
-    // Leer roles de 'roles' (clave separada)
-    this.roles = JSON.parse(localStorage.getItem('roles') || '[]');
+  private loadSessionFromStorage(): void {
+    const usuarioStr = this.storageService.getItem('usuario');
+    const datosUsuario = this.safeParse<UsuarioLS>(usuarioStr, {});
 
-    // Leer permisos de 'permisos' (clave separada)
-    this.userPermissions = JSON.parse(localStorage.getItem('permisos') || '[]');
+    // Roles / Permisos
+    this.roles = this.safeParse<string[]>(localStorage.getItem('roles'), []);
+    this.userPermissions = this.safeParse<string[]>(localStorage.getItem('permisos'), []);
 
-    // Alinear con la respuesta del login
+    // Campos
     this.nombre_usuario = datosUsuario.nombre_usuario ?? '';
     this.apellido = datosUsuario.apellido ?? '';
     this.userName = `${this.nombre_usuario} ${this.apellido}`.trim();
+
     this.imagen_url = datosUsuario.imagen_url ?? null;
     this.usuario_id = datosUsuario.usuario_id ?? 0;
 
-    // Logs para verificar que los datos se carguen correctamente
-    console.log('Datos del usuario cargados:', datosUsuario);
-    console.log('Roles:', this.roles);
-    console.log('Permisos:', this.userPermissions);
-    console.log('Nombre completo:', this.userName);
-
-    this.checkScreenSize();
   }
 
-  // Verificar permisos (array)
+  // ===== Permisos / Roles =====
   puedeVer(permiso: string | string[]): boolean {
-    if (Array.isArray(permiso)) {
-      return permiso.some(p => this.userPermissions.includes(p));
-    }
-    return this.userPermissions.includes(permiso);
+    if (!this.userPermissions?.length) return false;
+    return Array.isArray(permiso)
+      ? permiso.some(p => this.userPermissions.includes(p))
+      : this.userPermissions.includes(permiso);
   }
 
-  // Verificar roles (array)
   tieneRol(rol: string): boolean {
-    return this.roles.includes(rol);
+    if (!this.roles?.length) return false;
+
+    // Por si a veces roles viene como "Administrador" / "Empleado" y otras como "ROLE_ADMIN"
+    return this.roles.some(r => String(r).toLowerCase() === rol.toLowerCase());
   }
 
-  // Sidebar
+  // ===== Sidebar =====
   @HostListener('window:resize')
-  onResize() {
+  onResize(): void {
     this.checkScreenSize();
   }
 
-  checkScreenSize() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.windowWidth = window.innerWidth;
-      this.isSidebarOpen = this.windowWidth >= 768;
-    }
+  private checkScreenSize(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.windowWidth = window.innerWidth;
+    this.isSidebarOpen = this.windowWidth >= 768;
   }
 
-  toggleSidebar() {
+  toggleSidebar(): void {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
-  toggleSubmenu(menu: string) {
+  toggleSubmenu(menu: string): void {
     this.openSubmenu = this.openSubmenu === menu ? null : menu;
   }
 
@@ -106,8 +111,8 @@ export class PanelControlComponent implements OnInit {
     return this.openSubmenu === menu;
   }
 
-  // Sesión
-  logout() {
+  // ===== Sesión =====
+  logout(): void {
     this.storageService.removeItem('token');
     localStorage.removeItem('usuario');
     localStorage.removeItem('roles');
@@ -115,16 +120,15 @@ export class PanelControlComponent implements OnInit {
     this.router.navigate(['/index']);
   }
 
-  confirmarCerrarSesion() {
-    if (confirm('¿Está seguro de que desea cerrar sesión?')) {
-      this.logout();
-    }
+  confirmarCerrarSesion(): void {
+    if (confirm('¿Está seguro de que desea cerrar sesión?')) this.logout();
   }
 
-  verPerfil() {
+  verPerfil(): void {
     this.router.navigate(['panel-control/perfil']);
   }
-  panelDeControl() {
+
+  panelDeControl(): void {
     this.router.navigate(['panel-control/dashboardComponent']);
   }
 }

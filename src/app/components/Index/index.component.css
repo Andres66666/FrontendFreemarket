@@ -1,143 +1,60 @@
-/* ############################ */
-/* Estilo para el header */
-/* ############################ */
-#navbar {
-  background-color: #20c997; /* Color verde agua */
-  transition: background-color 0.3s ease;
+.hero-section{
+height:100vh;
+display:flex;
+align-items:center;
+background: linear-gradient(120deg,#111,#2c3e50);
+padding-top:80px;
 }
 
-/* Cambiar el color de fondo al hacer scroll */
-.navbar.scrolled {
-  background-color: rgba(32, 201, 151, 0.9); /* Color verde agua con opacidad */
+.hero-title{
+font-size:48px;
+font-weight:bold;
 }
 
-/* Estilo para los enlaces */
-.nav-link {
-  transition: color 0.3s ease;
+.hero-text{
+font-size:18px;
+opacity:0.9;
 }
 
-.nav-link:hover {
-  color: #20c997; /* Color amarillo al pasar el mouse */
+/* MARCO DEL CARRUSEL */
+
+.carousel-frame{
+height:420px;
+width:100%;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-/* Estilo para el botón */
-.btn-light {
-  background-color: #ffffff; /* Fondo blanco */
-  color: #20c997; /* Color verde agua */
-  border: 2px solid #20c997; /* Borde verde agua */
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* IMAGENES */
+
+.carousel-frame img{
+max-height:100%;
+max-width:100%;
+object-fit:contain;
 }
 
-.btn-light:hover {
-  background-color: #20c997; /* Fondo verde agua al pasar el mouse */
-  color: #ffffff; /* Texto blanco al pasar el mouse */
+/* CONTROLES MAS VISIBLES */
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon{
+filter: invert(1);
 }
 
-/* ############################ */
-/* seccion titulo */
-/* ############################ */
-.text-center-titulo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  padding-top: 100px;
-  position: relative;
-}
-.main-background {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)),
-    url("https://images.pexels.com/photos/6214138/pexels-photo-6214138.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
-      no-repeat center center fixed;
-  background-size: cover;
-  min-height: 100vh; /* Asegúrate de que cubra toda la altura de la ventana */
+/* RESPONSIVE */
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white; /* Cambia el color del texto para que sea legible sobre el fondo */
-  text-align: center;
-  position: relative;
+@media (max-width:768px){
+
+.hero-title{
+font-size:32px;
 }
 
-h2 {
-  transform: translate(0, -40%);
-  font-size: calc(12vw + 0.4rem); /* Aumentado en un 10% */
-  font-family: "Frozen", serif;
-  background-image: url("https://assets.codepen.io/209981/ice.jpg");
-  -webkit-background-clip: text;
-  background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: contain;
-  position: relative;
-  -webkit-text-stroke: 1px #4f90ab;
-
-  /* Ajuste de las sombras */
-  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5))
-    drop-shadow(0 0 2px rgba(41, 131, 172, 0.5))
-    drop-shadow(0 0 30px rgba(125, 204, 239, 0.5))
-    drop-shadow(0 0 30px rgba(58, 122, 155, 0.5));
-
-  pointer-events: none; /* Desactiva la interacción */
-  text-decoration: none; /* Elimina el subrayado */
+.hero-section{
+text-align:center;
 }
 
-h2:focus {
-  outline: none; /* Elimina el borde de enfoque */
+.carousel-frame{
+height:260px;
 }
 
-.animation {
-  position: absolute;
-  left: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0) 45%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(255, 255, 255, 0) 55%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shine 7s infinite;
-  background-size: 200%;
-}
-
-@keyframes shine {
-  0% {
-    background-position: -120%;
-  }
-  10% {
-    background-position: 120%;
-  }
-  100% {
-    background-position: 120%;
-  }
-}
-
-@font-face {
-  font-family: "Frozen";
-  src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/209981/Ice%20kingdom%20-%20Bold%20-%20Por%20Kustren.woff");
-}
-
-/* ############################ */
-/* seccion de cards iamgnes de productos  */
-/* ############################ */
-
-/* Estilos para las tarjetas */
-.custom-card {
-  width: 100%; /* Asegura que la tarjeta ocupe todo el ancho disponible */
-  height: 500px; /* Establece una altura fija para las tarjetas */
-  margin: 10px; /* Espacio alrededor de cada tarjeta */
-  display: flex; /* Utiliza flexbox para centrar el contenido */
-  flex-direction: column; /* Asegura que los elementos dentro de la tarjeta se apilen verticalmente */
-  align-items: center; /* Centra horizontalmente el contenido */
-}
-
-/* Estilos para las imágenes */
-.custom-img {
-  width: 400px; /* Ancho fijo para la imagen */
-  height: 400px; /* Altura fija para que sea cuadrada */
-  object-fit: cover; /* Asegura que la imagen mantenga su proporción y se recorte si es necesario */
-  margin: 10px 0; /* Espacio vertical alrededor de la imagen */
 }

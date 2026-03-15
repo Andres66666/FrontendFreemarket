@@ -1,0 +1,699 @@
+<!-- prestamos.component.html -->
+<div class="container my-4">
+
+  <!-- ===================== SIMULADOR ===================== -->
+  <div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Simulador de Préstamos – Método Francés</h4>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+
+        <div class="col-md-4">
+          <label class="form-label">Monto (Bs)</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="montoFormateado" name="monto"
+                 (focus)="onMontoFocus()" (blur)="onMontoBlur()"
+                 placeholder="10.000,00">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Interés (%)</label>
+          <input type="number" class="form-control"
+                 [(ngModel)]="interes" name="interes">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Años</label>
+          <input type="number" class="form-control"
+                 [(ngModel)]="anios" name="anios">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Tipo de interés</label>
+          <select class="form-select" [(ngModel)]="tipoInteres" name="tipoInteres">
+            <option value="anual">Anual</option>
+            <option value="mensual">Mensual</option>
+            <option value="semanal">Semanal</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Forma de pago</label>
+          <select class="form-select" [(ngModel)]="tipoPago" name="tipoPago">
+            <option value="mensual">Mensual</option>
+            <option value="semanal">Semanal</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Fecha inicio</label>
+          <input type="date" class="form-control"
+                 [(ngModel)]="fechaInicio" name="fechaInicio">
+        </div>
+
+        <div class="col-md-12 mt-3 d-flex gap-2">
+          <button class="btn btn-success" type="button" (click)="calcular()">Calcular</button>
+          <button class="btn btn-primary" type="button" (click)="descargarPDF()" [disabled]="!cuotas.length">
+            Descargar PDF
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMEN SIMULADOR -->
+  <div *ngIf="cuotas.length" class="row mt-4">
+    <div class="col-md-4">
+      <div class="alert alert-info">
+        <strong>Total pagado</strong><br>
+        Bs {{ totalPagado | number:'1.2-2' }}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="alert alert-warning">
+        <strong>Total intereses</strong><br>
+        Bs {{ totalIntereses | number:'1.2-2' }}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="alert alert-success">
+        <strong>Ganancia</strong><br>
+        Bs {{ ganancia | number:'1.2-2' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA SIMULADOR -->
+  <div *ngIf="cuotas.length" class="card shadow mb-3">
+    <div class="card-body">
+      <h3 class="text-center">PLAN DE PAGOS</h3>
+      <p class="text-center">
+        Fecha: {{ (fechaInicio ? (fechaInicio | date:'dd/MM/yyyy') : (today | date:'dd/MM/yyyy')) }}
+      </p>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Cuota</th>
+            <th>Interés</th>
+            <th>Amortización</th>
+            <th>Saldo</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let c of cuotas">
+            <td>{{ c.nro }}</td>
+            <td>{{ c.fecha | date:'dd/MM/yyyy' }}</td>
+            <td>{{ c.cuota | number:'1.2-2' }}</td>
+            <td>{{ c.interes | number:'1.2-2' }}</td>
+            <td>{{ c.amortizacion | number:'1.2-2' }}</td>
+            <td>{{ c.saldo | number:'1.2-2' }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===================== TRÁMITE + CONTRATO ===================== -->
+  <div class="card shadow mb-4">
+    <div class="card-header bg-dark text-white">
+      <h4 class="mb-0">Trámite de Préstamo (Contrato)</h4>
+    </div>
+
+    <div class="card-body" [formGroup]="tramiteForm">
+
+      <!-- ===================== CONTRATO ===================== -->
+      <div class="row g-3" formGroupName="contrato">
+
+        <div class="col-md-4">
+          <label class="form-label">Ciudad</label>
+          <input class="form-control" formControlName="ciudad">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Fecha contrato</label>
+          <input type="date" class="form-control" formControlName="fechaContrato">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Fecha pago pactada</label>
+          <input type="date" class="form-control" formControlName="fechaPagoPactada">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Días de gracia (0-10)</label>
+          <input type="number" class="form-control" formControlName="diasGracia" min="0" max="10">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Medio de pago</label>
+          <select class="form-select" formControlName="medioPago">
+            <option value="EFECTIVO">Efectivo</option>
+            <option value="TRANSFERENCIA">Transferencia</option>
+          </select>
+        </div>
+
+        <div class="col-md-3" *ngIf="tramiteForm.get('contrato.medioPago')?.value==='TRANSFERENCIA'">
+          <label class="form-label">Banco</label>
+          <input class="form-control" formControlName="banco">
+        </div>
+
+        <div class="col-md-3" *ngIf="tramiteForm.get('contrato.medioPago')?.value==='TRANSFERENCIA'">
+          <label class="form-label">Cuenta</label>
+          <input class="form-control" formControlName="cuenta">
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- ===================== PRESTAMISTA (SIN EXT) ===================== -->
+      <div class="row g-3" formGroupName="prestamista">
+        <h5 class="mt-2">Datos del Prestamista</h5>
+
+        <div class="col-md-6">
+          <label class="form-label">Nombres y apellidos</label>
+          <input class="form-control" formControlName="nombres">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">C.I.</label>
+          <input class="form-control" formControlName="ci">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Teléfono</label>
+          <input class="form-control" formControlName="telefono">
+        </div>
+
+        <div class="col-md-12">
+          <label class="form-label">Domicilio</label>
+          <input class="form-control" formControlName="domicilio">
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- ===================== PRESTATARIO (SIN EXT) ===================== -->
+      <div class="row g-3" formGroupName="prestatario">
+        <h5 class="mt-2">Datos del Prestatario</h5>
+
+        <div class="col-md-6">
+          <label class="form-label">Nombres y apellidos</label>
+          <input class="form-control" formControlName="nombres">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">C.I.</label>
+          <input class="form-control" formControlName="ci">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Teléfono</label>
+          <input class="form-control" formControlName="telefono">
+        </div>
+
+        <div class="col-md-12">
+          <label class="form-label">Domicilio</label>
+          <input class="form-control" formControlName="domicilio">
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- ===================== PRÉSTAMO ===================== -->
+      <div class="row g-3" formGroupName="prestamo">
+        <h5 class="mt-2">Datos del Préstamo</h5>
+
+        <div class="col-md-4">
+          <label class="form-label">Monto (Bs)</label>
+          <input type="number" class="form-control" formControlName="monto" min="1">
+          <small class="text-muted">
+            1000–2000: 1 mes | 2500–5000: 2 meses | &gt;5000: Plan de pagos
+          </small>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Interés mensual (%)</label>
+          <input type="number" class="form-control" formControlName="interesMensualPct" step="0.01">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Interés moratorio mensual (%)</label>
+          <input type="number" class="form-control" formControlName="moratorioMensualPct" step="0.01">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Modalidad</label>
+          <input class="form-control" formControlName="modalidad" readonly>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Plazo (meses)</label>
+          <input type="number" class="form-control" formControlName="plazoMeses" min="1">
+          <small class="text-muted">
+            (Se calcula según fecha pactada en el PDF; si quieres que aquí se calcule automático, dime y te paso el TS)
+          </small>
+        </div>
+
+        <div class="col-md-12" *ngIf="tramiteForm.get('prestamo.modalidad')?.value === 'PLAN_PAGOS'">
+          <div class="alert alert-warning mb-0">
+            Monto &gt; Bs 5.000: el sistema generó el <strong>Plan de Pagos</strong> automáticamente (mensual).
+            Puedes revisar la tabla arriba y luego generar el contrato para adjuntar el ANEXO.
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- ===================== PRENDA / GARANTÍA ===================== -->
+      <div class="row g-3" formGroupName="prenda">
+        <h5 class="mt-2">Prenda / Garantía</h5>
+
+        <div class="col-md-4">
+          <label class="form-label">Tipo de prenda</label>
+          <select class="form-select" formControlName="tipo">
+            <option *ngFor="let t of tiposPrenda" [value]="t.value">{{ t.label }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Valor declarado (Bs)</label>
+          <input type="number" class="form-control" formControlName="valorDeclarado" min="1">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Observaciones generales</label>
+          <input class="form-control" formControlName="observaciones">
+        </div>
+
+        <!-- =============== AUTO =============== -->
+        <div class="col-12" formGroupName="auto" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'VEHICULO_AUTO'">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-3"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-2"><label class="form-label">Año</label><input class="form-control" formControlName="anio"></div>
+            <div class="col-md-2"><label class="form-label">Color</label><input class="form-control" formControlName="color"></div>
+            <div class="col-md-2"><label class="form-label">Placa</label><input class="form-control" formControlName="placa"></div>
+
+            <div class="col-md-3"><label class="form-label">Nro. Motor</label><input class="form-control" formControlName="nroMotor"></div>
+            <div class="col-md-3"><label class="form-label">Nro. Chasis</label><input class="form-control" formControlName="nroChasis"></div>
+            <div class="col-md-3"><label class="form-label">RUAT</label><input class="form-control" formControlName="ruat"></div>
+
+            <div class="col-md-3">
+              <label class="form-label">SOAT vigente</label>
+              <select class="form-select" formControlName="soatVigente">
+                <option [ngValue]="true">Sí</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Inspección técnica</label>
+              <select class="form-select" formControlName="inspeccionTecnica">
+                <option [ngValue]="true">Al día</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">Descripción/Observaciones del vehículo</label>
+              <input class="form-control" formControlName="estado" placeholder="(opcional)">
+            </div>
+          </div>
+        </div>
+
+        <!-- =============== MOTO =============== -->
+        <div class="col-12" formGroupName="moto" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'VEHICULO_MOTO'">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-3"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-2"><label class="form-label">Año</label><input class="form-control" formControlName="anio"></div>
+            <div class="col-md-2"><label class="form-label">Color</label><input class="form-control" formControlName="color"></div>
+
+            <div class="col-md-2">
+              <label class="form-label">¿Tiene placa?</label>
+              <select class="form-select" formControlName="placaTiene">
+                <option [ngValue]="true">Sí</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Placa</label>
+              <input class="form-control" formControlName="placa" placeholder="Si corresponde">
+            </div>
+
+            <div class="col-md-3"><label class="form-label">Nro. Motor</label><input class="form-control" formControlName="nroMotor"></div>
+            <div class="col-md-3"><label class="form-label">Nro. Chasis</label><input class="form-control" formControlName="nroChasis"></div>
+            <div class="col-md-3"><label class="form-label">RUAT</label><input class="form-control" formControlName="ruat"></div>
+
+            <div class="col-md-3">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-12"><label class="form-label">Observaciones</label><input class="form-control" formControlName="observaciones"></div>
+          </div>
+        </div>
+
+        <!-- =============== MAQUINARIA VEH =============== -->
+        <div class="col-12" formGroupName="maquinariaVeh" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'VEHICULO_MAQUINARIA'">
+          <div class="row g-3">
+            <div class="col-md-4"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipo"></div>
+            <div class="col-md-4"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-4"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-4"><label class="form-label">Serie</label><input class="form-control" formControlName="serie"></div>
+
+            <div class="col-md-4">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-12"><label class="form-label">Observaciones</label><input class="form-control" formControlName="observaciones"></div>
+          </div>
+        </div>
+
+        <!-- =============== CELULAR (CHECKS) =============== -->
+        <div class="col-12" formGroupName="celular" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'ELECTRONICO_CELULAR'">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-3"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-3"><label class="form-label">IMEI 1</label><input class="form-control" formControlName="imei1"></div>
+            <div class="col-md-3"><label class="form-label">IMEI 2</label><input class="form-control" formControlName="imei2"></div>
+            <div class="col-md-3"><label class="form-label">Color</label><input class="form-control" formControlName="color"></div>
+
+            <div class="col-md-3">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Especificaciones</label>
+              <div class="border rounded p-2" style="max-height: 140px; overflow:auto;">
+                <div class="form-check" *ngFor="let e of especificacionesCelular">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="e.value"
+                         (change)="onCheckboxChange($event, 'prenda.celular.especificaciones')">
+                  <label class="form-check-label">{{ e.label }}</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Accesorios</label>
+              <div class="border rounded p-2" style="max-height: 140px; overflow:auto;">
+                <div class="form-check" *ngFor="let a of accesoriosCelular">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="a.value"
+                         (change)="onCheckboxChange($event, 'prenda.celular.accesorios')">
+                  <label class="form-check-label">{{ a.label }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =============== LAPTOP (CHECKS) =============== -->
+        <div class="col-12" formGroupName="laptop" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'ELECTRONICO_LAPTOP'">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-3"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-3"><label class="form-label">Serie</label><input class="form-control" formControlName="serie"></div>
+
+            <div class="col-md-3">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Especificaciones</label>
+              <div class="border rounded p-2" style="max-height: 160px; overflow:auto;">
+                <div class="form-check" *ngFor="let e of especificacionesLaptop">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="e.value"
+                         (change)="onCheckboxChange($event, 'prenda.laptop.especificaciones')">
+                  <label class="form-check-label">{{ e.label }}</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Accesorios</label>
+              <div class="border rounded p-2" style="max-height: 160px; overflow:auto;">
+                <div class="form-check" *ngFor="let a of accesoriosLaptop">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="a.value"
+                         (change)="onCheckboxChange($event, 'prenda.laptop.accesorios')">
+                  <label class="form-check-label">{{ a.label }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =============== TABLET (estado + accesorios checks opcional) =============== -->
+        <div class="col-12" formGroupName="tablet" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'ELECTRONICO_TABLET'">
+          <div class="row g-3">
+            <div class="col-md-4"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-4"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-4"><label class="form-label">Serie</label><input class="form-control" formControlName="serie"></div>
+
+            <div class="col-md-4">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-8">
+              <label class="form-label">Accesorios (texto)</label>
+              <input class="form-control" formControlName="accesorios" placeholder="Ej: cargador, funda">
+            </div>
+          </div>
+        </div>
+
+        <!-- =============== TV (CHECKS) =============== -->
+        <div class="col-12" formGroupName="tv" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'ELECTRONICO_TV'">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-3"><label class="form-label">Pulgadas</label><input class="form-control" formControlName="pulgadas"></div>
+            <div class="col-md-3"><label class="form-label">Serie</label><input class="form-control" formControlName="serie"></div>
+            <div class="col-md-3"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipoPantalla" placeholder="LED/OLED/LCD"></div>
+
+            <div class="col-md-3">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Especificaciones</label>
+              <div class="border rounded p-2" style="max-height: 140px; overflow:auto;">
+                <div class="form-check" *ngFor="let e of especificacionesTv">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="e.value"
+                         (change)="onCheckboxChange($event, 'prenda.tv.especificaciones')">
+                  <label class="form-check-label">{{ e.label }}</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Accesorios</label>
+              <div class="border rounded p-2" style="max-height: 140px; overflow:auto;">
+                <div class="form-check" *ngFor="let a of accesoriosTv">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="a.value"
+                         (change)="onCheckboxChange($event, 'prenda.tv.accesorios')">
+                  <label class="form-check-label">{{ a.label }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =============== ELECTRODOMÉSTICO =============== -->
+        <div class="col-12" formGroupName="electrodomestico" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'ELECTRODOMESTICO'">
+          <div class="row g-3">
+            <div class="col-md-4"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipo"></div>
+            <div class="col-md-4"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-4"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-4"><label class="form-label">Serie</label><input class="form-control" formControlName="serie"></div>
+
+            <div class="col-md-4">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-8"><label class="form-label">Accesorios</label><input class="form-control" formControlName="accesorios"></div>
+          </div>
+        </div>
+
+        <!-- =============== HERRAMIENTA / MAQUINARIA =============== -->
+        <div class="col-12" formGroupName="herramienta" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'MAQUINARIA_HERRAMIENTA'">
+          <div class="row g-3">
+            <div class="col-md-4"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipo"></div>
+            <div class="col-md-4"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-4"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-4"><label class="form-label">Serie</label><input class="form-control" formControlName="serie"></div>
+            <div class="col-md-4"><label class="form-label">Capacidad</label><input class="form-control" formControlName="capacidad"></div>
+
+            <div class="col-md-4">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-12"><label class="form-label">Accesorios</label><input class="form-control" formControlName="accesorios"></div>
+          </div>
+        </div>
+
+        <!-- =============== MERCADERÍA =============== -->
+        <div class="col-12" formGroupName="mercaderia" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'MERCADERIA'">
+          <div class="row g-3">
+            <div class="col-md-4"><label class="form-label">Rubro</label><input class="form-control" formControlName="rubro"></div>
+            <div class="col-md-8"><label class="form-label">Detalle lote</label><input class="form-control" formControlName="detalleLote"></div>
+            <div class="col-md-3"><label class="form-label">Cantidad</label><input class="form-control" formControlName="cantidad"></div>
+            <div class="col-md-3"><label class="form-label">Unidad</label><input class="form-control" formControlName="unidad"></div>
+
+            <div class="col-md-3">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-12"><label class="form-label">Lugar de almacenamiento</label><input class="form-control" formControlName="lugarAlmacen"></div>
+          </div>
+        </div>
+
+        <!-- =============== VALORES / DOCUMENTO =============== -->
+        <div class="col-12" formGroupName="valorDocumento" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'VALOR_DOCUMENTO'">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipo"></div>
+            <div class="col-md-3"><label class="form-label">Número</label><input class="form-control" formControlName="numero"></div>
+            <div class="col-md-3"><label class="form-label">Entidad</label><input class="form-control" formControlName="entidad"></div>
+            <div class="col-md-3"><label class="form-label">Monto</label><input class="form-control" formControlName="monto"></div>
+            <div class="col-md-4"><label class="form-label">Fecha vencimiento</label><input type="date" class="form-control" formControlName="fechaVenc"></div>
+            <div class="col-md-4"><label class="form-label">Titular</label><input class="form-control" formControlName="titular"></div>
+            <div class="col-md-4"><label class="form-label">Observaciones</label><input class="form-control" formControlName="observaciones"></div>
+          </div>
+        </div>
+
+        <!-- =============== GANADO =============== -->
+        <div class="col-12" formGroupName="ganado" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'GANADO'">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipo"></div>
+            <div class="col-md-3"><label class="form-label">Cantidad</label><input class="form-control" formControlName="cantidad"></div>
+            <div class="col-md-3"><label class="form-label">Identificación</label><input class="form-control" formControlName="identificacion"></div>
+            <div class="col-md-3"><label class="form-label">Edad aprox</label><input class="form-control" formControlName="edadAprox"></div>
+            <div class="col-md-6"><label class="form-label">Estado sanitario</label><input class="form-control" formControlName="estadoSanitario"></div>
+            <div class="col-md-6"><label class="form-label">Lugar custodia</label><input class="form-control" formControlName="lugarCustodia"></div>
+          </div>
+        </div>
+
+        <!-- =============== JOYA =============== -->
+        <div class="col-12" formGroupName="joya" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'JOYA'">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipo"></div>
+            <div class="col-md-3"><label class="form-label">Material</label><input class="form-control" formControlName="material"></div>
+            <div class="col-md-3"><label class="form-label">Pureza</label><input class="form-control" formControlName="pureza"></div>
+            <div class="col-md-3"><label class="form-label">Peso (g)</label><input class="form-control" formControlName="pesoGramos"></div>
+            <div class="col-md-6"><label class="form-label">Piedras</label><input class="form-control" formControlName="piedras"></div>
+
+            <div class="col-md-6">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- =============== DERECHO / DOCUMENTO =============== -->
+        <div class="col-12" formGroupName="derechoDocumento" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'DERECHO_DOCUMENTO'">
+          <div class="row g-3">
+            <div class="col-md-4"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipo"></div>
+            <div class="col-md-4"><label class="form-label">Identificación</label><input class="form-control" formControlName="identificacion"></div>
+            <div class="col-md-4"><label class="form-label">Titular</label><input class="form-control" formControlName="titular"></div>
+            <div class="col-md-4"><label class="form-label">Vigencia</label><input class="form-control" formControlName="vigencia"></div>
+            <div class="col-md-8"><label class="form-label">Observaciones</label><input class="form-control" formControlName="observaciones"></div>
+          </div>
+        </div>
+
+        <!-- =============== EQUIPO NEGOCIO =============== -->
+        <div class="col-12" formGroupName="equipoNegocio" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'EQUIPO_NEGOCIO'">
+          <div class="row g-3">
+            <div class="col-md-4"><label class="form-label">Tipo</label><input class="form-control" formControlName="tipo"></div>
+            <div class="col-md-4"><label class="form-label">Marca</label><input class="form-control" formControlName="marca"></div>
+            <div class="col-md-4"><label class="form-label">Modelo</label><input class="form-control" formControlName="modelo"></div>
+            <div class="col-md-4"><label class="form-label">Serie</label><input class="form-control" formControlName="serie"></div>
+
+            <div class="col-md-4">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-8"><label class="form-label">Accesorios</label><input class="form-control" formControlName="accesorios"></div>
+          </div>
+        </div>
+
+        <!-- =============== OTRO =============== -->
+        <div class="col-12" formGroupName="otro" *ngIf="tramiteForm.get('prenda.tipo')?.value === 'OTRO'">
+          <div class="row g-3">
+            <div class="col-md-8"><label class="form-label">Descripción</label><input class="form-control" formControlName="descripcion"></div>
+            <div class="col-md-4"><label class="form-label">Identificación/Serie</label><input class="form-control" formControlName="identificacion"></div>
+
+            <div class="col-md-4">
+              <label class="form-label">Estado</label>
+              <select class="form-select" formControlName="estado">
+                <option *ngFor="let s of estadosPrenda" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" type="button" (click)="generarContratoPDF()">
+          Generar documento de contrato (PDF)
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
