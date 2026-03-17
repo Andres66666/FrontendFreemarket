@@ -1,33 +1,48 @@
+.sidebar-collapsed {
+  width: 80px !important;
+  overflow: hidden;
+}
+
+/* Oculta textos correctamente */
+.sidebar-collapsed span,
+.sidebar-collapsed .fw-semibold {
+  display: none !important;
+}
+
+/* Centrar iconos */
+.sidebar-collapsed .list-group-item {
+  justify-content: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Quitar separación */
+.sidebar-collapsed .d-flex {
+  justify-content: center !important;
+}
+
+/* Ocultar flechas */
+.sidebar-collapsed .bi-chevron-down,
+.sidebar-collapsed .bi-chevron-right {
+  display: none !important;
+}
+
+/* Ocultar SOLO submenus, no el principal */
+.sidebar-collapsed ul ul {
+  display: none !important;
+}
+/* Tamaño iconos */
+.sidebar-collapsed i {
+  font-size: 1.4rem;
+}
 .leftSide {
   width: 290px;
-  background: #6CC9BE;
-  min-height: calc(100vh - 56px);
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.3s ease;
+}
+.sidebar-collapsed .list-group-item > div {
+  justify-content: center !important;
 }
 
-/* En desktop siempre visible */
-@media (min-width: 768px) {
-  .leftSide {
-    transform: translateX(0) !important;
-    position: relative;
-  }
-}
-
-/* En móvil */
-@media (max-width: 767.98px) {
-  .leftSide {
-    position: fixed;
-    top: 87px; /* altura navbar */
-    left: 0;
-    z-index: 1050;
-    height: 100%;
-  }
-
-  .sidebar-closed {
-    transform: translateX(-100%);
-  }
-
-  .sidebar-open {
-    transform: translateX(0);
-  }
+.sidebar-collapsed .list-group-item i {
+  margin: 0 !important;
 }

@@ -29,7 +29,7 @@ export interface Usuario {
 
 export interface UsuarioRol {
   id: number;
-  usuario: Usuario; 
+  usuario: Usuario;
   rol: Role;
 }
 
@@ -55,7 +55,7 @@ export interface Producto {
   precio_mayor: number;
   stock: number;
   codigo_producto: string;
-  categoria: Categoria; // Relación con la categoría
+  categoria: Categoria;
   fecha_creacion: Date;
   fecha_actualizacion: Date;
   imagen_productos: string;
@@ -65,21 +65,20 @@ export interface Producto {
 export interface Venta {
   id: number;
   fecha_venta: Date;
-  usuario: Usuario; 
-  estado: string; 
-  total: number; 
+  usuario: Usuario;
+  estado: string;
+  total: number;
 }
 
 export interface DetalleVenta {
   id: number;
   venta: Venta;
-  producto: Producto; 
+  producto: Producto;
   cantidad: number;
   precio: number;
-  subtotal: number; 
+  subtotal: number;
   tipo_venta: string;
 }
-
 
 export interface Efectivo {
   id: number;
@@ -97,4 +96,3 @@ export interface Efectivo {
   total: number;
   fecha_creacion: Date;
 }
-

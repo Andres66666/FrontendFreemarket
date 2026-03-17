@@ -1,5 +1,11 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { StorageService } from '../../Services/Storage.service';
 import { ServicesService } from '../../Services/services.service';
@@ -32,12 +38,12 @@ export class PanelControlComponent implements OnInit {
   usuario_id = 0;
 
   openSubmenu: string | null = null;
-
+  isSidebarCollapsed = false;
   constructor(
     private storageService: StorageService,
     private router: Router,
     private authService: ServicesService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnInit(): void {
@@ -58,9 +64,12 @@ export class PanelControlComponent implements OnInit {
     const usuarioStr = this.storageService.getItem('usuario');
     const datosUsuario = this.safeParse<UsuarioLS>(usuarioStr, {});
 
-    // Roles / Permisos
+    // Roles / Permisos 74707215
     this.roles = this.safeParse<string[]>(localStorage.getItem('roles'), []);
-    this.userPermissions = this.safeParse<string[]>(localStorage.getItem('permisos'), []);
+    this.userPermissions = this.safeParse<string[]>(
+      localStorage.getItem('permisos'),
+      [],
+    );
 
     // Campos
     this.nombre_usuario = datosUsuario.nombre_usuario ?? '';
@@ -69,14 +78,13 @@ export class PanelControlComponent implements OnInit {
 
     this.imagen_url = datosUsuario.imagen_url ?? null;
     this.usuario_id = datosUsuario.usuario_id ?? 0;
-
   }
 
   // ===== Permisos / Roles =====
   puedeVer(permiso: string | string[]): boolean {
     if (!this.userPermissions?.length) return false;
     return Array.isArray(permiso)
-      ? permiso.some(p => this.userPermissions.includes(p))
+      ? permiso.some((p) => this.userPermissions.includes(p))
       : this.userPermissions.includes(permiso);
   }
 
@@ -84,7 +92,9 @@ export class PanelControlComponent implements OnInit {
     if (!this.roles?.length) return false;
 
     // Por si a veces roles viene como "Administrador" / "Empleado" y otras como "ROLE_ADMIN"
-    return this.roles.some(r => String(r).toLowerCase() === rol.toLowerCase());
+    return this.roles.some(
+      (r) => String(r).toLowerCase() === rol.toLowerCase(),
+    );
   }
 
   // ===== Sidebar =====
@@ -101,12 +111,19 @@ export class PanelControlComponent implements OnInit {
 
   toggleSidebar(): void {
     this.isSidebarOpen = !this.isSidebarOpen;
-  }
 
+    if (this.isSidebarOpen) {
+      this.isSidebarCollapsed = false;
+    }
+  }
   toggleSubmenu(menu: string): void {
+    if (this.isSidebarCollapsed) {
+      this.isSidebarCollapsed = false;
+      this.openSubmenu = menu;
+      return;
+    }
     this.openSubmenu = this.openSubmenu === menu ? null : menu;
   }
-
   isSubmenuOpen(menu: string): boolean {
     return this.openSubmenu === menu;
   }
@@ -130,5 +147,12 @@ export class PanelControlComponent implements OnInit {
 
   panelDeControl(): void {
     this.router.navigate(['panel-control/dashboardComponent']);
+  }
+  collapseSidebar(): void {
+    if (this.windowWidth >= 768) {
+      this.isSidebarCollapsed = true;
+    } else {
+      this.isSidebarOpen = false;
+    }
   }
 }

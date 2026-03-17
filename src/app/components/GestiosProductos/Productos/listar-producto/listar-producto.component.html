@@ -1,13 +1,10 @@
 <div class="container-fluid px-2 px-md-4 mt-4">
-
   <div class="card shadow-sm">
     <div class="card-body">
-
       <h2 class="text-center mb-4">Lista de Productos</h2>
 
       <!-- FILTROS -->
       <div class="row g-3 mb-4">
-
         <div class="col-12 col-sm-6 col-lg-3">
           <select
             class="form-select"
@@ -43,23 +40,19 @@
         </div>
 
         <div class="col-12 col-sm-6 col-lg-3">
-          <button
-            class="btn btn-success w-100"
-            (click)="registrarProducto()"
-          >
+          <button class="btn btn-success w-100" (click)="registrarProducto()">
             <i class="bi bi-journal-plus me-2"></i>
             Registrar Producto
           </button>
         </div>
-
       </div>
 
       <!-- TABLA PARA TABLET Y PC -->
       <div class="table-responsive d-none d-md-block">
-
-        <table class="table table-striped table-bordered table-hover align-middle text-center">
-
-          <thead class="table-dark">
+        <table
+          class="table table-striped table-bordered table-hover align-middle text-center"
+        >
+          <thead class="table-info">
             <tr>
               <th>Img</th>
               <th>Nombre</th>
@@ -69,7 +62,7 @@
               <th>Compra</th>
               <th>Unitario</th>
               <th class="d-none d-lg-table-cell">Mayor</th>
-              <th (click)="ordenarPorStock()" style="cursor:pointer">Stock</th>
+              <th (click)="ordenarPorStock()" style="cursor: pointer">Stock</th>
               <th class="d-none d-xl-table-cell">Creación</th>
               <th class="d-none d-xl-table-cell">Actualización</th>
               <th>Acciones</th>
@@ -81,16 +74,20 @@
               *ngFor="let producto of filteredProductos()"
               [ngClass]="{
                 'table-danger': !producto.estado_equipo,
-                'table-success': producto.estado_equipo
+                'table-success': producto.estado_equipo,
               }"
             >
-
               <td>
                 <img
                   *ngIf="producto.imagen_productos"
                   [src]="producto.imagen_productos"
                   class="img-fluid rounded-circle"
-                  style="width:40px;height:40px;object-fit:cover;cursor:pointer"
+                  style="
+                    width: 40px;
+                    height: 40px;
+                    object-fit: cover;
+                    cursor: pointer;
+                  "
                   (click)="openModal(producto.imagen_productos)"
                 />
               </td>
@@ -114,17 +111,15 @@
               <td>{{ producto.stock }}</td>
 
               <td class="d-none d-xl-table-cell">
-                {{ producto.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}
+                {{ producto.fecha_creacion | date: "dd/MM/yyyy HH:mm" }}
               </td>
 
               <td class="d-none d-xl-table-cell">
-                {{ producto.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}
+                {{ producto.fecha_actualizacion | date: "dd/MM/yyyy HH:mm" }}
               </td>
 
               <td>
-
                 <div class="d-flex flex-column flex-lg-row gap-1">
-
                   <button
                     class="btn btn-primary btn-sm"
                     (click)="editarProducto(producto.id)"
@@ -134,40 +129,38 @@
 
                   <button
                     class="btn btn-sm"
-                    [ngClass]="producto.estado_equipo ? 'btn-danger':'btn-success'"
+                    [ngClass]="
+                      producto.estado_equipo ? 'btn-danger' : 'btn-success'
+                    "
                     (click)="toggleProductoActivado(producto)"
                   >
-                    {{ producto.estado_equipo ? "Desactivar":"Activar" }}
+                    {{ producto.estado_equipo ? "Desactivar" : "Activar" }}
                   </button>
-
                 </div>
-
               </td>
-
             </tr>
           </tbody>
-
         </table>
-
       </div>
 
       <!-- TARJETAS PARA CELULAR -->
       <div class="d-md-none">
-
         <div
           class="card mb-3 shadow-sm"
           *ngFor="let producto of filteredProductos()"
         >
-
           <div class="card-body">
-
             <div class="d-flex align-items-center mb-3">
-
               <img
                 *ngIf="producto.imagen_productos"
                 [src]="producto.imagen_productos"
                 class="rounded"
-                style="width:70px;height:70px;object-fit:cover;margin-right:10px"
+                style="
+                  width: 70px;
+                  height: 70px;
+                  object-fit: cover;
+                  margin-right: 10px;
+                "
                 (click)="openModal(producto.imagen_productos)"
               />
 
@@ -177,7 +170,6 @@
                   Código: {{ producto.codigo_producto }}
                 </small>
               </div>
-
             </div>
 
             <p class="mb-1">
@@ -196,18 +188,15 @@
             </p>
 
             <p class="mb-2">
-
               <span
                 class="badge"
-                [ngClass]="producto.estado_equipo ? 'bg-success':'bg-danger'"
+                [ngClass]="producto.estado_equipo ? 'bg-success' : 'bg-danger'"
               >
-                {{ producto.estado_equipo ? "Activo":"Inactivo" }}
+                {{ producto.estado_equipo ? "Activo" : "Inactivo" }}
               </span>
-
             </p>
 
             <div class="d-grid gap-2">
-
               <button
                 class="btn btn-primary btn-sm"
                 (click)="editarProducto(producto.id)"
@@ -217,18 +206,16 @@
 
               <button
                 class="btn btn-sm"
-                [ngClass]="producto.estado_equipo ? 'btn-danger':'btn-success'"
+                [ngClass]="
+                  producto.estado_equipo ? 'btn-danger' : 'btn-success'
+                "
                 (click)="toggleProductoActivado(producto)"
               >
-                {{ producto.estado_equipo ? "Desactivar":"Activar" }}
+                {{ producto.estado_equipo ? "Desactivar" : "Activar" }}
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
 
       <!-- PAGINACIÓN -->
@@ -236,7 +223,6 @@
       <div
         class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 gap-2"
       >
-
         <button
           class="btn btn-secondary w-100 w-md-auto"
           (click)="previousPage()"
@@ -254,9 +240,7 @@
         >
           Siguiente
         </button>
-
       </div>
-
     </div>
   </div>
 </div>
