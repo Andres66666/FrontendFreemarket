@@ -64,7 +64,7 @@ export class PanelControlComponent implements OnInit {
     const usuarioStr = this.storageService.getItem('usuario');
     const datosUsuario = this.safeParse<UsuarioLS>(usuarioStr, {});
 
-    // Roles / Permisos 74707215
+    // Roles / Permisos
     this.roles = this.safeParse<string[]>(localStorage.getItem('roles'), []);
     this.userPermissions = this.safeParse<string[]>(
       localStorage.getItem('permisos'),
@@ -91,7 +91,6 @@ export class PanelControlComponent implements OnInit {
   tieneRol(rol: string): boolean {
     if (!this.roles?.length) return false;
 
-    // Por si a veces roles viene como "Administrador" / "Empleado" y otras como "ROLE_ADMIN"
     return this.roles.some(
       (r) => String(r).toLowerCase() === rol.toLowerCase(),
     );

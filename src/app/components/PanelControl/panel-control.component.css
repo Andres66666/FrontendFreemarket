@@ -1,3 +1,4 @@
+/* ===== SIDEBAR COLAPSADO ===== */
 .sidebar-collapsed {
   width: 80px !important;
   overflow: hidden;
@@ -31,18 +32,46 @@
 .sidebar-collapsed ul ul {
   display: none !important;
 }
+
 /* Tamaño iconos */
 .sidebar-collapsed i {
   font-size: 1.4rem;
 }
+
 .leftSide {
   width: 290px;
   transition: all 0.3s ease;
 }
+
 .sidebar-collapsed .list-group-item > div {
   justify-content: center !important;
 }
 
 .sidebar-collapsed .list-group-item i {
   margin: 0 !important;
+}
+
+/* ===== ESTILO TEXTO E ICONOS ===== */
+
+/* Texto negro */
+.leftSide .list-group-item {
+  color: #000 !important;
+}
+
+/* Iconos negros */
+.leftSide .list-group-item i {
+  color: #000 !important;
+}
+
+/* ===== HOVER VERDE AGUA SUAVE ===== */
+
+.leftSide .list-group-item:hover {
+  background: rgba(116, 221, 102, 0.2) !important;
+  transition: all 0.2s ease;
+}
+
+/* Opacar texto e iconos al pasar mouse */
+.leftSide .list-group-item:hover span,
+.leftSide .list-group-item:hover i {
+  opacity: 0.7;
 }

@@ -189,15 +189,6 @@
             </li>
 
             <li
-              *ngIf="puedeVer('listarProductosEmpleado')"
-              class="list-group-item list-group-item-action border-0 rounded-4 mb-2 text-white"
-              routerLink="/panel-control/listar-productos-empleado"
-              style="background: rgba(255, 255, 255, 0.14); cursor: pointer"
-            >
-              <i class="bi bi-box2-fill me-2"></i> Productos (Empleado)
-            </li>
-
-            <li
               *ngIf="puedeVer(['registrarVenta', 'registrarVenta-Empleado'])"
               class="list-group-item list-group-item-action border-0 rounded-4 mb-2 text-white"
               routerLink="/panel-control/listar-ventas"
