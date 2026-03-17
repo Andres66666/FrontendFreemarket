@@ -54,17 +54,11 @@ export class ListarDetalleVentaComponent implements OnInit {
   // ==============================
   getDetallesVenta() {
     this.servicesService.getDetalleVentas().subscribe((data) => {
-      console.log('🔥 DATOS RAW DEL BACKEND:', data);
-
       this.detallesVenta = data.sort(
         (a, b) =>
           new Date(b.venta.fecha_venta).getTime() -
           new Date(a.venta.fecha_venta).getTime(),
       );
-
-      console.log('🔥 DETALLES ORDENADOS:', this.detallesVenta);
-      console.log('🔥 PRIMER REGISTRO:', this.detallesVenta[0]);
-
       this.generateUniqueLists();
       this.applyFilters();
     });
@@ -77,14 +71,11 @@ export class ListarDetalleVentaComponent implements OnInit {
     }, 500);
   }
   private generateUniqueLists() {
-    console.log('🔍 INICIANDO generateUniqueLists...');
-
     // Usuarios únicos (con validación)
     const usuariosSet = new Map();
     this.detallesVenta.forEach((d, index) => {
       const user = d.venta?.usuario;
       if (user && user.id) {
-        console.log(`✅ Usuario ${index}:`, user.id, user.nombre_usuario);
         usuariosSet.set(user.id, {
           id: Number(user.id), // 🔥 ASEGURAR NUMBER
           nombre_usuario: user.nombre_usuario,
@@ -92,43 +83,28 @@ export class ListarDetalleVentaComponent implements OnInit {
           ci: user.ci || '',
         });
       } else {
-        console.log(`❌ Usuario inválido en registro ${index}:`, d.venta);
       }
     });
     this.uniqueUsuarios = Array.from(usuariosSet.values());
-    console.log('✅ USUARIOS ÚNICOS:', this.uniqueUsuarios);
 
     // Categorías únicas (con validación)
     const categoriasSet = new Map();
     this.detallesVenta.forEach((d, index) => {
       const cat = d.producto?.categoria;
       if (cat && cat.id) {
-        console.log(`✅ Categoría ${index}:`, cat.id, cat.nombre_categoria);
         categoriasSet.set(cat.id, {
           id: Number(cat.id), // 🔥 ASEGURAR NUMBER
           nombre_categoria: cat.nombre_categoria || '',
         });
-      } else {
-        console.log(
-          `❌ Categoría inválida en registro ${index}:`,
-          d.producto?.categoria,
-        );
       }
     });
     this.uniqueCategorias = Array.from(categoriasSet.values());
-    console.log('✅ CATEGORÍAS ÚNICAS:', this.uniqueCategorias);
   }
 
   // ==============================
   // FILTROS (OPTIMIZADO)
   // ==============================
   applyFilters() {
-    console.log('🔍 APLICANDO FILTROS:', {
-      usuarioId: this.selectedUsuarioId,
-      categoriaId: this.selectedCategoriaId,
-      venta: this.searchVenta,
-    });
-
     this.loading = true;
     setTimeout(() => {
       let filtered = this.detallesVenta;
@@ -138,26 +114,15 @@ export class ListarDetalleVentaComponent implements OnInit {
         filtered = filtered.filter((d) =>
           d.venta.id.toString().includes(this.searchVenta),
         );
-        console.log('🔍 Después de filtro venta:', filtered.length);
       }
 
       // 2. Usuario (CORREGIDO)
       if (this.selectedUsuarioId !== '' && this.selectedUsuarioId !== null) {
         const usuarioIdNum = Number(this.selectedUsuarioId);
-        console.log('🔍 Filtrando usuario ID:', usuarioIdNum);
         filtered = filtered.filter((d) => {
           const match = d.venta?.usuario?.id === usuarioIdNum;
-          console.log(
-            '  - Registro usuario:',
-            d.venta?.usuario?.id,
-            '==',
-            usuarioIdNum,
-            '?',
-            match,
-          );
           return match;
         });
-        console.log('🔍 Después de filtro usuario:', filtered.length);
       }
 
       // 3. Categoría (CORREGIDO)
@@ -166,24 +131,12 @@ export class ListarDetalleVentaComponent implements OnInit {
         this.selectedCategoriaId !== null
       ) {
         const categoriaIdNum = Number(this.selectedCategoriaId);
-        console.log('🔍 Filtrando categoría ID:', categoriaIdNum);
         filtered = filtered.filter((d) => {
           const catId = d.producto?.categoria?.id;
           const match = catId === categoriaIdNum;
-          console.log(
-            '  - Registro categoría:',
-            catId,
-            '==',
-            categoriaIdNum,
-            '?',
-            match,
-          );
           return match;
         });
-        console.log('🔍 Después de filtro categoría:', filtered.length);
       }
-
-      // ... resto de filtros igual ...
 
       if (this.searchProducto) {
         filtered = filtered.filter((d) =>
@@ -222,7 +175,6 @@ export class ListarDetalleVentaComponent implements OnInit {
         );
       }
 
-      console.log('✅ RESULTADO FINAL:', filtered.length, 'registros');
       this.filteredList = filtered;
       this.page = 1;
       this.updatePaginatedDetallesVenta();
