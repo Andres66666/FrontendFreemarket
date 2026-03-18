@@ -1,6 +1,6 @@
 // dashboard.component.ts
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
@@ -19,13 +19,46 @@ type ImageItem = {
 })
 export class DashboardComponent {
   images: ImageItem[] = [
-    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918463/BCP_rchxxv.jpg', category: 'bancos', alt: 'BCP' },
-    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918463/CUENTA_UNION_1_svdgdo.jpg', category: 'bancos', alt: 'Cuenta Unión 0' },
-    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918464/CUENTA_UNION_0_kih6zp.jpg', category: 'bancos', alt: 'Cuenta Unión 1' },
-    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918464/YAPE_shmdtn.jpg', category: 'bancos', alt: 'Yape' },
-    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767919783/yasta_g63rgq.jpg', category: 'bancos', alt: 'Yasta' },
-    { src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1771986339/takenos_b8aba9.jpg', category: 'bancos', alt: 'Takenos' },
-
+    {
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918463/BCP_rchxxv.jpg',
+      category: 'bancos',
+      alt: 'BCP',
+    },
+    {
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918463/CUENTA_UNION_1_svdgdo.jpg',
+      category: 'bancos',
+      alt: 'Cuenta Unión 0',
+    },
+    {
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918464/CUENTA_UNION_0_kih6zp.jpg',
+      category: 'bancos',
+      alt: 'Cuenta Unión 1',
+    },
+    {
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918464/YAPE_shmdtn.jpg',
+      category: 'bancos',
+      alt: 'Yape',
+    },
+    {
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767919783/yasta_g63rgq.jpg',
+      category: 'bancos',
+      alt: 'Yasta',
+    },
+    {
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1771986339/takenos_b8aba9.jpg',
+      category: 'bancos',
+      alt: 'Takenos',
+    },
+    {
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1773792023/QR_jhovana_aihgv7.jpg',
+      category: 'bancos',
+      alt: 'QR Jhovana',
+    },
+    {
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1773792026/QR_sonia_ib9zic.jpg',
+      category: 'bancos',
+      alt: 'QR Sonia',
+    },
   ];
 
   selectedCategory = '';
@@ -37,38 +70,29 @@ export class DashboardComponent {
   whatsappNumber = '';
 
   get currentImage(): ImageItem | null {
-
     return this.filteredImages?.length
       ? this.filteredImages[this.currentIndex]
       : null;
-
   }
 
   filterImages(): void {
-
     this.filteredImages = this.selectedCategory
-      ? this.images.filter(img => img.category === this.selectedCategory)
+      ? this.images.filter((img) => img.category === this.selectedCategory)
       : [...this.images];
 
     this.currentIndex = 0;
-
   }
 
   openModal(index: number): void {
-
     this.currentIndex = index;
     this.showModal = true;
-
   }
 
   closeModal(): void {
-
     this.showModal = false;
-
   }
 
   sendToWhatsapp(): void {
-
     const img = this.currentImage;
 
     if (!img) return;
@@ -80,11 +104,9 @@ export class DashboardComponent {
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 
     window.open(url, '_blank');
-
   }
 
   sendGameToWhatsapp(): void {
-
     const phone = (this.whatsappNumber || '').replace(/\D/g, '');
 
     const gameLink =
@@ -95,11 +117,9 @@ export class DashboardComponent {
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 
     window.open(url, '_blank');
-
   }
 
   async copyImageLink(): Promise<void> {
-
     const img = this.currentImage;
 
     if (!img) return;
@@ -107,7 +127,5 @@ export class DashboardComponent {
     await navigator.clipboard.writeText(img.src);
 
     alert('Link copiado');
-
   }
-
 }
