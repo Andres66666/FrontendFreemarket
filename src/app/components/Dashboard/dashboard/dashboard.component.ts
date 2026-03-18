@@ -25,12 +25,12 @@ export class DashboardComponent {
       alt: 'BCP',
     },
     {
-      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918463/CUENTA_UNION_1_svdgdo.jpg',
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1773843787/QR_Andres_2_mxqkcw.jpg',
       category: 'bancos',
       alt: 'Cuenta Unión 0',
     },
     {
-      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918464/CUENTA_UNION_0_kih6zp.jpg',
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1773843787/QR_Andres_1_lwydyj.jpg',
       category: 'bancos',
       alt: 'Cuenta Unión 1',
     },
