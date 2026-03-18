@@ -22,32 +22,32 @@ export class DashboardComponent {
     {
       src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918463/BCP_rchxxv.jpg',
       category: 'bancos',
-      alt: 'BCP',
+      alt: 'BCP Andres',
     },
     {
       src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1773843787/QR_Andres_2_mxqkcw.jpg',
       category: 'bancos',
-      alt: 'Cuenta Unión 0',
+      alt: 'QR Unión Andres 0',
     },
     {
       src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1773843787/QR_Andres_1_lwydyj.jpg',
       category: 'bancos',
-      alt: 'Cuenta Unión 1',
+      alt: 'QR Unión Andres 1',
     },
     {
       src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767918464/YAPE_shmdtn.jpg',
       category: 'bancos',
-      alt: 'Yape',
+      alt: 'Yape Andres',
     },
     {
       src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1767919783/yasta_g63rgq.jpg',
       category: 'bancos',
-      alt: 'Yasta',
+      alt: 'Yasta Andres',
     },
     {
       src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1771986339/takenos_b8aba9.jpg',
       category: 'bancos',
-      alt: 'Takenos',
+      alt: 'Takenos Andres',
     },
     {
       src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1773792023/QR_jhovana_aihgv7.jpg',
