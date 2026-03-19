@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -18,8 +18,8 @@ import {
 } from '../../../../Models/models';
 import { ServicesService } from '../../../../Services/services.service';
 
-import { OkComponent } from '../../../Mensajes/ok/ok.component';
 import { ErrorComponent } from '../../../Mensajes/error/error.component';
+import { OkComponent } from '../../../Mensajes/ok/ok.component';
 import { EjBarraComponent } from '../../ej-barra/ej-barra.component';
 
 @Component({
@@ -38,12 +38,11 @@ import { EjBarraComponent } from '../../ej-barra/ej-barra.component';
   styleUrl: './listar-productos-empleado.component.css',
 })
 export class ListarProductosEmpleadoComponent implements OnInit {
-
   productos: Producto[] = [];
   categorias: Categoria[] = [];
   ventas: Venta[] = [];
   usuarios: Usuario[] = [];
-  detalleVentas: DetalleVenta[] = []; 
+  detalleVentas: DetalleVenta[] = [];
 
   ok: string = '';
   error: string = '';
@@ -90,7 +89,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
   constructor(
     private productoService: ServicesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.ventaForm = this.fb.group({
       usuario: ['', Validators.required],
@@ -108,7 +107,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUsuarios(); 
+    this.getUsuarios();
     this.getProductos();
     this.getCategorias();
     this.getVentas();
@@ -156,14 +155,18 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     const roles = this.productoService.getRolesFromLocalStorage();
     this.mostrarPrecioMayor = !this.tieneRolOcultarPrecio(roles);
 
-    this.productoService.verificarUsuario(this.usuario_id).subscribe((usuarioExistente) => {
-      if (!usuarioExistente) return;
+    this.productoService
+      .verificarUsuario(this.usuario_id)
+      .subscribe((usuarioExistente) => {
+        if (!usuarioExistente) return;
 
-      const usuarioSeleccionado = this.usuarios.find((u) => u.id === this.usuario_id);
-      if (usuarioSeleccionado) {
-        this.ventaForm.patchValue({ usuario: usuarioSeleccionado });
-      }
-    });
+        const usuarioSeleccionado = this.usuarios.find(
+          (u) => u.id === this.usuario_id,
+        );
+        if (usuarioSeleccionado) {
+          this.ventaForm.patchValue({ usuario: usuarioSeleccionado });
+        }
+      });
   }
 
   private getUsuarioLocalStorage() {
@@ -184,14 +187,14 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
   filteredProductos(): Producto[] {
     let filtered = this.productos.filter(
-      (producto) => producto.estado_equipo !== false
+      (producto) => producto.estado_equipo !== false,
     );
 
     if (this.searchCategoria) {
       filtered = filtered.filter((producto) =>
         producto.categoria.nombre_categoria
           .toLowerCase()
-          .includes(this.searchCategoria.toLowerCase())
+          .includes(this.searchCategoria.toLowerCase()),
       );
     }
 
@@ -199,7 +202,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
       filtered = filtered.filter((producto) =>
         producto.nombre_producto
           .toLowerCase()
-          .includes(this.searchNombreProducto.toLowerCase())
+          .includes(this.searchNombreProducto.toLowerCase()),
       );
     }
 
@@ -207,13 +210,13 @@ export class ListarProductosEmpleadoComponent implements OnInit {
       filtered = filtered.filter((producto) =>
         producto.codigo_producto
           .toLowerCase()
-          .includes(this.searchCodigoProducto.toLowerCase())
+          .includes(this.searchCodigoProducto.toLowerCase()),
       );
     }
 
     return filtered.slice(
       (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
+      this.page * this.pageSize,
     );
   }
 
@@ -221,7 +224,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     this.searchCodigoProducto = codigo;
 
     const productoEncontrado = this.productos.find(
-      (p) => p.codigo_producto.toLowerCase() === codigo.toLowerCase()
+      (p) => p.codigo_producto.toLowerCase() === codigo.toLowerCase(),
     );
 
     if (productoEncontrado) {
@@ -260,7 +263,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
         : Number(producto.precio_unitario);
 
     const existingDetail = this.detalleVenta.find(
-      (d) => d.producto.id === producto.id
+      (d) => d.producto.id === producto.id,
     );
 
     if (existingDetail) {
@@ -287,7 +290,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   actualizarCantidad(
     item: DetalleVenta | undefined,
     nuevaCantidad: number,
-    tipoPrecio: string
+    tipoPrecio: string,
   ) {
     if (!item) return;
 
@@ -341,7 +344,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     };
 
     const existingDetail = this.detalleVenta.find(
-      (d) => d.producto.id === nuevoDetalle.producto.id
+      (d) => d.producto.id === nuevoDetalle.producto.id,
     );
 
     if (existingDetail) {
@@ -358,7 +361,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   actualizarTotalVenta() {
     this.totalVenta = this.detalleVenta.reduce(
       (total, item) => total + item.subtotal,
-      0
+      0,
     );
     this.ventaForm.patchValue({ total: this.totalVenta });
     this.calcularCambio();
@@ -367,7 +370,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   calcularTotal() {
     this.totalVenta = this.detalleVenta.reduce(
       (acc, item) => acc + item.subtotal,
-      0
+      0,
     );
     this.ventaForm.patchValue({ total: this.totalVenta });
   }
@@ -378,7 +381,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
     if (
       tipoPrecio === 'mayor' &&
-      producto?.categoria.nombre_categoria === 'Targetas'
+      producto?.categoria.nombre_categoria === 'Tarjetas'
     ) {
       return cantidad >= 10;
     }
@@ -392,7 +395,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   }
 
   isCategoriaConBotonUnidad(producto: Producto): boolean {
-    return producto.categoria.nombre_categoria === 'Targetas';
+    return producto.categoria.nombre_categoria === 'Tarjetas';
   }
 
   registrarVenta() {
@@ -416,7 +419,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
       (error) => {
         console.error('Error al registrar la venta:', error);
         this.error = 'Error al registrar la venta.';
-      }
+      },
     );
   }
 
@@ -441,7 +444,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     }));
 
     const promises = detalles.map((detalle) =>
-      this.productoService.crearDetalleVenta(detalle).toPromise()
+      this.productoService.crearDetalleVenta(detalle).toPromise(),
     );
 
     Promise.all(promises)
