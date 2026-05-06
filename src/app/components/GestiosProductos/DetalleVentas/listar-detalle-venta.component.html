@@ -209,37 +209,33 @@
               </td>
 
               <!-- ADMIN -->
+              <!-- En lugar de acceso directo -->
               <td *ngIf="isAdmin">
                 {{
-                  detalle.producto.precio_compra
-                    | currency: "Bs. " : "symbol" : "1.2-2"
+                  getPrecioCompra(detalle)
+                    | currency: "Bs " : "symbol" : "1.2-2"
                 }}
               </td>
               <td *ngIf="isAdmin">
                 {{
-                  detalle.producto.precio_unitario
-                    | currency: "Bs. " : "symbol" : "1.2-2"
+                  getPrecioUnitario(detalle)
+                    | currency: "Bs " : "symbol" : "1.2-2"
                 }}
               </td>
               <td *ngIf="isAdmin">
                 {{
-                  detalle.producto.precio_mayor
-                    | currency: "Bs. " : "symbol" : "1.2-2"
+                  getPrecioMayor(detalle) | currency: "Bs " : "symbol" : "1.2-2"
                 }}
               </td>
               <td *ngIf="isAdmin">
                 {{
-                  calcularCosto(detalle) | currency: "Bs. " : "symbol" : "1.2-2"
+                  calcularCosto(detalle) | currency: "Bs " : "symbol" : "1.2-2"
                 }}
               </td>
-              <td
-                *ngIf="isAdmin"
-                [class.text-success]="calcularGanancia(detalle) > 0"
-                [class.text-danger]="calcularGanancia(detalle) < 0"
-              >
+              <td *ngIf="isAdmin">
                 {{
                   calcularGanancia(detalle)
-                    | currency: "Bs. " : "symbol" : "1.2-2"
+                    | currency: "Bs " : "symbol" : "1.2-2"
                 }}
               </td>
             </tr>

@@ -2,10 +2,10 @@
   <h2 class="text-center">Registrar Producto</h2>
   <form [formGroup]="productoForm" (ngSubmit)="registrarProductos()">
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-12">
         <!-- Nombre del Producto -->
-        <div class="form-group row mb-4">
-          <div class="col-sm-5 text-start">
+        <div class="form-group row mb-3">
+          <div class="col-sm-6 text-start">
             <label for="nombre_producto" class="form-label"
               >Nombre del Producto</label
             >
@@ -18,12 +18,12 @@
               [ngClass]="{
                 'is-invalid':
                   productoForm.get('nombre_producto')?.invalid &&
-                  productoForm.get('nombre_producto')?.touched
+                  productoForm.get('nombre_producto')?.touched,
               }"
             />
             <div class="invalid-feedback">Este campo es obligatorio.</div>
           </div>
-          <div class="col-sm-5 text-start">
+          <div class="col-sm-6 text-start">
             <label for="codigo_producto" class="form-label"
               >Codigo Del Producto</label
             >
@@ -36,13 +36,13 @@
               [ngClass]="{
                 'is-invalid':
                   productoForm.get('codigo_producto')?.invalid &&
-                  productoForm.get('codigo_producto')?.touched
+                  productoForm.get('codigo_producto')?.touched,
               }"
             />
             <div class="invalid-feedback">Este campo es obligatorio.</div>
           </div>
         </div>
-        <div class="form-group row mb-4">
+        <div class="form-group row mb-3">
           <div class="col-sm-4 text-start">
             <label for="precio_compra" class="form-label">Precio Compra</label>
             <input
@@ -54,12 +54,12 @@
               [ngClass]="{
                 'is-invalid':
                   productoForm.get('precio_compra')?.invalid &&
-                  productoForm.get('precio_compra')?.touched
+                  productoForm.get('precio_compra')?.touched,
               }"
             />
             <div class="invalid-feedback">Ingrese un precio_compra válido.</div>
           </div>
-          <div class="col-sm-3 text-start">
+          <div class="col-sm-4 text-start">
             <label for="precio_unitario" class="form-label"
               >Precio unitario</label
             >
@@ -72,14 +72,14 @@
               [ngClass]="{
                 'is-invalid':
                   productoForm.get('precio_unitario')?.invalid &&
-                  productoForm.get('precio_unitario')?.touched
+                  productoForm.get('precio_unitario')?.touched,
               }"
             />
             <div class="invalid-feedback">
               Ingrese un precio_unitario válido.
             </div>
           </div>
-          <div class="col-sm-3 text-start">
+          <div class="col-sm-4 text-start">
             <label for="precio_mayor" class="form-label">Precio Mayor</label>
             <input
               type="number"
@@ -90,14 +90,14 @@
               [ngClass]="{
                 'is-invalid':
                   productoForm.get('precio_mayor')?.invalid &&
-                  productoForm.get('precio_mayor')?.touched
+                  productoForm.get('precio_mayor')?.touched,
               }"
             />
             <div class="invalid-feedback">Ingrese un precio_mayor válido.</div>
           </div>
         </div>
-        <div class="form-group row mb-4">
-          <div class="col-sm-5 text-start">
+        <div class="form-group row mb-3">
+          <div class="col-sm-6 text-start">
             <label for="stock" class="form-label">Stock</label>
             <input
               type="number"
@@ -108,12 +108,12 @@
               [ngClass]="{
                 'is-invalid':
                   productoForm.get('stock')?.invalid &&
-                  productoForm.get('stock')?.touched
+                  productoForm.get('stock')?.touched,
               }"
             />
             <div class="invalid-feedback">Ingrese una cantidad válida.</div>
           </div>
-          <div class="col-sm-5 text-start">
+          <div class="col-sm-6 text-start">
             <label for="categoria" class="form-label">Categoría</label>
             <select
               id="categoria"
@@ -122,7 +122,7 @@
               [ngClass]="{
                 'is-invalid':
                   productoForm.get('categoria')?.invalid &&
-                  productoForm.get('categoria')?.touched
+                  productoForm.get('categoria')?.touched,
               }"
             >
               <option *ngFor="let cat of categoria" [value]="cat.id">
@@ -132,8 +132,8 @@
             <div class="invalid-feedback">Seleccione una categoría.</div>
           </div>
         </div>
-        <div class="form-group row mb-4">
-          <div class="col-sm-10 text-start">
+        <div class="form-group row mb-3">
+          <div class="col-sm-12 text-start">
             <label for="descripcion" class="form-label">Descripción</label>
             <textarea
               id="descripcion"
@@ -144,65 +144,45 @@
               [ngClass]="{
                 'is-invalid':
                   productoForm.get('descripcion')?.invalid &&
-                  productoForm.get('descripcion')?.touched
+                  productoForm.get('descripcion')?.touched,
               }"
             ></textarea>
             <div class="invalid-feedback">Este campo es obligatorio.</div>
           </div>
         </div>
 
-        <!-- Botón de Enviar -->
-        <button
-          type="submit"
-          class="btn btn-primary me-2"
-          [disabled]="productoForm.invalid"
-        >
-          Registrar Producto
-        </button>
-        <button class="btn btn-success" (click)="volver()">Volver</button>
-      </div>
-      <div class="col-md-4 text-center">
-        <div class="form-group">
-          <label
-            for="imagen_productos"
-            class="form-label"
-            style="font-size: 1.6rem"
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="volver()"
+            title="Volver a la lista de productos"
           >
-            Imagen del Producto
-          </label>
-          <input
-            type="file"
-            id="imagen_productos"
-            class="form-control"
-            (change)="onFileChange($event)"
-            [ngClass]="{ 'is-invalid': isFileInvalid }"
-          />
-          <div class="invalid-feedback">{{ errorMensaje }}</div>
-          <!-- Vista previa de la imagen -->
-          <div class="mt-3">
-            <img
-              *ngIf="imagenPreview"
-              [src]="imagenPreview"
-              alt="Vista previa de la imagen"
-              class="img-thumbnail"
-              style="width: 350px; height: 350; object-fit: cover"
-            />
-          </div>
+            <i class="bi bi-door-open me-1 fs-5"></i>
+          </button>
+          <button
+            type="submit"
+            class="btn btn-outline-success"
+            [disabled]="productoForm.invalid"
+            title="Registrar Producto"
+          >
+            <i class="bi bi-floppy2-fill me-1 fs-5"></i>
+          </button>
         </div>
       </div>
     </div>
   </form>
-  <!-- Modal de Éxito -->
-  <app-ok
-    *ngIf="mensajeModal"
-    [mensaje]="mensajeModal"
-    (close)="manejarOk()"
-  ></app-ok>
-
-  <!-- Modal de Error -->
-  <app-error
-    *ngIf="errorModal"
-    [mensaje]="errorModal"
-    (close)="manejarError()"
-  ></app-error>
 </div>
+<!-- Modal de Éxito -->
+<app-ok
+  *ngIf="mensajeModal"
+  [mensaje]="mensajeModal"
+  (close)="manejarOk()"
+></app-ok>
+
+<!-- Modal de Error -->
+<app-error
+  *ngIf="errorModal"
+  [mensaje]="errorModal"
+  (close)="manejarError()"
+></app-error>

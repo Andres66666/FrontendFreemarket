@@ -54,7 +54,6 @@
         >
           <thead class="table-info">
             <tr>
-              <th>Img</th>
               <th>Nombre</th>
               <th>Código</th>
               <th class="d-none d-lg-table-cell">Descripción</th>
@@ -77,21 +76,6 @@
                 'table-success': producto.estado_equipo,
               }"
             >
-              <td>
-                <img
-                  *ngIf="producto.imagen_productos"
-                  [src]="producto.imagen_productos"
-                  class="img-fluid rounded-circle"
-                  style="
-                    width: 40px;
-                    height: 40px;
-                    object-fit: cover;
-                    cursor: pointer;
-                  "
-                  (click)="openModal(producto.imagen_productos)"
-                />
-              </td>
-
               <td>{{ producto.nombre_producto }}</td>
               <td>{{ producto.codigo_producto }}</td>
 
@@ -151,19 +135,6 @@
         >
           <div class="card-body">
             <div class="d-flex align-items-center mb-3">
-              <img
-                *ngIf="producto.imagen_productos"
-                [src]="producto.imagen_productos"
-                class="rounded"
-                style="
-                  width: 70px;
-                  height: 70px;
-                  object-fit: cover;
-                  margin-right: 10px;
-                "
-                (click)="openModal(producto.imagen_productos)"
-              />
-
               <div>
                 <h6 class="mb-0">{{ producto.nombre_producto }}</h6>
                 <small class="text-muted">

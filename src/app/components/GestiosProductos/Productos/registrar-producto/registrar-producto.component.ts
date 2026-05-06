@@ -1,3 +1,5 @@
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -5,13 +7,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Producto, Categoria } from '../../../../Models/models';
-import { Component, EventEmitter, Output } from '@angular/core';
-import { ServicesService } from '../../../../Services/services.service';
-import { CommonModule } from '@angular/common';
-import { OkComponent } from '../../../Mensajes/ok/ok.component';
-import { ErrorComponent } from '../../../Mensajes/error/error.component';
 import { Router } from '@angular/router';
+import { Categoria, Producto } from '../../../../Models/models';
+import { ServicesService } from '../../../../Services/services.service';
+import { ErrorComponent } from '../../../Mensajes/error/error.component';
+import { OkComponent } from '../../../Mensajes/ok/ok.component';
 
 @Component({
   selector: 'app-registrar-producto',
@@ -30,17 +30,13 @@ export class RegistrarProductoComponent {
   productoForm: FormGroup;
   categoria: Categoria[] = [];
 
-  imagenPreview: string | ArrayBuffer | null = null; // Variable para almacenar la vista previa de la imagen seleccionada
-  isFileInvalid: boolean = false;
-  errorMensaje: string | null = null; // Mensaje de error
-
   mensajeModal: string = ''; // Mensaje para el modal
   errorModal: string = '';
 
   constructor(
     private fb: FormBuilder,
     private productosService: ServicesService,
-    private router: Router
+    private router: Router,
   ) {
     this.productoForm = fb.group({
       nombre_producto: ['', Validators.required],
@@ -67,35 +63,35 @@ export class RegistrarProductoComponent {
       const formData = new FormData();
       formData.append(
         'nombre_producto',
-        this.productoForm.get('nombre_producto')?.value
+        this.productoForm.get('nombre_producto')?.value,
       );
       formData.append(
         'descripcion',
-        this.productoForm.get('descripcion')?.value
+        this.productoForm.get('descripcion')?.value,
       );
       formData.append(
         'precio_compra',
-        this.productoForm.get('precio_compra')?.value
+        this.productoForm.get('precio_compra')?.value,
       );
       formData.append(
         'precio_unitario',
-        this.productoForm.get('precio_unitario')?.value
+        this.productoForm.get('precio_unitario')?.value,
       );
       formData.append(
         'precio_mayor',
-        this.productoForm.get('precio_mayor')?.value
+        this.productoForm.get('precio_mayor')?.value,
       );
 
       formData.append('stock', this.productoForm.get('stock')?.value);
       formData.append(
         'codigo_producto',
-        this.productoForm.get('codigo_producto')?.value
+        this.productoForm.get('codigo_producto')?.value,
       );
 
       formData.append('categoria', this.productoForm.get('categoria')?.value);
       formData.append(
         'imagen_productos',
-        this.productoForm.get('imagen_productos')?.value
+        this.productoForm.get('imagen_productos')?.value,
       );
 
       this.productosService
@@ -104,11 +100,10 @@ export class RegistrarProductoComponent {
           (response) => {
             this.mensajeModal = 'Producto registrado con éxito';
             this.productoForm.reset(); // Restablece el formulario después del éxito
-            this.imagenPreview = null; // Limpia la vista previa de la imagen
           },
           (error) => {
             this.errorModal = 'Error al registrar el producto';
-          }
+          },
         );
     }
   }
@@ -121,53 +116,5 @@ export class RegistrarProductoComponent {
   }
   manejarError() {
     this.errorModal = '';
-  }
-
-  onFileChange(event: any): void {
-    const inputElement = event.target as HTMLInputElement;
-
-    if (inputElement.files && inputElement.files.length > 0) {
-      const inputElement = event.target as HTMLInputElement;
-
-      // Verificar si files no es null y tiene al menos un archivo
-      if (inputElement.files && inputElement.files.length > 0) {
-        const file = inputElement.files[0];
-        const fileName = file.name;
-
-        // Validar la extensión del archivo
-        const validExtensions = ['image/png', 'image/jpeg'];
-        if (!validExtensions.includes(file.type)) {
-          this.errorMensaje =
-            'Formato de archivo incorrecto. Solo se permiten PNG y JPG.'; // Mensaje de error
-          this.isFileInvalid = true; // Establecer el estado de error
-          inputElement.classList.add('is-invalid'); // Agregar clase de error
-          inputElement.classList.remove('is-valid'); // Quitar clase de éxito
-          this.imagenPreview = null; // Limpiar la vista previa
-          return;
-        }
-
-        // Si es válido, actualizar el formulario y el label
-        this.productoForm.patchValue({
-          imagen_productos: file,
-        });
-        const label = inputElement.nextElementSibling as HTMLLabelElement;
-        label.innerText = fileName; // Actualizar el texto del label con el nombre del archivo
-
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.imagenPreview = reader.result;
-          inputElement.classList.add('is-valid'); // Agregar clase de éxito
-          inputElement.classList.remove('is-invalid'); // Quitar clase de error
-          this.errorMensaje = null; // Limpiar mensaje de error
-          this.isFileInvalid = false; // Restablecer el estado de error
-        };
-        reader.readAsDataURL(file);
-      } else {
-        this.errorMensaje = 'Por favor, selecciona un archivo.'; // Mensaje de error si no hay archivo
-        this.isFileInvalid = true; // Establecer el estado de error
-        inputElement.classList.add('is-invalid'); // Agregar clase de error
-        inputElement.classList.remove('is-valid'); // Quitar clase de éxito
-      }
-    }
   }
 }

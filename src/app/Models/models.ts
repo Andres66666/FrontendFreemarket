@@ -58,7 +58,7 @@ export interface Producto {
   categoria: Categoria;
   fecha_creacion: Date;
   fecha_actualizacion: Date;
-  imagen_productos: string;
+  // imagen_productos: string;  ← QUITADO
   estado_equipo: boolean;
 }
 

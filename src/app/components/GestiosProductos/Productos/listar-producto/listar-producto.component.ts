@@ -1,14 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { Categoria, Producto } from '../../../../Models/models';
 import { ServicesService } from '../../../../Services/services.service';
-import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-listar-producto',
@@ -27,7 +22,9 @@ export class ListarProductoComponent implements OnInit {
   pageSize: number = 6;
   ordenarAscendente: boolean = true;
 
-  constructor(private productoService: ServicesService,    private router: Router
+  constructor(
+    private productoService: ServicesService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +46,6 @@ export class ListarProductoComponent implements OnInit {
 
   editarProducto(id: number) {
     this.router.navigate(['panel-control/editar-productos', id]);
-
   }
 
   registrarProducto() {
@@ -80,7 +76,7 @@ export class ListarProductoComponent implements OnInit {
       filtered = filtered.filter((producto) =>
         producto.categoria.nombre_categoria
           .toLowerCase()
-          .includes(this.searchCategoria.toLowerCase())
+          .includes(this.searchCategoria.toLowerCase()),
       );
     }
 
@@ -89,7 +85,7 @@ export class ListarProductoComponent implements OnInit {
       filtered = filtered.filter((producto) =>
         producto.nombre_producto
           .toLowerCase()
-          .includes(this.searchNombreProducto.toLowerCase())
+          .includes(this.searchNombreProducto.toLowerCase()),
       );
     }
 
@@ -98,20 +94,22 @@ export class ListarProductoComponent implements OnInit {
       filtered = filtered.filter((producto) =>
         producto.codigo_producto
           .toLowerCase()
-          .includes(this.searchCodigoProducto.toLowerCase())
+          .includes(this.searchCodigoProducto.toLowerCase()),
       );
     }
 
     // Filtrar productos con stock cero
-    const productosConStockCero = filtered.filter(producto => producto.stock === 0);
-    const productosConStock = filtered.filter(producto => producto.stock > 0);
+    const productosConStockCero = filtered.filter(
+      (producto) => producto.stock === 0,
+    );
+    const productosConStock = filtered.filter((producto) => producto.stock > 0);
 
     // Combinar los productos con stock cero y los que tienen stock
     const productosFiltrados = [...productosConStockCero, ...productosConStock];
 
     return productosFiltrados.slice(
       (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
+      this.page * this.pageSize,
     );
   }
 
@@ -140,13 +138,13 @@ export class ListarProductoComponent implements OnInit {
       .subscribe(
         (response) => {
           console.log(
-            `Producto ${producto.estado_equipo} actualizado exitosamente.`
+            `Producto ${producto.estado_equipo} actualizado exitosamente.`,
           );
         },
         (error) => {
           console.error('Error al actualizar el estado del equipo:', error);
           producto.estado_equipo = !producto.estado_equipo;
-        }
+        },
       );
   }
 }

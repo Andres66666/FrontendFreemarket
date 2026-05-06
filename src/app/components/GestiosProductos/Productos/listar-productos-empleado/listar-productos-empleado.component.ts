@@ -18,10 +18,10 @@ import {
 } from '../../../../Models/models';
 import { ServicesService } from '../../../../Services/services.service';
 
+import { forkJoin } from 'rxjs';
 import { ErrorComponent } from '../../../Mensajes/error/error.component';
 import { OkComponent } from '../../../Mensajes/ok/ok.component';
 import { EjBarraComponent } from '../../ej-barra/ej-barra.component';
-
 @Component({
   selector: 'app-listar-productos-empleado',
   standalone: true,
@@ -46,10 +46,6 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
   ok: string = '';
   error: string = '';
-
-  // Modal imagen
-  modalVisible: boolean = false;
-  imageToShow: string = '';
 
   // Responsive
   isMobile = false;
@@ -428,38 +424,49 @@ export class ListarProductosEmpleadoComponent implements OnInit {
       this.error = 'No hay detalles de venta para registrar.';
       return;
     }
+
     if (this.idVentaActual === null) {
       this.error = 'No se ha registrado ninguna venta.';
       return;
     }
 
-    const detalles: DetalleVenta[] = this.detalleVenta.map((item) => ({
-      id: 0,
-      venta: { id: this.idVentaActual } as Venta,
-      producto: item.producto,
+    const detallesParaEnviar = this.detalleVenta.map((item) => ({
+      venta_id: this.idVentaActual!,
+      producto_id: item.producto.id,
       cantidad: item.cantidad,
       precio: item.precio,
       subtotal: item.subtotal,
       tipo_venta: item.tipo_venta,
     }));
 
-    const promises = detalles.map((detalle) =>
-      this.productoService.crearDetalleVenta(detalle).toPromise(),
+    console.log('📤 Enviando detalles:', detallesParaEnviar);
+
+    // 🔥 AQUÍ LA MAGIA
+    const requests = detallesParaEnviar.map((detalle) =>
+      this.productoService.crearDetalleVenta(detalle),
     );
 
-    Promise.all(promises)
-      .then(() => {
+    forkJoin(requests).subscribe({
+      next: (responses) => {
+        console.log('✅ Todos los detalles creados', responses);
+
+        // ✅ AHORA SÍ actualiza correctamente
         this.getProductos();
+
+        // Reset
         this.detalleVenta = [];
         this.totalVenta = 0;
         this.idVentaActual = null;
         this.montoPagado = '';
         this.cambio = 0;
+
         this.ok = 'Venta registrada correctamente.';
-      })
-      .catch(() => {
-        this.error = 'Ocurrió un error al registrar los detalles de la venta.';
-      });
+      },
+      error: (error) => {
+        console.error('❌ Error al registrar detalles:', error);
+        this.error = 'Error al registrar detalles.';
+      },
+    });
   }
 
   calcularCambio() {
@@ -511,15 +518,6 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
     const url = `https://wa.me/${telefono}?text=${mensajeCodificado}`;
     window.open(url, '_blank');
-  }
-
-  openModal(imageUrl: string) {
-    this.imageToShow = imageUrl;
-    this.modalVisible = true;
-  }
-
-  closeModal() {
-    this.modalVisible = false;
   }
 
   toggleDetalles(index: number): void {

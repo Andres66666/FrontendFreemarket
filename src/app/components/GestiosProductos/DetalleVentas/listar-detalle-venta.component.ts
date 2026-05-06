@@ -237,21 +237,19 @@ export class ListarDetalleVentaComponent implements OnInit {
   // ==============================
 
   // AGREGAR ESTE MÉTODO PARA LIMPIAR DATOS
+
   private sanitizeNumber(value: any): number {
-    if (value === null || value === undefined || value === '') return 0;
-    return parseFloat(value.toString().replace(/[^\d.-]/g, '')) || 0;
-  }
-
-  // ==============================
-  // CALCULOS (CON SANITIZACIÓN)
-  // ==============================
-  calcularCosto(d: DetalleVenta): number {
-    const precioCompra = this.sanitizeNumber(d.producto.precio_compra);
-    return precioCompra * d.cantidad;
-  }
-
-  calcularGanancia(d: DetalleVenta): number {
-    return d.subtotal - this.calcularCosto(d);
+    if (
+      value === null ||
+      value === undefined ||
+      value === '' ||
+      value === 'null'
+    ) {
+      return 0;
+    }
+    // Convertir string a número limpiamente
+    const num = parseFloat(String(value).replace(/[^\d.-]/g, ''));
+    return isNaN(num) ? 0 : num;
   }
 
   // ==============================
@@ -275,27 +273,6 @@ export class ListarDetalleVentaComponent implements OnInit {
     );
   }
 
-  getTotalPrecioCompra(): number {
-    return this.filteredList.reduce((sum, d) => {
-      const precio = this.sanitizeNumber(d.producto?.precio_compra);
-      return sum + precio * d.cantidad;
-    }, 0);
-  }
-
-  getTotalPrecioUnitario(): number {
-    return this.filteredList.reduce((sum, d) => {
-      const precio = this.sanitizeNumber(d.producto?.precio_unitario);
-      return sum + precio * d.cantidad;
-    }, 0);
-  }
-
-  getTotalPrecioMayor(): number {
-    return this.filteredList.reduce((sum, d) => {
-      const precio = this.sanitizeNumber(d.producto?.precio_mayor);
-      return sum + precio * d.cantidad;
-    }, 0);
-  }
-
   getTotalCosto(): number {
     return this.filteredList.reduce((sum, d) => sum + this.calcularCosto(d), 0);
   }
@@ -303,6 +280,48 @@ export class ListarDetalleVentaComponent implements OnInit {
   getTotalGanancia(): number {
     return this.filteredList.reduce(
       (sum, d) => sum + this.calcularGanancia(d),
+      0,
+    );
+  }
+
+  // desde aqui
+  // Métodos específicos para precios (más robustos)
+  getPrecioCompra(detalle: DetalleVenta): number {
+    return this.sanitizeNumber(detalle.producto?.precio_compra);
+  }
+
+  getPrecioUnitario(detalle: DetalleVenta): number {
+    return this.sanitizeNumber(detalle.producto?.precio_unitario);
+  }
+
+  getPrecioMayor(detalle: DetalleVenta): number {
+    return this.sanitizeNumber(detalle.producto?.precio_mayor);
+  }
+
+  calcularCosto(detalle: DetalleVenta): number {
+    return this.getPrecioCompra(detalle) * detalle.cantidad;
+  }
+
+  calcularGanancia(detalle: DetalleVenta): number {
+    return detalle.subtotal - this.calcularCosto(detalle);
+  }
+  getTotalPrecioCompra(): number {
+    return this.filteredList.reduce(
+      (sum, d) => sum + this.getPrecioCompra(d) * d.cantidad,
+      0,
+    );
+  }
+
+  getTotalPrecioUnitario(): number {
+    return this.filteredList.reduce(
+      (sum, d) => sum + this.getPrecioUnitario(d) * d.cantidad,
+      0,
+    );
+  }
+
+  getTotalPrecioMayor(): number {
+    return this.filteredList.reduce(
+      (sum, d) => sum + this.getPrecioMayor(d) * d.cantidad,
       0,
     );
   }

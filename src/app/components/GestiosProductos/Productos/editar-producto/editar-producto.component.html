@@ -7,7 +7,7 @@
     enctype="multipart/form-data"
   >
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-12">
         <!-- Datos del producto -->
         <div class="form-group row mb-3">
           <div class="col-sm-6">
@@ -22,7 +22,7 @@
               [ngClass]="{
                 'is-invalid':
                   form.get('nombre_producto')?.invalid &&
-                  form.get('nombre_producto')?.touched
+                  form.get('nombre_producto')?.touched,
               }"
             />
             <div
@@ -45,7 +45,7 @@
               [ngClass]="{
                 'is-invalid':
                   form.get('codigo_producto')?.invalid &&
-                  form.get('codigo_producto')?.touched
+                  form.get('codigo_producto')?.touched,
               }"
             />
             <div
@@ -74,7 +74,7 @@
               [ngClass]="{
                 'is-invalid':
                   form.get('precio_compra')?.invalid &&
-                  form.get('precio_compra')?.touched
+                  form.get('precio_compra')?.touched,
               }"
             />
             <div
@@ -100,7 +100,7 @@
               [ngClass]="{
                 'is-invalid':
                   form.get('precio_unitario')?.invalid &&
-                  form.get('precio_unitario')?.touched
+                  form.get('precio_unitario')?.touched,
               }"
             />
             <div
@@ -124,7 +124,7 @@
               [ngClass]="{
                 'is-invalid':
                   form.get('precio_mayor')?.invalid &&
-                  form.get('precio_mayor')?.touched
+                  form.get('precio_mayor')?.touched,
               }"
             />
             <div
@@ -149,7 +149,7 @@
               class="form-control"
               [ngClass]="{
                 'is-invalid':
-                  form.get('stock')?.invalid && form.get('stock')?.touched
+                  form.get('stock')?.invalid && form.get('stock')?.touched,
               }"
             />
             <div
@@ -168,7 +168,7 @@
               [ngClass]="{
                 'is-invalid':
                   form.get('categoria')?.invalid &&
-                  form.get('categoria')?.touched
+                  form.get('categoria')?.touched,
               }"
             >
               <option value="" disabled>Seleccione categoría</option>
@@ -197,60 +197,37 @@
           ></textarea>
         </div>
 
-        <button
-          type="submit"
-          class="btn btn-primary me-2"
-          [disabled]="form.invalid"
-        >
-          <i class="bi bi-save me-1"></i> Guardar Cambios
-        </button>
-        <button class="btn btn-success" (click)="volver()">Volver</button>
-      </div>
-
-      <!-- Sección de imagen -->
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-header bg-light">
-            <h5 class="card-title mb-0">Imagen del Producto</h5>
-          </div>
-          <div class="card-body text-center">
-            <div class="mb-3">
-              <label for="imagenProducto" class="form-label"
-                >Cambiar imagen</label
-              >
-              <input
-                type="file"
-                id="imagenProducto"
-                class="form-control"
-                accept="image/*"
-                (change)="onImageChange($event)"
-              />
-            </div>
-            <div class="image-preview-container">
-              <img
-                [src]="imagenPreview || 'assets/images/placeholder-product.png'"
-                alt="Vista previa de imagen"
-                class="img-thumbnail img-preview"
-              />
-              <div *ngIf="!imagenPreview" class="no-image-text text-muted">
-                No hay imagen seleccionada
-              </div>
-            </div>
-          </div>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="volver()"
+            title="Volver a la lista de productos"
+          >
+            <i class="bi bi-door-open me-1 fs-5"></i>
+          </button>
+          <button
+            type="submit"
+            class="btn btn-outline-success"
+            [disabled]="form.invalid"
+            title="Guardar cambios"
+          >
+            <i class="bi bi-floppy2-fill me-1 fs-5"></i>
+          </button>
         </div>
       </div>
     </div>
   </form>
-
-  <!-- Modales de feedback -->
-  <app-ok
-    *ngIf="mensajeModal"
-    [mensaje]="mensajeModal"
-    (close)="manejarOk()"
-  ></app-ok>
-  <app-error
-    *ngIf="errorModal"
-    [mensaje]="errorModal"
-    (close)="manejarError()"
-  ></app-error>
 </div>
+
+<!-- Modales de feedback -->
+<app-ok
+  *ngIf="mensajeModal"
+  [mensaje]="mensajeModal"
+  (close)="manejarOk()"
+></app-ok>
+<app-error
+  *ngIf="errorModal"
+  [mensaje]="errorModal"
+  (close)="manejarError()"
+></app-error>

@@ -31,8 +31,8 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class ServicesService {
-  /*   private apiUrl = 'http://localhost:8000/api/'; */
-  private apiUrl = 'https://backendfreemarket.onrender.com/api/';
+  private apiUrl = 'http://localhost:8000/api/';
+  /*   private apiUrl = 'https://backendfreemarket.onrender.com/api/'; */
 
   private productosSubject = new BehaviorSubject<Producto[]>([]);
   productos$ = this.productosSubject.asObservable();
@@ -261,18 +261,25 @@ export class ServicesService {
     });
   }
   /* ---------------------------- PRODUCTOS ---------------------------- */
+  /* ---------------------------- PRODUCTOS ---------------------------- */
   getProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${this.apiUrl}productos/`);
   }
+
   getProductoById(id: number): Observable<Producto> {
     return this.http.get<Producto>(`${this.apiUrl}productos/${id}/`);
   }
+
+  // 🔥 CAMBIADO: Ya no usa FormData, usa objeto normal
   crearProducto(producto: Producto): Observable<Producto> {
     return this.http.post<Producto>(`${this.apiUrl}productos/`, producto);
   }
-  actualizarProducto(id: number, producto: FormData): Observable<Producto> {
+
+  // 🔥 CAMBIADO: Ya no usa FormData, usa objeto normal
+  actualizarProducto(id: number, producto: Producto): Observable<Producto> {
     return this.http.put<Producto>(`${this.apiUrl}productos/${id}/`, producto);
   }
+
   actualizarEstadoProducto(
     id: number,
     estado_equipo: boolean,
@@ -305,11 +312,9 @@ export class ServicesService {
     return this.http.get<DetalleVenta>(`${this.apiUrl}detallesventas/${id}/`);
   }
 
-  crearDetalleVenta(detalleventas: DetalleVenta): Observable<DetalleVenta> {
-    return this.http.post<DetalleVenta>(`${this.apiUrl}detallesventas/`, {
-      ...detalleventas,
-      producto_id: detalleventas.producto.id, // Asegúrate de enviar el ID del producto
-    });
+  crearDetalleVenta(data: any): Observable<any> {
+    // Cambia a 'any'
+    return this.http.post(`${this.apiUrl}detallesventas/`, data);
   }
 
   actualizarDetalleVenta(

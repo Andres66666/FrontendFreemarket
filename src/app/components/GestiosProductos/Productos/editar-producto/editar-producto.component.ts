@@ -1,17 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Producto, Categoria } from '../../../../Models/models';
-import { ServicesService } from '../../../../Services/services.service';
-import { CommonModule } from '@angular/common';
-import { OkComponent } from '../../../Mensajes/ok/ok.component';
-import { ErrorComponent } from '../../../Mensajes/error/error.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Categoria, Producto } from '../../../../Models/models';
+import { ServicesService } from '../../../../Services/services.service';
+import { ErrorComponent } from '../../../Mensajes/error/error.component';
+import { OkComponent } from '../../../Mensajes/ok/ok.component';
 
 @Component({
   selector: 'app-editar-producto',
@@ -26,18 +25,18 @@ export class EditarProductoComponent implements OnInit {
   form!: FormGroup;
   mensajeModal: string = '';
   errorModal: string = '';
-  imagenPreview: string | ArrayBuffer | null = null;
-  imagenFile: File | null = null;
 
-  constructor(private productosService: ServicesService,    private route: ActivatedRoute,
-      private router: Router) {}
+  constructor(
+    private productosService: ServicesService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
-
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.loadProductoData(id);
-       this.loadCategorias();
+      this.loadCategorias();
     }
   }
 
@@ -47,24 +46,11 @@ export class EditarProductoComponent implements OnInit {
         this.producto = data;
         this.initializeForm();
         // Asegurar que la URL de la imagen sea correcta
-        this.imagenPreview = this.fixImageUrl(this.producto.imagen_productos);
       },
       error: (err) => {
         console.error('Error cargando producto:', err);
       },
     });
-  }
-
-  fixImageUrl(url: string): string {
-    if (!url) return '';
-    // Corregir URLs mal formadas
-    if (url.includes('image/upload/http://')) {
-      return url.replace('image/upload/http://', 'http://');
-    }
-    if (url.includes('image/upload/https://')) {
-      return url.replace('image/upload/https://', 'https://');
-    }
-    return url;
   }
 
   loadCategorias() {
@@ -82,7 +68,7 @@ export class EditarProductoComponent implements OnInit {
     this.form = new FormGroup({
       nombre_producto: new FormControl(
         this.producto.nombre_producto,
-        Validators.required
+        Validators.required,
       ),
       descripcion: new FormControl(this.producto.descripcion),
       precio_compra: new FormControl(this.producto.precio_compra, [
@@ -103,55 +89,35 @@ export class EditarProductoComponent implements OnInit {
       ]),
       codigo_producto: new FormControl(
         this.producto.codigo_producto,
-        Validators.required
+        Validators.required,
       ),
       categoria: new FormControl(
         this.producto.categoria.id,
-        Validators.required
+        Validators.required,
       ),
-      imagen_productos: new FormControl(null),
     });
-  }
-
-  onImageChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.imagenFile = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagenPreview = reader.result;
-      };
-      reader.readAsDataURL(this.imagenFile);
-    }
   }
 
   onSubmit(): void {
     if (this.form.valid) {
-      const formData = new FormData();
-
-      // Agregar todos los campos del formulario
-      formData.append('nombre_producto', this.form.value.nombre_producto);
-      formData.append('descripcion', this.form.value.descripcion || '');
-      formData.append(
-        'precio_compra',
-        this.form.value.precio_compra.toString()
-      );
-      formData.append(
-        'precio_unitario',
-        this.form.value.precio_unitario.toString()
-      );
-      formData.append('precio_mayor', this.form.value.precio_mayor.toString());
-      formData.append('stock', this.form.value.stock.toString());
-      formData.append('codigo_producto', this.form.value.codigo_producto);
-      formData.append('categoria', this.form.value.categoria);
-
-      // Agregar la imagen solo si se seleccionó una nueva
-      if (this.imagenFile) {
-        formData.append('imagen_productos', this.imagenFile);
-      }
+      // 🔥 CAMBIADO: Objeto simple en lugar de FormData
+      const productoData: Producto = {
+        id: this.producto.id,
+        nombre_producto: this.form.value.nombre_producto,
+        descripcion: this.form.value.descripcion || '',
+        precio_compra: this.form.value.precio_compra,
+        precio_unitario: this.form.value.precio_unitario,
+        precio_mayor: this.form.value.precio_mayor,
+        stock: this.form.value.stock,
+        codigo_producto: this.form.value.codigo_producto,
+        categoria: { id: this.form.value.categoria } as Categoria,
+        estado_equipo: this.producto.estado_equipo,
+        fecha_creacion: this.producto.fecha_creacion,
+        fecha_actualizacion: new Date(),
+      };
 
       this.productosService
-        .actualizarProducto(this.producto.id, formData)
+        .actualizarProducto(this.producto.id, productoData) // 🔥 Ya no FormData
         .subscribe({
           next: () => {
             this.mensajeModal = 'Producto actualizado con éxito';
@@ -163,7 +129,6 @@ export class EditarProductoComponent implements OnInit {
         });
     }
   }
-
   manejarOk(): void {
     this.mensajeModal = '';
     this.router.navigate(['panel-control/listar-productos']);
