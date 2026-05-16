@@ -32,7 +32,7 @@ interface LoginResponse {
 })
 export class ServicesService {
 /*     private apiUrl = 'http://localhost:8000/api/'; */
-  private apiUrl = 'https://backendfreemarket.onrender.com/api/';
+  private apiUrl = 'https://backendfreemarket-1.onrender.com/api/';
 
   private productosSubject = new BehaviorSubject<Producto[]>([]);
   productos$ = this.productosSubject.asObservable();
