@@ -38,73 +38,196 @@ body {
   position: sticky;
   top: 0;
   z-index: 1030;
-
-  height: 65px;
-
+  height: 60px;
   display: flex;
   align-items: center;
-
-  padding: 0 1rem;
+  padding: 0 0.75rem;
 
   background: #6cc9be;
   color: #fff;
-
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.header .btn,
-.header .bi,
-.header span,
-.header small {
-  color: white !important;
+@media (min-width: 992px) {
+  .header {
+    height: 65px;
+    padding: 0 1.5rem;
+  }
 }
 
 /* ==========================================================================
-   BOTÓN SIDEBAR
+   BOTÓN MENÚ (TOGGLE)
    ========================================================================== */
 
 .toggle-button {
-  width: 42px;
-  height: 42px;
-
+  width: 36px;
+  height: 36px;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  border-radius: 12px;
-
-  background: rgba(255, 255, 255, 0.15);
-
-  transition: all 0.3s ease;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  transition: all 0.2s ease;
 }
 
 .toggle-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: scale(1.05);
+  background: #f0f0f0;
 }
 
 .toggle-button i {
   font-size: 1.25rem;
+  color: #333;
+}
+
+@media (min-width: 576px) {
+  .toggle-button {
+    width: 40px;
+    height: 40px;
+  }
+  .toggle-button i {
+    font-size: 1.4rem;
+  }
+}
+
+
+/* ==========================================================================
+   BOTÓN PANEL DE CONTROL
+   ========================================================================== */
+
+.btn-panel {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: #000000 !important;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-panel:hover {
+  background: #f5f5f5;
+}
+
+.btn-panel i {
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 575px) {
+  .btn-panel {
+    padding: 6px 8px;
+  }
+}
+
+@media (min-width: 576px) {
+  .btn-panel {
+    padding: 6px 12px;
+  }
+  .btn-panel i {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .btn-panel i {
+    font-size: 1.3rem;
+  }
 }
 
 /* ==========================================================================
-   AVATAR
+   BOTONES USUARIO Y LOGOUT
    ========================================================================== */
 
+.btn-user,
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: #000000 !important;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-user:hover,
+.btn-logout:hover {
+  background: #f5f5f5;
+}
+
+/* AVATAR */
 .avatar {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   object-fit: cover;
-
-  border: 2px solid white;
+  border: 2px solid #ddd;
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
-  line-height: 1.1;
+  margin-left: 6px;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.name-user {
+  font-size: 0.8rem;
+  color: #333;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.role-user {
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.btn-logout i {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 575px) {
+  .user-info {
+    display: none;
+  }
+  .btn-user {
+    padding: 4px;
+  }
+  .btn-logout {
+    padding: 6px 8px;
+  }
+}
+
+@media (min-width: 576px) {
+  .avatar {
+    width: 36px;
+    height: 36px;
+  }
+  .name-user {
+    font-size: 0.85rem;
+  }
+  .role-user {
+    font-size: 0.75rem;
+  }
+  .btn-user,
+  .btn-logout {
+    padding: 6px 12px;
+  }
+}
+
+@media (min-width: 992px) {
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+  .user-info {
+    margin-left: 10px;
+  }
+  .name-user {
+    font-size: 0.9rem;
+  }
 }
 
 /* ==========================================================================
@@ -113,30 +236,27 @@ body {
 
 .leftSide {
   position: fixed;
-
-  top: 65px;
+  top: 60px;
   left: 0;
-
   width: 260px;
-  height: calc(100vh - 65px);
-
+  height: calc(100vh - 60px);
   overflow-y: auto;
   overflow-x: hidden;
-
-  background: #ffffff;
-
+  background: #6cc9be;
   border-right: 1px solid #ececec;
-
   padding: 1rem 0.5rem;
-
   z-index: 1040;
-
   transition:
     width 0.3s ease,
     transform 0.3s ease;
 }
 
-/* MOBILE */
+@media (min-width: 992px) {
+  .leftSide {
+    top: 65px;
+    height: calc(100vh - 65px);
+  }
+}
 
 .sidebar-open {
   transform: translateX(0);
@@ -147,7 +267,7 @@ body {
 }
 
 /* ==========================================================================
-   MENÚ
+   MENÚ SIDEBAR
    ========================================================================== */
 
 .leftSide .list-group {
@@ -156,24 +276,23 @@ body {
 
 .leftSide .list-group-item {
   border: none !important;
-
   border-radius: 12px !important;
-
   cursor: pointer;
-
   background: transparent;
-
   color: #444;
-
+  padding: 10px 12px;
   transition: all 0.25s ease;
+  font-size: 0.9rem;
 }
 
 .leftSide .list-group-item:hover {
-  background: rgba(108, 201, 190, 0.15);
+  background: white;
 }
 
 .leftSide .list-group-item i {
-  color: #6cc9be;
+  font-size: 1.1rem;
+  color: #000000;
+  width: 24px;
 }
 
 .leftSide .list-group-item span {
@@ -182,7 +301,8 @@ body {
 
 .leftSide ul ul .list-group-item {
   margin-left: 10px;
-  font-size: 0.92rem;
+  font-size: 0.85rem;
+  padding: 8px 12px;
 }
 
 /* ==========================================================================
@@ -191,18 +311,20 @@ body {
 
 .overlay {
   position: fixed;
-
-  top: 65px;
+  top: 60px;
   left: 0;
-
   width: 100%;
-  height: calc(100vh - 65px);
-
+  height: calc(100vh - 60px);
   background: rgba(0, 0, 0, 0.35);
-
   backdrop-filter: blur(2px);
-
   z-index: 1035;
+}
+
+@media (min-width: 992px) {
+  .overlay {
+    top: 65px;
+    height: calc(100vh - 65px);
+  }
 }
 
 /* ==========================================================================
@@ -211,96 +333,99 @@ body {
 
 .main-content {
   flex: 1;
-
-  padding: 1rem;
-
+  padding: 0.75rem;
   margin-left: 0;
-
   transition: margin-left 0.3s ease;
 }
 
 .content-card {
   width: 100%;
-
-  min-height: calc(100vh - 100px);
-
+  min-height: calc(100vh - 90px);
   background: white;
-
-  border-radius: 16px;
-
-  padding: 1.5rem;
-
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* ==========================================================================
-   TABLET
-   ========================================================================== */
-
-@media (min-width: 768px) {
+@media (min-width: 576px) {
+  .main-content {
+    padding: 1rem;
+  }
   .content-card {
-    padding: 1.8rem;
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+}
+
+@media (min-width: 992px) {
+  .main-content {
+    padding: 1.5rem;
+  }
+  .content-card {
+    min-height: calc(100vh - 100px);
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .content-card {
+    padding: 2rem;
   }
 }
 
 /* ==========================================================================
-   DESKTOP ERP
+   DESKTOP (RAIL SIDEBAR)
    ========================================================================== */
 
 @media (min-width: 992px) {
   .leftSide {
     transform: translateX(0);
-    width: 85px; /* Estado inicial: solo íconos */
-    overflow: hidden; /* Oculta el texto que sobresale */
-    transition: width 0.3s ease; /* Suavizado */
+    width: 65px;
+    overflow: hidden;
+    transition: width 0.3s ease;
   }
 
   .sidebar-open {
-    width: 260px; /* Estado扩张ado */
+    width: 260px;
   }
 
   .sidebar-closed {
-    width: 85px;
+    width: 65px;
   }
 
-  /* =====================================================
-     MAGIC: Hover sobre la barra cerrada la abre 
-     ====================================================== */
   .leftSide.sidebar-closed:hover {
     width: 260px;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.1); /* Opcional: sombra */
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
   }
 
-  /* Ocultar texto cuando está cerrada (sin hover) para que no se rompa el layout */
   .sidebar-closed span,
   .sidebar-closed ul ul,
   .sidebar-closed .bi-chevron-right,
   .sidebar-closed .bi-chevron-down {
     display: none !important;
   }
-  
-  /* IMPORTANTE: Mostrar texto en hover */
+
   .sidebar-closed:hover span,
   .sidebar-closed:hover ul ul,
   .sidebar-closed:hover .bi-chevron-right,
   .sidebar-closed:hover .bi-chevron-down {
     display: block !important;
-    opacity: 1;
   }
 
   .sidebar-closed .list-group-item {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 12px;
   }
 
   .sidebar-closed .list-group-item i {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     margin-right: 0 !important;
   }
 
   .main-content {
-    margin-left: 85px;
+    margin-left: 65px;
   }
 
   .content-shifted {
@@ -313,59 +438,13 @@ body {
 }
 
 /* ==========================================================================
-   LARGE DESKTOP
-   ========================================================================== */
-
-@media (min-width: 1400px) {
-  .content-card {
-    padding: 2rem;
-  }
-}
-
-/* ==========================================================================
-   MOBILE
-   ========================================================================== */
-
-@media (max-width: 576px) {
-  .header {
-    padding: 0 0.6rem;
-    height: 60px;
-  }
-
-  .leftSide {
-    top: 60px;
-    height: calc(100vh - 60px);
-  }
-
-  .overlay {
-    top: 60px;
-    height: calc(100vh - 60px);
-  }
-
-  .toggle-button {
-    width: 36px;
-    height: 36px;
-  }
-
-  .avatar {
-    width: 34px;
-    height: 34px;
-  }
-
-  .content-card {
-    padding: 1rem;
-  }
-}
-
-/* ==========================================================================
-   ULTRA SMALL
+   MOBILE PEQUEÑO
    ========================================================================== */
 
 @media (max-width: 400px) {
   .header {
-    padding: 0 0.4rem;
+    padding: 0 0.5rem;
   }
-
   .toggle-button {
     width: 32px;
     height: 32px;
@@ -377,7 +456,7 @@ body {
    ========================================================================== */
 
 .toggle-button:focus-visible {
-  outline: 2px solid white;
+  outline: 2px solid #6cc9be;
   outline-offset: 2px;
 }
 

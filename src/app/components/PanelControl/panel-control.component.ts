@@ -160,15 +160,12 @@ export class PanelControlComponent implements OnInit {
   }
 
   toggleSection(section: string) {
-    // Si era la misma sección, la cerramos, si no, la abrimos
     if (this.activeSection === section) {
       this.activeSection = null;
     } else {
       this.activeSection = section;
     }
     
-    // IMPORTANTE: Aquí forzamos que la barra se abra si está cerrada
-    // para que el usuario vea las opciones.
     if (!this.isSidebarOpen) {
       this.isSidebarOpen = true;
     }
@@ -180,11 +177,7 @@ export class PanelControlComponent implements OnInit {
 
   navegarYRegresar(ruta: string): void {
     this.router.navigate([ruta]);
-
-    // Cerrar submenu siempre
     this.activeSection = null;
-
-    // En móvil cerrar sidebar completo
     if (this.windowWidth < 992) {
       this.isSidebarOpen = false;
     }
