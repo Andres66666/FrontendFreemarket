@@ -261,7 +261,6 @@ export class ServicesService {
     });
   }
   /* ---------------------------- PRODUCTOS ---------------------------- */
-  /* ---------------------------- PRODUCTOS ---------------------------- */
   getProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${this.apiUrl}productos/`);
   }
