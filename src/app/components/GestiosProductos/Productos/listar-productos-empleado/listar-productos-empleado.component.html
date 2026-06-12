@@ -103,7 +103,6 @@
             <tr>
               <th>Producto</th>
               <th>Código</th>
-              <th>Categoría</th>
               <th class="text-center">Stock</th>
               <th class="text-end">Precio U</th>
               <th class="text-end" *ngIf="mostrarPrecioMayor">Precio M</th>
@@ -136,14 +135,6 @@
                 <td>
                   <code class="small">{{ producto.codigo_producto }}</code>
                 </td>
-
-                <!-- Categoría -->
-                <td>
-                  <span class="badge bg-light text-dark">{{
-                    producto.categoria.nombre_categoria
-                  }}</span>
-                </td>
-
                 <!-- Stock -->
                 <td class="text-center">
                   <span

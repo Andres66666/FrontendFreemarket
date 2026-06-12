@@ -1,77 +1,388 @@
-/* ===== SIDEBAR COLAPSADO ===== */
-.sidebar-collapsed {
-  width: 80px !important;
-  overflow: hidden;
+/* ==========================================================================
+   RESET
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
 }
 
-/* Oculta textos correctamente */
-.sidebar-collapsed span,
-.sidebar-collapsed .fw-semibold {
-  display: none !important;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #f5f7fb;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
-/* Centrar iconos */
-.sidebar-collapsed .list-group-item {
-  justify-content: center !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f5f7fb;
 }
 
-/* Quitar separación */
-.sidebar-collapsed .d-flex {
-  justify-content: center !important;
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+
+  height: 65px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 1rem;
+
+  background: #6cc9be;
+  color: #fff;
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* Ocultar flechas */
-.sidebar-collapsed .bi-chevron-down,
-.sidebar-collapsed .bi-chevron-right {
-  display: none !important;
+.header .btn,
+.header .bi,
+.header span,
+.header small {
+  color: white !important;
 }
 
-/* Ocultar SOLO submenus, no el principal */
-.sidebar-collapsed ul ul {
-  display: none !important;
-}
+/* ==========================================================================
+   BOTÓN SIDEBAR
+   ========================================================================== */
 
-/* Tamaño iconos */
-.sidebar-collapsed i {
-  font-size: 1.4rem;
-}
+.toggle-button {
+  width: 42px;
+  height: 42px;
 
-.leftSide {
-  width: 290px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.15);
+
   transition: all 0.3s ease;
 }
 
-.sidebar-collapsed .list-group-item > div {
-  justify-content: center !important;
+.toggle-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
 }
 
-.sidebar-collapsed .list-group-item i {
-  margin: 0 !important;
+.toggle-button i {
+  font-size: 1.25rem;
 }
 
-/* ===== ESTILO TEXTO E ICONOS ===== */
+/* ==========================================================================
+   AVATAR
+   ========================================================================== */
 
-/* Texto negro */
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  border: 2px solid white;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  line-height: 1.1;
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
+.leftSide {
+  position: fixed;
+
+  top: 65px;
+  left: 0;
+
+  width: 260px;
+  height: calc(100vh - 65px);
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: #ffffff;
+
+  border-right: 1px solid #ececec;
+
+  padding: 1rem 0.5rem;
+
+  z-index: 1040;
+
+  transition:
+    width 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* MOBILE */
+
+.sidebar-open {
+  transform: translateX(0);
+}
+
+.sidebar-closed {
+  transform: translateX(-100%);
+}
+
+/* ==========================================================================
+   MENÚ
+   ========================================================================== */
+
+.leftSide .list-group {
+  gap: 4px;
+}
+
 .leftSide .list-group-item {
-  color: #000 !important;
-}
+  border: none !important;
 
-/* Iconos negros */
-.leftSide .list-group-item i {
-  color: #000 !important;
-}
+  border-radius: 12px !important;
 
-/* ===== HOVER VERDE AGUA SUAVE ===== */
+  cursor: pointer;
+
+  background: transparent;
+
+  color: #444;
+
+  transition: all 0.25s ease;
+}
 
 .leftSide .list-group-item:hover {
-  background: rgba(116, 221, 102, 0.2) !important;
-  transition: all 0.2s ease;
+  background: rgba(108, 201, 190, 0.15);
 }
 
-/* Opacar texto e iconos al pasar mouse */
-.leftSide .list-group-item:hover span,
-.leftSide .list-group-item:hover i {
-  opacity: 0.7;
+.leftSide .list-group-item i {
+  color: #6cc9be;
+}
+
+.leftSide .list-group-item span {
+  color: #444;
+}
+
+.leftSide ul ul .list-group-item {
+  margin-left: 10px;
+  font-size: 0.92rem;
+}
+
+/* ==========================================================================
+   OVERLAY
+   ========================================================================== */
+
+.overlay {
+  position: fixed;
+
+  top: 65px;
+  left: 0;
+
+  width: 100%;
+  height: calc(100vh - 65px);
+
+  background: rgba(0, 0, 0, 0.35);
+
+  backdrop-filter: blur(2px);
+
+  z-index: 1035;
+}
+
+/* ==========================================================================
+   MAIN
+   ========================================================================== */
+
+.main-content {
+  flex: 1;
+
+  padding: 1rem;
+
+  margin-left: 0;
+
+  transition: margin-left 0.3s ease;
+}
+
+.content-card {
+  width: 100%;
+
+  min-height: calc(100vh - 100px);
+
+  background: white;
+
+  border-radius: 16px;
+
+  padding: 1.5rem;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .content-card {
+    padding: 1.8rem;
+  }
+}
+
+/* ==========================================================================
+   DESKTOP ERP
+   ========================================================================== */
+
+@media (min-width: 992px) {
+  .leftSide {
+    transform: translateX(0);
+    width: 85px; /* Estado inicial: solo íconos */
+    overflow: hidden; /* Oculta el texto que sobresale */
+    transition: width 0.3s ease; /* Suavizado */
+  }
+
+  .sidebar-open {
+    width: 260px; /* Estado扩张ado */
+  }
+
+  .sidebar-closed {
+    width: 85px;
+  }
+
+  /* =====================================================
+     MAGIC: Hover sobre la barra cerrada la abre 
+     ====================================================== */
+  .leftSide.sidebar-closed:hover {
+    width: 260px;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.1); /* Opcional: sombra */
+  }
+
+  /* Ocultar texto cuando está cerrada (sin hover) para que no se rompa el layout */
+  .sidebar-closed span,
+  .sidebar-closed ul ul,
+  .sidebar-closed .bi-chevron-right,
+  .sidebar-closed .bi-chevron-down {
+    display: none !important;
+  }
+  
+  /* IMPORTANTE: Mostrar texto en hover */
+  .sidebar-closed:hover span,
+  .sidebar-closed:hover ul ul,
+  .sidebar-closed:hover .bi-chevron-right,
+  .sidebar-closed:hover .bi-chevron-down {
+    display: block !important;
+    opacity: 1;
+  }
+
+  .sidebar-closed .list-group-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sidebar-closed .list-group-item i {
+    font-size: 1.4rem;
+    margin-right: 0 !important;
+  }
+
+  .main-content {
+    margin-left: 85px;
+  }
+
+  .content-shifted {
+    margin-left: 260px;
+  }
+
+  .overlay {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   LARGE DESKTOP
+   ========================================================================== */
+
+@media (min-width: 1400px) {
+  .content-card {
+    padding: 2rem;
+  }
+}
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 576px) {
+  .header {
+    padding: 0 0.6rem;
+    height: 60px;
+  }
+
+  .leftSide {
+    top: 60px;
+    height: calc(100vh - 60px);
+  }
+
+  .overlay {
+    top: 60px;
+    height: calc(100vh - 60px);
+  }
+
+  .toggle-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .content-card {
+    padding: 1rem;
+  }
+}
+
+/* ==========================================================================
+   ULTRA SMALL
+   ========================================================================== */
+
+@media (max-width: 400px) {
+  .header {
+    padding: 0 0.4rem;
+  }
+
+  .toggle-button {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+.toggle-button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }

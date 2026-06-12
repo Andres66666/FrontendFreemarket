@@ -25,9 +25,15 @@ type UsuarioLS = {
   styleUrls: ['./panel-control.component.css'],
 })
 export class PanelControlComponent implements OnInit {
-  isSidebarOpen = false;
+  // ==========================
+  // SIDEBAR
+  // ==========================
+
   windowWidth = 0;
 
+  // ==========================
+  // USUARIO
+  // ==========================
   userName = '';
   userPermissions: string[] = [];
   roles: string[] = [];
@@ -37,8 +43,9 @@ export class PanelControlComponent implements OnInit {
   imagen_url: string | null = null;
   usuario_id = 0;
 
-  openSubmenu: string | null = null;
-  isSidebarCollapsed = false;
+  isSidebarOpen = false; // Estado actual de la barra
+  activeSection: string | null = null; // Sección activa (ej: 'usuarios')
+
   constructor(
     private storageService: StorageService,
     private router: Router,
@@ -51,8 +58,12 @@ export class PanelControlComponent implements OnInit {
     this.checkScreenSize();
   }
 
+  // ==========================
+  // STORAGE
+  // ==========================
   private safeParse<T>(raw: string | null, fallback: T): T {
     if (!raw) return fallback;
+
     try {
       return JSON.parse(raw) as T;
     } catch {
@@ -62,96 +73,198 @@ export class PanelControlComponent implements OnInit {
 
   private loadSessionFromStorage(): void {
     const usuarioStr = this.storageService.getItem('usuario');
-    const datosUsuario = this.safeParse<UsuarioLS>(usuarioStr, {});
 
-    // Roles / Permisos
-    this.roles = this.safeParse<string[]>(localStorage.getItem('roles'), []);
+    const datosUsuario =
+      this.safeParse<UsuarioLS>(usuarioStr, {});
+
+    this.roles = this.safeParse<string[]>(
+      localStorage.getItem('roles'),
+      [],
+    );
+
     this.userPermissions = this.safeParse<string[]>(
       localStorage.getItem('permisos'),
       [],
     );
 
-    // Campos
-    this.nombre_usuario = datosUsuario.nombre_usuario ?? '';
-    this.apellido = datosUsuario.apellido ?? '';
-    this.userName = `${this.nombre_usuario} ${this.apellido}`.trim();
+    this.nombre_usuario =
+      datosUsuario.nombre_usuario ?? '';
 
-    this.imagen_url = datosUsuario.imagen_url ?? null;
-    this.usuario_id = datosUsuario.usuario_id ?? 0;
+    this.apellido =
+      datosUsuario.apellido ?? '';
+
+    this.userName =
+      `${this.nombre_usuario} ${this.apellido}`.trim();
+
+    this.imagen_url =
+      datosUsuario.imagen_url ?? null;
+
+    this.usuario_id =
+      datosUsuario.usuario_id ?? 0;
   }
 
-  // ===== Permisos / Roles =====
+  // ==========================
+  // ROLES / PERMISOS
+  // ==========================
   puedeVer(permiso: string | string[]): boolean {
-    if (!this.userPermissions?.length) return false;
+    if (!this.userPermissions?.length) {
+      return false;
+    }
+
     return Array.isArray(permiso)
-      ? permiso.some((p) => this.userPermissions.includes(p))
+      ? permiso.some((p) =>
+          this.userPermissions.includes(p),
+        )
       : this.userPermissions.includes(permiso);
   }
 
   tieneRol(rol: string): boolean {
-    if (!this.roles?.length) return false;
+    if (!this.roles?.length) {
+      return false;
+    }
 
     return this.roles.some(
-      (r) => String(r).toLowerCase() === rol.toLowerCase(),
+      (r) =>
+        String(r).toLowerCase() ===
+        rol.toLowerCase(),
     );
   }
 
-  // ===== Sidebar =====
+  // ==========================
+  // RESPONSIVE
+  // ==========================
   @HostListener('window:resize')
   onResize(): void {
     this.checkScreenSize();
   }
 
   private checkScreenSize(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    this.windowWidth = window.innerWidth;
-    this.isSidebarOpen = this.windowWidth >= 768;
-  }
-
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-
-    if (this.isSidebarOpen) {
-      this.isSidebarCollapsed = false;
-    }
-  }
-  toggleSubmenu(menu: string): void {
-    if (this.isSidebarCollapsed) {
-      this.isSidebarCollapsed = false;
-      this.openSubmenu = menu;
+    if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    this.openSubmenu = this.openSubmenu === menu ? null : menu;
-  }
-  isSubmenuOpen(menu: string): boolean {
-    return this.openSubmenu === menu;
-  }
 
-  // ===== Sesión =====
-  logout(): void {
-    this.storageService.removeItem('token');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('roles');
-    localStorage.removeItem('permisos');
-    this.router.navigate(['/index']);
-  }
+    this.windowWidth = window.innerWidth;
 
-  confirmarCerrarSesion(): void {
-    if (confirm('¿Está seguro de que desea cerrar sesión?')) this.logout();
-  }
-
-  verPerfil(): void {
-    this.router.navigate(['panel-control/perfil']);
-  }
-
-  panelDeControl(): void {
-    this.router.navigate(['panel-control/dashboardComponent']);
-  }
-  collapseSidebar(): void {
-    if (this.windowWidth >= 768) {
-      this.isSidebarCollapsed = true;
+    if (this.windowWidth >= 992) {
+      this.isSidebarOpen = true;
     } else {
       this.isSidebarOpen = false;
     }
+  }
+
+  // ==========================
+  // SIDEBAR
+  // ==========================
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  toggleSection(section: string) {
+    // Si era la misma sección, la cerramos, si no, la abrimos
+    if (this.activeSection === section) {
+      this.activeSection = null;
+    } else {
+      this.activeSection = section;
+    }
+    
+    // IMPORTANTE: Aquí forzamos que la barra se abra si está cerrada
+    // para que el usuario vea las opciones.
+    if (!this.isSidebarOpen) {
+      this.isSidebarOpen = true;
+    }
+  }
+
+  isActive(section: string): boolean {
+    return this.activeSection === section;
+  }
+
+  navegarYRegresar(ruta: string): void {
+    this.router.navigate([ruta]);
+
+    // Cerrar submenu siempre
+    this.activeSection = null;
+
+    // En móvil cerrar sidebar completo
+    if (this.windowWidth < 992) {
+      this.isSidebarOpen = false;
+    }
+  }
+
+  // ==========================
+  // CLICK FUERA DEL SIDEBAR
+  // ==========================
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    const clickedInsideSidebar =
+      target.closest('.leftSide');
+
+    const clickedInsideToggleButton =
+      target.closest('.toggle-button');
+
+    if (
+      !clickedInsideSidebar &&
+      !clickedInsideToggleButton
+    ) {
+
+      // Cerrar submenu siempre
+      this.activeSection = null;
+
+      // En móvil cerrar sidebar completo
+      if (this.windowWidth < 992) {
+        this.isSidebarOpen = false;
+      }
+    }
+  }
+  onMainContentClick() {
+    if (this.isSidebarOpen) {
+      this.isSidebarOpen = false;
+    }
+  }
+  // ==========================
+  // NAVEGACIÓN
+  // ==========================
+  panelDeControl(): void {
+    this.router.navigate([
+      '/panel-control/dashboardComponent',
+    ]);
+
+    if (this.windowWidth < 992) {
+      this.isSidebarOpen = false;
+    }
+  }
+
+  verPerfil(): void {
+    this.router.navigate([
+      '/panel-control/perfil',
+    ]);
+
+    if (this.windowWidth < 992) {
+      this.isSidebarOpen = false;
+    }
+  }
+
+  // ==========================
+  // SESIÓN
+  // ==========================
+  confirmarCerrarSesion(): void {
+    const confirmar = confirm(
+      '¿Está seguro de que desea cerrar sesión?',
+    );
+
+    if (confirmar) {
+      this.logout();
+    }
+  }
+
+  logout(): void {
+    this.storageService.removeItem('token');
+
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('roles');
+    localStorage.removeItem('permisos');
+
+    this.router.navigate(['/index']);
   }
 }
