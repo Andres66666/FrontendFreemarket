@@ -24,93 +24,104 @@
          IZQUIERDA: PRODUCTOS
     ========================== -->
   <div class="col-12 col-lg-7" id="seccion-productos">
-    <!-- FILTROS -->
-    <div class="row g-2 align-items-end mb-3">
-      <h5 class="mb-0 fw-semibold text-center fs-sm">Productos</h5>
-
-      <!-- CÓDIGO -->
-      <div class="col-12 col-sm-6 col-lg-3">
-        <label class="form-label small fw-semibold mb-1 fs-xs">Código</label>
-
-        <div class="input-group input-group-sm">
-          <span class="input-group-text">
-            <i class="bi bi-upc-scan"></i>
-          </span>
-
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            placeholder="Escanear..."
-            [(ngModel)]="searchCodigoProducto"
-            (keyup.enter)="buscarPorCodigoEscaneado(searchCodigoProducto)"
-          />
-
-          <button
-            *ngIf="searchCodigoProducto"
-            class="btn btn-outline-secondary btn-sm"
-            type="button"
-            (click)="buscarPorCodigoEscaneado(searchCodigoProducto)"
-          >
-            <i class="bi bi-search"></i>
-          </button>
-        </div>
+    <!-- FILTROS MEJORADOS -->
+    <div class="row g-2 mb-3">
+      <!-- TÍTULO -->
+      <div class="col-12">
+        <h5 class="mb-2 fw-semibold text-center fs-sm">Productos</h5>
       </div>
-
-      <!-- CATEGORÍA -->
-      <div class="col-12 col-sm-6 col-lg-2">
-        <label class="form-label small fw-semibold mb-1 fs-xs">Categoría</label>
-
-        <select
-          class="form-select form-select-sm"
-          [(ngModel)]="searchCategoria"
-          (change)="onCategoriaChange()"
-        >
-          <option value="">Todas</option>
-
-          <option *ngFor="let cat of categorias" [value]="cat.nombre_categoria">
-            {{ cat.nombre_categoria }}
-          </option>
-        </select>
-      </div>
-
-      <!-- PRODUCTO -->
-      <div class="col-12 col-sm-6 col-lg-3">
-        <label class="form-label small fw-semibold mb-1 fs-xs">Producto</label>
-
-        <select
-          class="form-select form-select-sm"
-          [(ngModel)]="searchNombreProducto"
-        >
-          <option value="">Todos</option>
-
-          <option
-            *ngFor="let prod of filterNamesByCategory()"
-            [value]="prod.nombre_producto"
-          >
-            {{ prod.nombre_producto }}
-          </option>
-        </select>
-      </div>
-
-      <!-- ESCÁNER -->
-      <div class="col-12 col-sm-6 col-lg-3">
+      <div class="d-flex flex-column align-items-center">
         <app-ej-barra (codigoEscaneado)="buscarPorCodigoEscaneado($event)">
         </app-ej-barra>
       </div>
+      <!-- FILA 1: Código + Escáner -->
+      <div class="col-12">
+        <div class="row g-2">
+          <!-- CÓDIGO -->
+          <div class="col-15">
+            <label class="form-label small fw-semibold mb-1 fs-xs"
+              >Código</label
+            >
+            <div class="input-group input-group-sm">
+              <span class="input-group-text">
+                <i class="bi bi-upc-scan"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="Escanear..."
+                [(ngModel)]="searchCodigoProducto"
+                (keyup.enter)="buscarPorCodigoEscaneado(searchCodigoProducto)"
+              />
+              <button
+                *ngIf="searchCodigoProducto"
+                class="btn btn-outline-secondary btn-sm"
+                type="button"
+                (click)="buscarPorCodigoEscaneado(searchCodigoProducto)"
+              >
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <!-- LIMPIAR -->
-      <div class="col-12 col-sm-6 col-lg-1">
-        <label class="form-label d-none d-lg-block">&nbsp;</label>
+      <!-- FILA 2: Categoría + Producto + Limpiar -->
+      <div class="col-12">
+        <div class="row g-2 align-items-end">
+          <!-- CATEGORÍA -->
+          <div class="col-5">
+            <label class="form-label small fw-semibold mb-1 fs-xs"
+              >Categoría</label
+            >
+            <select
+              class="form-select form-select-sm"
+              [(ngModel)]="searchCategoria"
+              (change)="onCategoriaChange()"
+            >
+              <option value="">Todas</option>
+              <option
+                *ngFor="let cat of categorias"
+                [value]="cat.nombre_categoria"
+              >
+                {{ cat.nombre_categoria }}
+              </option>
+            </select>
+          </div>
 
-        <button
-          class="btn btn-outline-danger btn-sm w-100"
-          (click)="clearQuantities()"
-        >
-          <i class="bi bi-trash"></i>
-        </button>
+          <!-- PRODUCTO -->
+          <div class="col-5">
+            <label class="form-label small fw-semibold mb-1 fs-xs"
+              >Producto</label
+            >
+            <select
+              class="form-select form-select-sm"
+              [(ngModel)]="searchNombreProducto"
+            >
+              <option value="">Todos</option>
+              <option
+                *ngFor="let prod of filterNamesByCategory()"
+                [value]="prod.nombre_producto"
+              >
+                {{ prod.nombre_producto }}
+              </option>
+            </select>
+          </div>
+
+          <!-- BOTÓN LIMPIAR -->
+          <div class="col-2">
+            <label class="form-label d-none d-lg-block">&nbsp;</label>
+            <button
+              class="btn btn-outline-danger btn-sm w-100"
+              (click)="clearQuantities()"
+              title="Limpiar filtros"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-
     <!-- TABLA PRODUCTOS -->
     <div class="table-responsive shadow-sm mb-2">
       <table class="table table-sm table-hover align-middle mb-0">

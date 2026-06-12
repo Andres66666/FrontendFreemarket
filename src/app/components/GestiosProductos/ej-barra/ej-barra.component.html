@@ -1,33 +1,73 @@
-<!-- Botones para controlar la cámara -->
-<div class="text-center">
+<!-- BOTONES CONTROL CÁMARA -->
+<div class="text-center mb-2">
   <button
-    class="btn btn-primary"
+    class="btn btn-primary btn-sm"
     (click)="activarCamara()"
     *ngIf="!camaraActivada"
   >
-    <i class="bi bi-upc-scan"></i>Escanear
+    <i class="bi bi-upc-scan me-1"></i>Escanear
   </button>
   <button
-    class="btn btn-danger"
+    class="btn btn-danger btn-sm"
     (click)="camaraActivada = false"
     *ngIf="camaraActivada"
   >
-    <i class="bi bi-x-circle"></i>Desactivar
+    <i class="bi bi-x-circle me-1"></i>Cerrar
   </button>
 </div>
-<!-- Vista de la cámara -->
+
+<!-- VISTA CÁMARA CENTRADA -->
 <div *ngIf="camaraActivada" class="text-center">
-  <div style="overflow: hidden; width: 320px; height: 240px" class="mx-auto">
-    <zxing-scanner
-      #scanner
-      (scanSuccess)="onCodeResult($event)"
-      [device]="currentDevice"
-      [formats]="formatsEnabled"
-      (camerasFound)="onCamerasFound($event)"
-      (permissionResponse)="onHasPermission($event)"
-      style="width: 100%; height: 100%; object-fit: cover"
-      [style.transform]="'scale(' + zoomValue + ')'"
+  <!-- CONTENEDOR CENTRADO -->
+  <div class="d-flex justify-content-center">
+    <div
+      style="overflow: hidden; width: 280px; height: 210px"
+      class="rounded shadow"
     >
-    </zxing-scanner>
+      <zxing-scanner
+        #scanner
+        (scanSuccess)="onCodeResult($event)"
+        [device]="currentDevice"
+        [formats]="formatsEnabled"
+        (camerasFound)="onCamerasFound($event)"
+        (permissionResponse)="onHasPermission($event)"
+        style="width: 100%; height: 100%; object-fit: cover"
+        [style.transform]="'scale(' + zoomValue + ')'"
+      >
+      </zxing-scanner>
+    </div>
+  </div>
+
+  <!-- CONTROLES ZOOM (debajo de la cámara) -->
+  <div class="mt-2 d-flex justify-content-center align-items-center gap-2">
+    <button
+      class="btn btn-outline-secondary btn-sm"
+      (click)="zoomValue = zoomValue > 1 ? zoomValue - 0.5 : 1; aplicarZoom()"
+      [disabled]="zoomValue <= 1"
+      title="Alejar"
+    >
+      <i class="bi bi-zoom-out"></i>
+    </button>
+
+    <span class="badge bg-secondary fs-xs"> {{ zoomValue }}x </span>
+
+    <button
+      class="btn btn-outline-secondary btn-sm"
+      (click)="zoomValue = zoomValue < 5 ? zoomValue + 0.5 : 5; aplicarZoom()"
+      [disabled]="zoomValue >= 5"
+      title="Acercar"
+    >
+      <i class="bi bi-zoom-in"></i>
+    </button>
+
+    <!-- LINTERNA -->
+    <button
+      class="btn btn-outline-warning btn-sm"
+      (click)="toggleLinterna()"
+      [class.active]="linternaActiva"
+      *ngIf="torchAvailable"
+    >
+      <i class="bi bi-lightning-fill"></i>
+    </button>
   </div>
 </div>
