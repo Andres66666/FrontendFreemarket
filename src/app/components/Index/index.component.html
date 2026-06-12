@@ -1,291 +1,203 @@
 <!-- NAVBAR PROFESIONAL -->
-<header class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-
-  <div class="container">
-
-    <a class="navbar-brand d-flex align-items-center">
-      <img src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
-           width="120">
-    </a>
-
-    <button class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#menu">
-
-      <span class="navbar-toggler-icon"></span>
-
-    </button>
-
-    <div class="collapse navbar-collapse" id="menu">
-
-      <ul class="navbar-nav ms-auto align-items-lg-center">
-
-        <li class="nav-item me-3">
-          <a class="nav-link text-dark">Inicio</a>
-        </li>
-
-        <li class="nav-item me-3">
-          <a class="nav-link text-dark">Productos</a>
-        </li>
-
-        <li class="nav-item me-3">
-          <a class="nav-link text-dark">Contacto</a>
-        </li>
-
-        <li class="nav-item">
-          <button class="btn btn-warning px-4" (click)="navigateToLogin()">
-            Iniciar Sesión
-          </button>
-        </li>
-
-      </ul>
-
+<header class="fixed-top bg-white border-0 shadow-none w-100 px-3 px-lg-5">
+  <div class="d-flex justify-content-between align-items-center py-2">
+    <div>
+      <img
+        src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
+        alt="Logo Malla Finita"
+        class="img-fluid"
+        style="max-width: 100px"
+      />
     </div>
 
+    <div class="text-end">
+      <button (click)="navigateToLogin()" class="btn btn-success me-2">
+        <i class="bi bi-door-open"></i>
+        <span class="d-none d-sm-inline">Iniciar Sesión</span>
+      </button>
+    </div>
   </div>
-
 </header>
-
-
 
 <!-- HERO PRINCIPAL -->
 <section class="hero-section">
-
   <div class="container">
-
     <div class="row align-items-center">
-
       <div class="col-lg-6 text-white">
-
-        <h1 class="hero-title">
-          Accesorios para celulares
-        </h1>
+        <h1 class="hero-title">Accesorios para celulares</h1>
 
         <p class="hero-text">
-          Encuentra cargadores, audífonos, protectores, cables, power banks
-          y los mejores accesorios tecnológicos al mejor precio.
+          Encuentra cargadores, audífonos, protectores, cables, power banks y
+          los mejores accesorios tecnológicos al mejor precio.
         </p>
-
       </div>
-
 
       <!-- CARRUSEL -->
-<!-- CARRUSEL -->
-<div class="col-lg-6">
+      <div class="col-lg-6">
+        <div
+          id="carouselProductos"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="carousel-frame">
+                <img
+                  src="https://storage.comprasmartphone.com/smartphones/samsung-galaxy-s23.png"
+                />
+              </div>
+            </div>
 
-  <div id="carouselProductos" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-item">
+              <div class="carousel-frame">
+                <img
+                  src="https://d13pvy8xd75yde.cloudfront.net/global/phones/spark10/blue.png"
+                />
+              </div>
+            </div>
 
-    <div class="carousel-inner">
+            <div class="carousel-item">
+              <div class="carousel-frame">
+                <img
+                  src="https://www.honor.com/content/dam/honor/common/product-list/product-series/honor-400/honor-400-gold-list.png"
+                />
+              </div>
+            </div>
 
-      <div class="carousel-item active">
-        <div class="carousel-frame">
-          <img src="https://storage.comprasmartphone.com/smartphones/samsung-galaxy-s23.png">
+            <div class="carousel-item">
+              <div class="carousel-frame">
+                <img
+                  src="https://storage.googleapis.com/images-production-egx/products/elgeniox-store/2025-07-28-audifonos-huavi-over-ear-fh710-pro--471756--2620250728T185014212.jpg"
+                />
+              </div>
+            </div>
+
+            <div class="carousel-item">
+              <div class="carousel-frame">
+                <img
+                  src="https://shop-cdncname.huawei.com/mx/uomcdn/MXHW/pms/202412/gbom/6942103138768/428_428_CC37797D4978E945A7AAAA50DD9EAA81mp.png"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTONES -->
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselProductos"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselProductos"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon"></span>
+          </button>
         </div>
       </div>
-
-      <div class="carousel-item">
-        <div class="carousel-frame">
-          <img src="https://d13pvy8xd75yde.cloudfront.net/global/phones/spark10/blue.png">
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="carousel-frame">
-          <img src="https://www.honor.com/content/dam/honor/common/product-list/product-series/honor-400/honor-400-gold-list.png">
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="carousel-frame">
-          <img src="https://storage.googleapis.com/images-production-egx/products/elgeniox-store/2025-07-28-audifonos-huavi-over-ear-fh710-pro--471756--2620250728T185014212.jpg">
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="carousel-frame">
-          <img src="https://shop-cdncname.huawei.com/mx/uomcdn/MXHW/pms/202412/gbom/6942103138768/428_428_CC37797D4978E945A7AAAA50DD9EAA81mp.png">
-        </div>
-      </div>
-
-     
-
     </div>
-
-    <!-- BOTONES -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselProductos" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-    </button>
-
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselProductos" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
-    </button>
-
   </div>
-
-</div>
-
-    </div>
-
-  </div>
-
 </section>
-
-
 
 <!-- SECCION INFORMACION -->
 <section class="container my-5">
-
   <div class="row align-items-center">
-
     <div class="col-lg-5 text-center">
-
       <img
-      src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124479/perfil_pyer5j.png"
-      class="img-fluid rounded-circle shadow"
-      width="250">
-
+        src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124479/perfil_pyer5j.png"
+        class="img-fluid rounded-circle shadow"
+        width="250"
+      />
     </div>
 
     <div class="col-lg-7">
-
       <h2 class="mb-4">Sobre Nosotros</h2>
 
       <p class="text-muted">
-
-        En Freemarket somos una tienda especializada en
-        accesorios para celulares y tecnología.
-        Nuestro objetivo es ofrecer productos de calidad
+        En Freemarket somos una tienda especializada en accesorios para
+        celulares y tecnología. Nuestro objetivo es ofrecer productos de calidad
         con precios accesibles y un servicio confiable.
-
       </p>
 
       <p class="text-muted">
-
-        Contamos con cargadores, audífonos, fundas,
-        cables USB, power banks, soportes para autos
-        y muchos más accesorios tecnológicos.
-
+        Contamos con cargadores, audífonos, fundas, cables USB, power banks,
+        soportes para autos y muchos más accesorios tecnológicos.
       </p>
-
     </div>
-
   </div>
-
 </section>
-
-
 
 <!-- MISION Y VISION -->
 <section class="bg-light py-5">
-
   <div class="container">
-
     <div class="row g-4">
-
       <div class="col-lg-6">
-
         <div class="card shadow h-100 border-0">
-
           <div class="card-body text-center">
-
             <h3 class="mb-3">Misión</h3>
 
             <p class="text-muted">
-
-              Brindar a nuestros clientes accesorios
-              tecnológicos de calidad con precios
-              accesibles y excelente atención.
-
+              Brindar a nuestros clientes accesorios tecnológicos de calidad con
+              precios accesibles y excelente atención.
             </p>
-
           </div>
-
         </div>
-
       </div>
 
       <div class="col-lg-6">
-
         <div class="card shadow h-100 border-0">
-
           <div class="card-body text-center">
-
             <h3 class="mb-3">Visión</h3>
 
             <p class="text-muted">
-
-              Convertirnos en una tienda líder en
-              venta de accesorios para celulares
-              ofreciendo innovación y confianza.
-
+              Convertirnos en una tienda líder en venta de accesorios para
+              celulares ofreciendo innovación y confianza.
             </p>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </section>
-
-
 
 <!-- FOOTER -->
 <footer class="bg-dark text-white mt-5">
-
   <div class="container py-5">
-
     <div class="row">
-
       <div class="col-lg-4">
+        <img
+          src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
+          width="140"
+          class="mb-3"
+        />
 
-        <img src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
-        width="140"
-        class="mb-3">
-
-        <p>
-
-          Tu tienda confiable de accesorios
-          para celulares y tecnología.
-
-        </p>
-
+        <p>Tu tienda confiable de accesorios para celulares y tecnología.</p>
       </div>
 
-
       <div class="col-lg-4">
-
         <h5>Contacto</h5>
 
         <p>Email: freemarket0620gmail.com</p>
         <p>Tel: +591 72937437</p>
         <p>Beni - Bolivia</p>
-
       </div>
 
-
       <div class="col-lg-4">
-
         <h5>Redes Sociales</h5>
 
         <div class="d-flex gap-3 mt-3">
-
           <i class="fab fa-facebook fa-2x"></i>
           <i class="fab fa-instagram fa-2x"></i>
           <i class="fab fa-whatsapp fa-2x"></i>
           <i class="fab fa-tiktok fa-2x"></i>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </footer>
