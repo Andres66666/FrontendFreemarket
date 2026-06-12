@@ -113,11 +113,7 @@
           </thead>
           <tbody>
             <ng-container
-              *ngFor="
-                let producto of filteredProductos()
-                  | slice: (page - 1) * 6 : (page - 1) * 6 + 6;
-                let i = index
-              "
+              *ngFor="let producto of filteredProductos(); let i = index"
             >
               <tr class="align-middle">
                 <!-- Producto + Detalles -->
@@ -253,29 +249,6 @@
             </ng-container>
           </tbody>
         </table>
-      </div>
-
-      <!-- PAGINACIÓN -->
-      <div class="d-flex align-items-center justify-content-center gap-2 mt-3">
-        <button
-          class="btn btn-outline-secondary btn-sm"
-          (click)="previousPage()"
-          [disabled]="page === 1"
-        >
-          <i class="bi bi-chevron-left"></i> Anterior
-        </button>
-
-        <span class="small text-muted"
-          >Página <span class="fw-semibold">{{ page }}</span></span
-        >
-
-        <button
-          class="btn btn-outline-secondary btn-sm"
-          (click)="nextPage()"
-          [disabled]="filteredProductos().length < pageSize"
-        >
-          Siguiente <i class="bi bi-chevron-right"></i>
-        </button>
       </div>
     </div>
 
@@ -430,34 +403,6 @@
                   >
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- WHATSAPP -->
-          <div class="row g-2 align-items-end">
-            <div class="col-12 col-md-7">
-              <label class="form-label small text-muted mb-1">WhatsApp</label>
-              <div class="input-group">
-                <span class="input-group-text"
-                  ><i class="bi bi-whatsapp"></i
-                ></span>
-                <input
-                  type="number"
-                  class="form-control"
-                  placeholder="Ej: 5917XXXXXXX"
-                  [(ngModel)]="numeroTelefono"
-                />
-              </div>
-            </div>
-            <div class="col-12 col-md-5 d-grid">
-              <button
-                class="btn btn-success"
-                type="button"
-                (click)="enviarPorWhatsApp()"
-                [disabled]="detalleVenta.length === 0"
-              >
-                <i class="bi bi-send me-1"></i> Enviar
-              </button>
             </div>
           </div>
         </div>

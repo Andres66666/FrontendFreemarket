@@ -58,8 +58,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   searchPrecio: string = '';
   searchCodigoProducto: string = '';
 
-  page: number = 1;
-  pageSize: number = 6;
+
 
   detalleVenta: DetalleVenta[] = [];
   totalVenta: number = 0;
@@ -81,7 +80,6 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
   montoPagado: string = '';
   cambio: number = 0;
-  numeroTelefono: string = '';
 
   constructor(
     private productoService: ServicesService,
@@ -209,11 +207,8 @@ export class ListarProductosEmpleadoComponent implements OnInit {
           .includes(this.searchCodigoProducto.toLowerCase()),
       );
     }
+    return filtered;
 
-    return filtered.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize,
-    );
   }
 
   buscarPorCodigoEscaneado(codigo: string) {
@@ -228,14 +223,6 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     }
 
     this.filteredProductos();
-  }
-
-  nextPage() {
-    this.page++;
-  }
-
-  previousPage() {
-    if (this.page > 1) this.page--;
   }
 
   clearQuantities() {
@@ -481,44 +468,6 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     });
   }
 
-  generarMensaje(): string {
-    let mensaje = '📝 *Detalles de Venta:* 🗒\n\n';
-
-    this.detalleVenta.forEach((item) => {
-      const precio = item.precio != null ? item.precio : 0;
-      const subtotal = item.subtotal != null ? item.subtotal : 0;
-
-      mensaje += `🔷 Código: ${item.producto.codigo_producto}\n`;
-      mensaje += `   Producto: ${item.producto.nombre_producto}\n`;
-      mensaje += `   Cantidad: ${item.cantidad}\n`;
-      mensaje += `   Precio: Bs ${precio.toFixed(2)}\n`;
-      mensaje += `   Tipo de Venta: ${item.tipo_venta}\n`;
-      mensaje += `   Subtotal: Bs ${subtotal.toFixed(2)}\n\n`;
-    });
-
-    mensaje += `💵 *Total:* Bs ${this.totalVenta.toFixed(2)}\n`;
-    mensaje += `\n✅ ¡Gracias por tu compra! 😊`;
-
-    return mensaje;
-  }
-
-  enviarPorWhatsApp() {
-    if (!this.numeroTelefono) {
-      this.error = 'Por favor ingresa un número de teléfono.';
-      return;
-    }
-    if (this.detalleVenta.length === 0) {
-      this.error = 'No hay productos en el carrito para enviar.';
-      return;
-    }
-
-    const mensaje = this.generarMensaje();
-    const mensajeCodificado = encodeURIComponent(mensaje);
-    const telefono = String(this.numeroTelefono).replace(/\D/g, '');
-
-    const url = `https://wa.me/${telefono}?text=${mensajeCodificado}`;
-    window.open(url, '_blank');
-  }
 
   toggleDetalles(index: number): void {
     this.detallesAbiertos[index] = !this.detallesAbiertos[index];
