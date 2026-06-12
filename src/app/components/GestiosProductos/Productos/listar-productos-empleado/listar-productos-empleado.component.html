@@ -1,32 +1,53 @@
+<!-- BOTÓN FLOTANTE CARRITO (solo móvil/tablet) -->
+<div
+  *ngIf="detalleVenta.length > 0 && !isDesktop"
+  class="position-fixed bottom-0 end-0 m-2"
+  style="z-index: 1050"
+>
+  <button
+    class="btn btn-primary btn-lg rounded-circle shadow"
+    (click)="irAlCarrito()"
+    title="Ver carrito"
+  >
+    <i class="bi bi-cart-fill"></i>
+    <span
+      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger fs-xxs"
+    >
+      {{ detalleVenta.length }}
+    </span>
+  </button>
+</div>
+
+<!-- MAIN CONTENT -->
 <div class="row">
   <!-- =========================
          IZQUIERDA: PRODUCTOS
     ========================== -->
-  <div class="col-12 col-lg-7">
+  <div class="col-12 col-lg-7" id="seccion-productos">
     <!-- FILTROS -->
-    <div class="row g-2 align-items-end mb-4">
-      <h5 class="mb-0 fw-semibold text-center">Productos</h5>
+    <div class="row g-2 align-items-end mb-3">
+      <h5 class="mb-0 fw-semibold text-center fs-sm">Productos</h5>
 
       <!-- CÓDIGO -->
       <div class="col-12 col-sm-6 col-lg-3">
-        <label class="form-label small fw-semibold"> Código </label>
+        <label class="form-label small fw-semibold mb-1 fs-xs">Código</label>
 
-        <div class="input-group">
+        <div class="input-group input-group-sm">
           <span class="input-group-text">
             <i class="bi bi-upc-scan"></i>
           </span>
 
           <input
             type="text"
-            class="form-control"
-            placeholder="Escanear código..."
+            class="form-control form-control-sm"
+            placeholder="Escanear..."
             [(ngModel)]="searchCodigoProducto"
             (keyup.enter)="buscarPorCodigoEscaneado(searchCodigoProducto)"
           />
 
           <button
             *ngIf="searchCodigoProducto"
-            class="btn btn-outline-secondary"
+            class="btn btn-outline-secondary btn-sm"
             type="button"
             (click)="buscarPorCodigoEscaneado(searchCodigoProducto)"
           >
@@ -37,14 +58,14 @@
 
       <!-- CATEGORÍA -->
       <div class="col-12 col-sm-6 col-lg-2">
-        <label class="form-label small fw-semibold"> Categoría </label>
+        <label class="form-label small fw-semibold mb-1 fs-xs">Categoría</label>
 
         <select
-          class="form-select"
+          class="form-select form-select-sm"
           [(ngModel)]="searchCategoria"
           (change)="onCategoriaChange()"
         >
-          <option value="">Todas las categorías</option>
+          <option value="">Todas</option>
 
           <option *ngFor="let cat of categorias" [value]="cat.nombre_categoria">
             {{ cat.nombre_categoria }}
@@ -54,10 +75,13 @@
 
       <!-- PRODUCTO -->
       <div class="col-12 col-sm-6 col-lg-3">
-        <label class="form-label small fw-semibold"> Producto </label>
+        <label class="form-label small fw-semibold mb-1 fs-xs">Producto</label>
 
-        <select class="form-select" [(ngModel)]="searchNombreProducto">
-          <option value="">Todos los nombres</option>
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="searchNombreProducto"
+        >
+          <option value="">Todos</option>
 
           <option
             *ngFor="let prod of filterNamesByCategory()"
@@ -76,10 +100,10 @@
 
       <!-- LIMPIAR -->
       <div class="col-12 col-sm-6 col-lg-1">
-        <label class="form-label d-none d-lg-block"> &nbsp; </label>
+        <label class="form-label d-none d-lg-block">&nbsp;</label>
 
         <button
-          class="btn btn-outline-danger w-100"
+          class="btn btn-outline-danger btn-sm w-100"
           (click)="clearQuantities()"
         >
           <i class="bi bi-trash"></i>
@@ -87,18 +111,18 @@
       </div>
     </div>
 
-    <!-- GRID → TABLA (misma lógica) -->
-    <div class="table-responsive shadow-sm mb-3">
-      <table class="table table-hover align-middle mb-0">
+    <!-- TABLA PRODUCTOS -->
+    <div class="table-responsive shadow-sm mb-2">
+      <table class="table table-sm table-hover align-middle mb-0">
         <thead class="table-light sticky-top">
-          <tr>
+          <tr class="fs-xs">
             <th>Producto</th>
             <th>Código</th>
             <th class="text-center">Stock</th>
             <th class="text-end">Precio U</th>
             <th class="text-end" *ngIf="mostrarPrecioMayor">Precio M</th>
-            <th class="text-center">Cantidad</th>
-            <th class="text-center">Acciones</th>
+            <th class="text-center">Cant.</th>
+            <th class="text-center">Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -106,30 +130,27 @@
             *ngFor="let producto of filteredProductos(); let i = index"
           >
             <tr class="align-middle">
-              <!-- Producto + Detalles -->
               <td>
-                <div>
-                  <div
-                    class="fw-semibold text-truncate mb-1"
-                    title="{{ producto.nombre_producto }}"
-                  >
-                    {{ producto.nombre_producto }}
-                  </div>
-                  <div *ngIf="!isMobile" class="small text-muted">
-                    <i class="bi bi-info-circle me-1"></i
-                    >{{ producto.descripcion }}
-                  </div>
+                <div
+                  class="fw-semibold text-truncate"
+                  style="max-width: 120px"
+                  title="{{ producto.nombre_producto }}"
+                >
+                  <span class="fs-xs">{{ producto.nombre_producto }}</span>
+                </div>
+                <div *ngIf="!isMobile" class="small text-muted">
+                  <i class="bi bi-info-circle me-1"></i
+                  >{{ producto.descripcion }}
                 </div>
               </td>
 
-              <!-- Código -->
               <td>
-                <code class="small">{{ producto.codigo_producto }}</code>
+                <code class="fs-xxs">{{ producto.codigo_producto }}</code>
               </td>
-              <!-- Stock -->
+
               <td class="text-center">
                 <span
-                  class="badge rounded-pill fs-6 px-2 py-1"
+                  class="badge rounded-pill fs-xxs px-1 py-0"
                   [ngClass]="{
                     'text-bg-danger': producto.stock === 0,
                     'text-bg-warning':
@@ -141,41 +162,33 @@
                 </span>
               </td>
 
-              <!-- Precio Unitario -->
-              <td class="text-end fw-semibold text-success">
+              <td class="text-end fw-semibold text-success fs-xs">
                 Bs {{ producto.precio_unitario | number: "1.2-2" }}
               </td>
 
-              <!-- Precio Mayor -->
-              <td *ngIf="mostrarPrecioMayor" class="text-end text-warning">
+              <td
+                *ngIf="mostrarPrecioMayor"
+                class="text-end text-warning fs-xs"
+              >
                 Bs {{ producto.precio_mayor | number: "1.2-2" }}
               </td>
 
-              <!-- Input Cantidad -->
               <td class="text-center">
                 <input
                   type="number"
-                  class="form-control form-control-sm mx-auto"
-                  style="width: 80px"
+                  class="form-control form-control-sm py-0"
+                  style="width: 60px"
                   placeholder="Cant."
                   min="1"
                   [max]="producto.stock"
                   [(ngModel)]="cantidadPorProducto[producto.id]"
-                  (ngModelChange)="
-                    actualizarCantidad(
-                      getDetalleVenta(producto.id),
-                      cantidadPorProducto[producto.id],
-                      isCategoriaConBotonUnidad(producto) ? 'mayor' : 'unidad'
-                    )
-                  "
                 />
               </td>
 
-              <!-- Botones Acción -->
               <td class="text-center">
                 <div class="btn-group btn-group-sm" role="group">
                   <button
-                    class="btn btn-success"
+                    class="btn btn-success btn-sm py-0"
                     [disabled]="!isCantidadValida(producto.id, 'unidad')"
                     (click)="
                       agregarAlCarrito(
@@ -184,12 +197,11 @@
                         'unidad'
                       )
                     "
-                    title="Agregar al carrito (Unidad)"
                   >
                     <i class="bi bi-cart-plus"></i>
                   </button>
                   <button
-                    class="btn btn-warning"
+                    class="btn btn-warning btn-sm py-0"
                     *ngIf="isCategoriaConBotonUnidad(producto)"
                     [disabled]="!isCantidadValida(producto.id, 'mayor')"
                     (click)="
@@ -199,32 +211,9 @@
                         'mayor'
                       )
                     "
-                    title="Agregar al carrito (Mayorista)"
                   >
                     <i class="bi bi-cart-check"></i>
                   </button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- Fila detalles expandible (móvil) -->
-            <tr *ngIf="detallesAbiertos[i] && isMobile" class="table-light">
-              <td colspan="8" class="p-2">
-                <div class="row g-2 small">
-                  <div class="col-6">
-                    <strong>Código:</strong> {{ producto.codigo_producto }}
-                  </div>
-                  <div class="col-6">
-                    <strong>Precio U:</strong> Bs
-                    {{ producto.precio_unitario }}
-                  </div>
-                  <div class="col-6" *ngIf="mostrarPrecioMayor">
-                    <strong>Precio M:</strong> Bs {{ producto.precio_mayor }}
-                  </div>
-                  <div class="col-12">
-                    <i class="bi bi-info-circle me-1 text-muted"></i>
-                    {{ producto.descripcion }}
-                  </div>
                 </div>
               </td>
             </tr>
@@ -237,22 +226,15 @@
   <!-- =========================
          DERECHA: DETALLE VENTA
     ========================== -->
-  <div class="col-12 col-lg-5">
+  <div class="col-12 col-lg-5" id="seccion-carrito">
     <div class="card shadow-sm border-0 position-sticky" style="top: 90px">
-      <h5 class="mb-0 fw-semibold text-center">Detalle Venta</h5>
+      <h5 class="mb-0 fw-semibold text-center fs-sm">Detalle Venta</h5>
 
-      <!-- FORM (se mantiene para registrar datos) -->
-      <div class="card-body d-none">
-        <form [formGroup]="ventaForm">
-          <input formControlName="total" [value]="totalVenta" readonly />
-        </form>
-      </div>
-
-      <!-- TABLA -->
+      <!-- TABLA DETALLE VENTA -->
       <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-sm table-hover align-middle mb-0">
           <thead class="table-light">
-            <tr>
+            <tr class="fs-xs">
               <th>Código</th>
               <th>Producto</th>
               <th class="text-center">Cant.</th>
@@ -264,20 +246,18 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let item of detalleVenta">
+            <tr *ngFor="let item of detalleVenta" class="fs-xs">
               <td>{{ item.producto.codigo_producto }}</td>
               <td>{{ item.producto.nombre_producto }}</td>
               <td class="text-center">{{ item.cantidad }}</td>
               <td class="text-end">Bs {{ item.precio | number: "1.2-2" }}</td>
-              <td class="text-center">
-                {{ item.tipo_venta }}
-              </td>
+              <td class="text-center">{{ item.tipo_venta }}</td>
               <td class="text-end fw-semibold">
                 Bs {{ item.subtotal | number: "1.2-2" }}
               </td>
               <td class="text-center">
                 <button
-                  class="btn btn-outline-danger btn-sm"
+                  class="btn btn-outline-danger btn-sm py-0"
                   (click)="eliminarProducto(item)"
                 >
                   <i class="bi bi-trash"></i>
@@ -286,82 +266,74 @@
             </tr>
 
             <tr *ngIf="detalleVenta.length === 0">
-              <td colspan="7" class="text-center text-muted py-4">
+              <td colspan="7" class="text-center text-muted py-3 fs-xs">
                 No hay productos en el carrito
               </td>
             </tr>
           </tbody>
 
-          <!-- TOTAL AL FINAL DE SUBTOTAL -->
           <tfoot *ngIf="detalleVenta.length > 0">
             <tr class="table-primary">
-              <td colspan="5" class="text-end fw-bold fs-5">TOTAL:</td>
-
-              <td class="text-end fw-bold fs-4">
+              <td colspan="5" class="text-end fw-bold">TOTAL:</td>
+              <td class="text-end fw-bold fs-sm">
                 Bs {{ totalVenta | number: "1.2-2" }}
               </td>
-
               <td></td>
             </tr>
           </tfoot>
         </table>
       </div>
 
-      <div class="card-body border-top">
-        <!-- CAMBIO -->
-        <div class="row g-2 align-items-center mb-3">
-          <div class="col-12 col-md-6">
-            <label for="montoPagado" class="form-label small text-muted mb-1"
-              >Monto canceló</label
-            >
-            <div class="input-group">
-              <span class="input-group-text">Bs</span>
+      <!-- MONTO Y CAMBIO -->
+      <div class="card-body border-top py-2">
+        <div class="row g-2 align-items-center">
+          <div class="col-6">
+            <label class="form-label small text-muted mb-0 fs-xs">Monto:</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text py-1">Bs</span>
               <input
                 type="text"
-                id="montoPagado"
                 [(ngModel)]="montoPagado"
-                class="form-control"
+                class="form-control form-control-sm py-1"
                 (input)="calcularCambio()"
-                placeholder="Monto..."
               />
             </div>
           </div>
 
-          <div class="col-12 col-md-6">
-            <label class="form-label small text-muted mb-1">Cambio</label>
+          <div class="col-6">
+            <label class="form-label small text-muted mb-0 fs-xs"
+              >Cambio:</label
+            >
             <div
-              class="alert mb-0 py-2"
+              class="alert mb-0 py-1"
               [ngClass]="cambio < 0 ? 'alert-danger' : 'alert-success'"
             >
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="small">Total</span>
-                <span class="fw-semibold"
-                  >Bs {{ cambio | number: "1.2-2" }}</span
-                >
-              </div>
+              <span class="fw-semibold fs-xs"
+                >Bs {{ cambio | number: "1.2-2" }}</span
+              >
             </div>
           </div>
         </div>
       </div>
 
-      <!-- FOOTER -->
-      <div class="card-footer bg-white border-0 d-flex gap-2">
+      <!-- FOOTER BOTONES -->
+      <div class="card-footer bg-white border-0 d-flex gap-2 py-2">
         <button
           type="button"
-          class="btn btn-outline-secondary w-50"
+          class="btn btn-outline-secondary btn-sm w-50"
           (click)="detalleVenta = []; totalVenta = 0; calcularCambio()"
           [disabled]="detalleVenta.length === 0"
         >
-          <i class="bi bi-x-circle me-1"></i> Vaciar
+          <i class="bi bi-x-circle me-1"></i>Vaciar
         </button>
 
         <button
           type="submit"
-          class="btn btn-primary w-50"
+          class="btn btn-primary btn-sm w-50"
           [disabled]="ventaForm.invalid || detalleVenta.length === 0"
           (click)="registrarVenta()"
         >
-          <i class="bi bi-cash-coin me-1"></i> Vender
+          <i class="bi bi-cash-coin me-1"></i>Vender
         </button>
       </div>
     </div>

@@ -82,6 +82,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   montoPagado: string = '';
   cambio: number = 0;
 
+  isDesktop: boolean = false;
   constructor(
     private productoService: ServicesService,
     private fb: FormBuilder,
@@ -487,8 +488,17 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     this.detallesAbiertos[index] = !this.detallesAbiertos[index];
   }
 
+
   checkScreenSize() {
     this.isMobile = window.innerWidth < 768;
+    this.isMobile = window.innerWidth < 992;
+    this.isDesktop = window.innerWidth >= 992;
+  }
+  irAlCarrito() {
+    const elemento = document.getElementById('seccion-carrito');
+    if (elemento) {
+      elemento.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   manejarOk() {
