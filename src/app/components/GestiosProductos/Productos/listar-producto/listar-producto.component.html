@@ -1,65 +1,65 @@
 <h2 class="text-center mb-3 fs-sm">Lista de Productos</h2>
 
+<!-- FILTROS dd-->
+
 <!-- FILTROS -->
-
 <div class="row g-2 mb-3">
-  <!-- FILA 1: Categoría + Producto -->
+  <!-- TÍTULO -->
   <div class="col-12">
-    <div class="row g-2">
-      <!-- Categoría -->
-      <div class="col-6">
-        <label class="form-label small fw-semibold mb-1 fs-xs">Categoría</label>
-        <select
-          class="form-select form-select-sm"
-          [(ngModel)]="searchCategoria"
-          (change)="onCategoriaChange()"
-        >
-          <option value="">Todas</option>
-          <option *ngFor="let cat of categorias" [value]="cat.nombre_categoria">
-            {{ cat.nombre_categoria }}
-          </option>
-        </select>
-      </div>
-
-      <div class="col-6">
-        <label class="form-label small fw-semibold mb-1 fs-xs">Producto</label>
-        <select
-          class="form-select form-select-sm"
-          [(ngModel)]="searchNombreProducto"
-        >
-          <option value="">Todos</option>
-          <option
-            *ngFor="let prod of filterNamesByCategory()"
-            [value]="prod.nombre_producto"
-          >
-            {{ prod.nombre_producto }}
-          </option>
-        </select>
-      </div>
-    </div>
+    <h5 class="mb-2 fw-semibold text-center fs-sm">Productos</h5>
   </div>
 
-  <!-- FILA 2: Código + Botón -->
-  <div class="col-12">
-    <div class="row g-2 align-items-end">
-      <div class="col-10 col-sm-6 col-lg-4">
-        <label class="form-label small fw-semibold mb-1 fs-xs">Código</label>
-        <input
-          type="text"
-          class="form-control form-control-sm"
-          placeholder="Buscar código..."
-          [(ngModel)]="searchCodigoProducto"
-        />
-      </div>
-      <div class="col-2 col-sm-4 col-lg-2">
-        <button
-          class="btn btn-success w-100 btn-sm"
-          (click)="registrarProducto()"
-        >
-          <i class="bi bi-journal-plus"></i>
-        </button>
-      </div>
-    </div>
+  <!-- Categoría -->
+  <div class="col-6 col-sm-4 col-lg-3">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Categoría</label>
+    <select
+      class="form-select form-select-sm"
+      [(ngModel)]="searchCategoria"
+      (change)="onCategoriaChange()"
+    >
+      <option value="">Categoría</option>
+      <option *ngFor="let cat of categorias" [value]="cat.nombre_categoria">
+        {{ cat.nombre_categoria }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Producto -->
+  <div class="col-6 col-sm-4 col-lg-3">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Producto</label>
+    <select
+      class="form-select form-select-sm"
+      [(ngModel)]="searchNombreProducto"
+    >
+      <option value="">Producto</option>
+      <option
+        *ngFor="let prod of filterNamesByCategory()"
+        [value]="prod.nombre_producto"
+      >
+        {{ prod.nombre_producto }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Código -->
+  <div class="col-8 col-sm-4 col-lg-4">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Código</label>
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      placeholder="Código..."
+      [(ngModel)]="searchCodigoProducto"
+    />
+  </div>
+
+  <!-- Botón -->
+  <div class="col-4 col-sm-12 col-lg-2">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Registrar</label>
+
+    <button class="btn btn-success w-100 btn-sm" (click)="registrarProducto()">
+      <i class="bi bi-journal-plus me-1"></i
+      ><span class="d-none d-lg-inline">Registrar</span>
+    </button>
   </div>
 </div>
 
