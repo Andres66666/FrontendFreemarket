@@ -1,217 +1,144 @@
-<div class="container-fluid px-2 px-md-4 mt-4">
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <h2 class="text-center mb-4">Lista de Productos</h2>
+<h2 class="text-center mb-3 fs-sm">Lista de Productos</h2>
 
-      <!-- FILTROS -->
-      <div class="row g-3 mb-4">
-        <div class="col-12 col-sm-6 col-lg-3">
-          <select
-            class="form-select"
-            [(ngModel)]="searchCategoria"
-            (change)="filteredProductos()"
+<!-- FILTROS -->
+
+<div class="row g-2 mb-3">
+  <!-- FILA 1: Categoría + Producto -->
+  <div class="col-12">
+    <div class="row g-2">
+      <!-- Categoría -->
+      <div class="col-6">
+        <label class="form-label small fw-semibold mb-1 fs-xs">Categoría</label>
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="searchCategoria"
+          (change)="onCategoriaChange()"
+        >
+          <option value="">Todas</option>
+          <option *ngFor="let cat of categorias" [value]="cat.nombre_categoria">
+            {{ cat.nombre_categoria }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-6">
+        <label class="form-label small fw-semibold mb-1 fs-xs">Producto</label>
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="searchNombreProducto"
+        >
+          <option value="">Todos</option>
+          <option
+            *ngFor="let prod of filterNamesByCategory()"
+            [value]="prod.nombre_producto"
           >
-            <option value="">Seleccionar Categoría</option>
-            <option
-              *ngFor="let categoria of categorias"
-              [value]="categoria.nombre_categoria"
-            >
-              {{ categoria.nombre_categoria }}
-            </option>
-          </select>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Buscar Por Nombre"
-            [(ngModel)]="searchNombreProducto"
-          />
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Buscar Por Código"
-            [(ngModel)]="searchCodigoProducto"
-          />
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3">
-          <button class="btn btn-success w-100" (click)="registrarProducto()">
-            <i class="bi bi-journal-plus me-2"></i>
-            Registrar Producto
-          </button>
-        </div>
+            {{ prod.nombre_producto }}
+          </option>
+        </select>
       </div>
+    </div>
+  </div>
 
-      <!-- TABLA PARA TABLET Y PC -->
-      <div class="table-responsive d-none d-md-block">
-        <table
-          class="table table-striped table-bordered table-hover align-middle text-center"
-        >
-          <thead class="table-info">
-            <tr>
-              <th>Nombre</th>
-              <th>Código</th>
-              <th class="d-none d-lg-table-cell">Descripción</th>
-              <th>Categoría</th>
-              <th>Compra</th>
-              <th>Unitario</th>
-              <th class="d-none d-lg-table-cell">Mayor</th>
-              <th (click)="ordenarPorStock()" style="cursor: pointer">Stock</th>
-              <th class="d-none d-xl-table-cell">Creación</th>
-              <th class="d-none d-xl-table-cell">Actualización</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr
-              *ngFor="let producto of filteredProductos()"
-              [ngClass]="{
-                'table-danger': !producto.estado_equipo,
-                'table-success': producto.estado_equipo,
-              }"
-            >
-              <td>{{ producto.nombre_producto }}</td>
-              <td>{{ producto.codigo_producto }}</td>
-
-              <td class="d-none d-lg-table-cell">
-                {{ producto.descripcion }}
-              </td>
-
-              <td>{{ producto.categoria.nombre_categoria }}</td>
-
-              <td>Bs {{ producto.precio_compra }}</td>
-              <td>Bs {{ producto.precio_unitario }}</td>
-
-              <td class="d-none d-lg-table-cell">
-                Bs {{ producto.precio_mayor }}
-              </td>
-
-              <td>{{ producto.stock }}</td>
-
-              <td class="d-none d-xl-table-cell">
-                {{ producto.fecha_creacion | date: "dd/MM/yyyy HH:mm" }}
-              </td>
-
-              <td class="d-none d-xl-table-cell">
-                {{ producto.fecha_actualizacion | date: "dd/MM/yyyy HH:mm" }}
-              </td>
-
-              <td>
-                <div class="d-flex flex-column flex-lg-row gap-1">
-                  <button
-                    class="btn btn-primary btn-sm"
-                    (click)="editarProducto(producto.id)"
-                  >
-                    Editar
-                  </button>
-
-                  <button
-                    class="btn btn-sm"
-                    [ngClass]="
-                      producto.estado_equipo ? 'btn-danger' : 'btn-success'
-                    "
-                    (click)="toggleProductoActivado(producto)"
-                  >
-                    {{ producto.estado_equipo ? "Desactivar" : "Activar" }}
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <!-- FILA 2: Código + Botón -->
+  <div class="col-12">
+    <div class="row g-2 align-items-end">
+      <div class="col-10 col-sm-6 col-lg-4">
+        <label class="form-label small fw-semibold mb-1 fs-xs">Código</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          placeholder="Buscar código..."
+          [(ngModel)]="searchCodigoProducto"
+        />
       </div>
-
-      <!-- TARJETAS PARA CELULAR -->
-      <div class="d-md-none">
-        <div
-          class="card mb-3 shadow-sm"
-          *ngFor="let producto of filteredProductos()"
-        >
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <div>
-                <h6 class="mb-0">{{ producto.nombre_producto }}</h6>
-                <small class="text-muted">
-                  Código: {{ producto.codigo_producto }}
-                </small>
-              </div>
-            </div>
-
-            <p class="mb-1">
-              <strong>Categoría:</strong>
-              {{ producto.categoria.nombre_categoria }}
-            </p>
-
-            <p class="mb-1">
-              <strong>Stock:</strong>
-              {{ producto.stock }}
-            </p>
-
-            <p class="mb-1">
-              <strong>Precio:</strong>
-              Bs {{ producto.precio_unitario }}
-            </p>
-
-            <p class="mb-2">
-              <span
-                class="badge"
-                [ngClass]="producto.estado_equipo ? 'bg-success' : 'bg-danger'"
-              >
-                {{ producto.estado_equipo ? "Activo" : "Inactivo" }}
-              </span>
-            </p>
-
-            <div class="d-grid gap-2">
-              <button
-                class="btn btn-primary btn-sm"
-                (click)="editarProducto(producto.id)"
-              >
-                Editar
-              </button>
-
-              <button
-                class="btn btn-sm"
-                [ngClass]="
-                  producto.estado_equipo ? 'btn-danger' : 'btn-success'
-                "
-                (click)="toggleProductoActivado(producto)"
-              >
-                {{ producto.estado_equipo ? "Desactivar" : "Activar" }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PAGINACIÓN -->
-
-      <div
-        class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 gap-2"
-      >
+      <div class="col-2 col-sm-4 col-lg-2">
         <button
-          class="btn btn-secondary w-100 w-md-auto"
-          (click)="previousPage()"
-          [disabled]="page === 1"
+          class="btn btn-success w-100 btn-sm"
+          (click)="registrarProducto()"
         >
-          Anterior
-        </button>
-
-        <span class="fw-bold">Página {{ page }}</span>
-
-        <button
-          class="btn btn-secondary w-100 w-md-auto"
-          (click)="nextPage()"
-          [disabled]="page * pageSize >= productos.length"
-        >
-          Siguiente
+          <i class="bi bi-journal-plus"></i>
         </button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- TABLA -->
+<div class="table-responsive shadow-sm mb-2">
+  <table class="table table-sm table-hover align-middle mb-0">
+    <thead class="table-light sticky-top">
+      <tr class="fs-xs">
+        <th>Nombre</th>
+        <th>Código</th>
+        <th class="d-none d-lg-table-cell">Descripción</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th class="d-none d-lg-table-cell">Mayor</th>
+        <th (click)="ordenarPorStock()" style="cursor: pointer">Stock</th>
+        <th class="d-none d-xl-table-cell">Creación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let producto of filteredProductos()"
+        [ngClass]="{
+          'table-danger': !producto.estado_equipo,
+          'table-success': producto.estado_equipo,
+        }"
+      >
+        <td class="fs-xs">{{ producto.nombre_producto }}</td>
+        <td class="fs-xxs">
+          <code>{{ producto.codigo_producto }}</code>
+        </td>
+        <td class="d-none d-lg-table-cell fs-xxs">
+          {{ producto.descripcion }}
+        </td>
+        <td class="fs-xxs">{{ producto.categoria.nombre_categoria }}</td>
+        <td class="fs-xs text-success">Bs {{ producto.precio_unitario }}</td>
+        <td class="d-none d-lg-table-cell fs-xs text-warning">
+          Bs {{ producto.precio_mayor }}
+        </td>
+        <td class="fs-xs">
+          <span
+            class="badge rounded-pill fs-xxs"
+            [ngClass]="{
+              'bg-danger': producto.stock === 0,
+              'bg-warning': producto.stock > 0 && producto.stock <= 3,
+              'bg-success': producto.stock > 3,
+            }"
+          >
+            {{ producto.stock }}
+          </span>
+        </td>
+        <td class="d-none d-xl-table-cell fs-xxs">
+          {{ producto.fecha_creacion | date: "dd/MM/yyyy" }}
+        </td>
+        <td>
+          <div class="btn-group btn-group-sm" role="group">
+            <button
+              class="btn btn-primary btn-sm py-0"
+              (click)="editarProducto(producto.id)"
+              title="Editar"
+            >
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button
+              class="btn btn-sm py-0"
+              [ngClass]="producto.estado_equipo ? 'btn-danger' : 'btn-success'"
+              (click)="toggleProductoActivado(producto)"
+              [title]="producto.estado_equipo ? 'Desactivar' : 'Activar'"
+            >
+              <i
+                class="bi"
+                [ngClass]="
+                  producto.estado_equipo ? 'bi-toggle-on' : 'bi-toggle-off'
+                "
+              ></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

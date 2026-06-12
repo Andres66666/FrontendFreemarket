@@ -18,20 +18,41 @@ export class ListarProductoComponent implements OnInit {
   searchNombreProducto: string = '';
   searchCategoria: string = '';
   searchCodigoProducto: string = '';
-  page: number = 1;
-  pageSize: number = 6;
   ordenarAscendente: boolean = true;
 
+
+
+  nombresPorCategoria: string[] = [];
   constructor(
     private productoService: ServicesService,
     private router: Router,
   ) {}
+  onCategoriaChange() {
+    this.searchNombreProducto = '';
+    this.actualizarNombresPorCategoria();
+  }
 
+  // Método para obtener nombres por categoría
+  filterNamesByCategory(): Producto[] {
+    if (!this.searchCategoria) {
+      return this.productos.filter(p => p.estado_equipo !== false);
+    }
+    return this.productos.filter(
+      p => p.estado_equipo !== false && 
+      p.categoria.nombre_categoria.toLowerCase() === this.searchCategoria.toLowerCase()
+    );
+  }
+
+  // Método auxiliar para actualizar nombres
+  actualizarNombresPorCategoria() {
+    const productos = this.filterNamesByCategory();
+    this.nombresPorCategoria = [...new Set(productos.map(p => p.nombre_producto))].sort();
+  }
   ngOnInit(): void {
     this.getProductos();
     this.getCategorias();
+    this.actualizarNombresPorCategoria();
   }
-
   getProductos() {
     this.productoService.getProductos().subscribe((data) => {
       this.productos = data;
@@ -69,58 +90,35 @@ export class ListarProductoComponent implements OnInit {
   }
 
   filteredProductos(): Producto[] {
-    let filtered = this.productos;
+    let filtered = this.productos.filter(p => p.estado_equipo !== false);
 
-    // Filtrar por categoría
+    // 1. Filtrar por categoría
     if (this.searchCategoria) {
-      filtered = filtered.filter((producto) =>
-        producto.categoria.nombre_categoria
-          .toLowerCase()
-          .includes(this.searchCategoria.toLowerCase()),
+      filtered = filtered.filter(p => 
+        p.categoria.nombre_categoria.toLowerCase() === this.searchCategoria.toLowerCase()
       );
     }
 
-    // Filtrar por nombre de producto
+    // 2. Filtrar por nombre
     if (this.searchNombreProducto) {
-      filtered = filtered.filter((producto) =>
-        producto.nombre_producto
-          .toLowerCase()
-          .includes(this.searchNombreProducto.toLowerCase()),
+      filtered = filtered.filter(p => 
+        p.nombre_producto.toLowerCase() === this.searchNombreProducto.toLowerCase()
       );
     }
 
-    // Filtrar por código de producto
+    // 3. Filtrar por código
     if (this.searchCodigoProducto) {
-      filtered = filtered.filter((producto) =>
-        producto.codigo_producto
-          .toLowerCase()
-          .includes(this.searchCodigoProducto.toLowerCase()),
+      const term = this.searchCodigoProducto.toLowerCase().trim();
+      filtered = filtered.filter(p => 
+        p.codigo_producto.toLowerCase().includes(term)
       );
     }
 
-    // Filtrar productos con stock cero
-    const productosConStockCero = filtered.filter(
-      (producto) => producto.stock === 0,
-    );
-    const productosConStock = filtered.filter((producto) => producto.stock > 0);
-
-    // Combinar los productos con stock cero y los que tienen stock
-    const productosFiltrados = [...productosConStockCero, ...productosConStock];
-
-    return productosFiltrados.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize,
-    );
-  }
-
-  nextPage() {
-    this.page++;
-  }
-
-  previousPage() {
-    if (this.page > 1) {
-      this.page--;
-    }
+    // Stock cero primero
+    const sinStock = filtered.filter(p => p.stock === 0);
+    const conStock = filtered.filter(p => p.stock > 0);
+    
+    return [...sinStock, ...conStock];
   }
   modalVisible: boolean = false;
   imageToShow: string = '';
