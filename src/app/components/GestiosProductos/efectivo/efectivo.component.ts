@@ -147,7 +147,7 @@ guardar() {
   data.total = this.total.toFixed(2);
 
   if (this.editingId) {
-    // ✏️ EDITAR
+    // EDITAR
     this.services.actualizarEfectivo(this.editingId, data).subscribe({
       next: () => {
         this.cargarEfectivos();
@@ -159,7 +159,7 @@ guardar() {
       }
     });
   } else {
-    // ✅ REGISTRAR
+    // REGISTRAR
     this.services.crearEfectivo(data).subscribe({
       next: () => {
         this.cargarEfectivos();
@@ -173,15 +173,15 @@ guardar() {
   }
 }
 
-mostrarMensaje(mensaje: string, tipo: 'success' | 'danger') {
-  this.mensaje = mensaje;
-  this.tipoMensaje = tipo;
+  mostrarMensaje(mensaje: string, tipo: 'success' | 'danger') {
+    this.mensaje = mensaje;
+    this.tipoMensaje = tipo;
 
-  // Ocultar mensaje después de 3 segundos
-  setTimeout(() => {
-    this.mensaje = '';
-    this.tipoMensaje = '';
-  }, 3000);
-}
+    // Ocultar mensaje después de 3 segundos
+    setTimeout(() => {
+      this.mensaje = '';
+      this.tipoMensaje = '';
+    }, 3000);
+  }
 
 }

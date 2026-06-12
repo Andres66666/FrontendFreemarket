@@ -1,197 +1,152 @@
-<div class="container my-5">
-  <!-- ===================== SIMULADOR ===================== -->
-  <div class="card shadow-lg border-0 rounded-4">
-    <div class="card-header bg-primary text-white rounded-top-4">
-      <h4 class="mb-0 text-center">Sistema de Gestión de Préstamos</h4>
-    </div>
+<h2 class="text-center mb-3 fs-sm">Sistema de Préstamos</h2>
 
-    <div class="card-body">
-      <div class="row g-4">
-        <!-- MONTO -->
-        <div class="col-md-4">
-          <label class="form-label fw-bold">Monto (Bs)</label>
-          <input
-            type="text"
-            class="form-control form-control-lg text-end"
-            [(ngModel)]="montoFormateado"
-            name="monto"
-            (focus)="onMontoFocus()"
-            (blur)="onMontoBlur()"
-            placeholder="10.000,00"
-          />
-        </div>
+<!-- FORMULARIO -->
+<div class="row g-2 mb-3">
+  <!-- TÍTULO -->
+  <div class="col-12">
+    <h5 class="mb-2 fw-semibold text-center fs-sm">Calculadora de Préstamos</h5>
+  </div>
 
-        <!-- INTERES -->
-        <div class="col-md-4">
-          <label class="form-label fw-bold">Interés (%)</label>
-          <input
-            type="number"
-            class="form-control form-control-lg text-end"
-            [(ngModel)]="interes"
-            name="interes"
-          />
-        </div>
+  <!-- MONTO -->
+  <div class="col-12 col-sm-6 col-lg-4">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Monto (Bs)</label>
+    <input
+      type="text"
+      class="form-control form-control-sm text-end"
+      [(ngModel)]="montoFormateado"
+      (focus)="onMontoFocus()"
+      (blur)="onMontoBlur()"
+      placeholder="10.000,00"
+    />
+  </div>
 
-        <!-- AÑOS -->
-        <div class="col-md-4">
-          <label class="form-label fw-bold">Tiempo</label>
+  <!-- INTERÉS -->
+  <div class="col-6 col-sm-4 col-lg-2">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Interés (%)</label>
+    <input
+      type="number"
+      class="form-control form-control-sm text-end"
+      [(ngModel)]="interes"
+    />
+  </div>
 
-          <div class="input-group input-group-lg">
-            <input
-              type="number"
-              class="form-control text-end"
-              [(ngModel)]="anios"
-              name="tiempo"
-              placeholder="1"
-            />
-
-            <select
-              class="form-select"
-              [(ngModel)]="periodoTipo"
-              name="periodoTipo"
-            >
-              <option value="anios">Años</option>
-              <option value="meses">Meses</option>
-              <option value="semanas">Semanas</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- TIPO INTERES -->
-        <div class="col-md-6">
-          <label class="form-label fw-bold">Tipo de interés</label>
-          <select
-            class="form-select form-select-lg"
-            [(ngModel)]="tipoInteres"
-            name="tipoInteres"
-          >
-            <option value="anual">Anual</option>
-            <option value="mensual">Mensual</option>
-            <option value="semanal">Semanal</option>
-          </select>
-        </div>
-
-        <!-- TIPO PAGO -->
-        <div class="col-md-6">
-          <label class="form-label fw-bold">Forma de pago</label>
-          <select
-            class="form-select form-select-lg"
-            [(ngModel)]="tipoPago"
-            name="tipoPago"
-          >
-            <option value="mensual">Mensual</option>
-            <option value="semanal">Semanal</option>
-          </select>
-        </div>
-
-        <!-- FECHA -->
-        <div class="col-md-6">
-          <label class="form-label fw-bold">Fecha inicio</label>
-          <input
-            type="date"
-            class="form-control form-control-lg"
-            [(ngModel)]="fechaInicio"
-            name="fechaInicio"
-          />
-        </div>
-
-        <!-- BOTONES -->
-        <div class="col-md-12 d-flex justify-content-center gap-3 mt-3">
-          <button class="btn btn-success btn-lg px-5" (click)="calcular()">
-            Calcular
-          </button>
-
-          <button
-            class="btn btn-outline-primary btn-lg px-5"
-            [disabled]="!cuotas.length"
-            (click)="generarPDF()"
-          >
-            Descargar PDF
-          </button>
-        </div>
-      </div>
+  <!-- TIEMPO -->
+  <div class="col-6 col-sm-4 col-lg-2">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Tiempo</label>
+    <div class="input-group input-group-sm">
+      <input type="number" class="form-control text-end" [(ngModel)]="anios" />
+      <select
+        class="form-select form-select-sm"
+        [(ngModel)]="periodoTipo"
+        style="max-width: 80px"
+      >
+        <option value="anios">Años</option>
+        <option value="meses">Meses</option>
+        <option value="semanas">Semanas</option>
+      </select>
     </div>
   </div>
 
-  <!-- ===================== RESUMEN ===================== -->
-  <div *ngIf="cuotas.length" class="row mt-4 g-3 text-center">
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0 bg-info text-white rounded-4">
-        <div class="card-body">
-          <h6>Total pagado</h6>
-          <h4>Bs {{ totalPagado | number: "1.2-2" }}</h4>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0 bg-warning text-dark rounded-4">
-        <div class="card-body">
-          <h6>Total intereses</h6>
-          <h4>Bs {{ totalIntereses | number: "1.2-2" }}</h4>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0 bg-success text-white rounded-4">
-        <div class="card-body">
-          <h6>Ganancia</h6>
-          <h4>Bs {{ ganancia | number: "1.2-2" }}</h4>
-        </div>
-      </div>
-    </div>
+  <!-- TIPO INTERÉS -->
+  <div class="col-6 col-sm-4 col-lg-2">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Tipo Interés</label>
+    <select class="form-select form-select-sm" [(ngModel)]="tipoInteres">
+      <option value="anual">Anual</option>
+      <option value="mensual">Mensual</option>
+      <option value="semanal">Semanal</option>
+    </select>
   </div>
 
-  <!-- ===================== TABLA ===================== -->
-  <div *ngIf="cuotas.length" class="card shadow-lg border-0 rounded-4 mt-4">
-    <div class="card-body">
-      <h3 class="text-center mb-2">Plan de Pagos</h3>
+  <!-- FORMA PAGO -->
+  <div class="col-6 col-sm-4 col-lg-2">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Forma Pago</label>
+    <select class="form-select form-select-sm" [(ngModel)]="tipoPago">
+      <option value="mensual">Mensual</option>
+      <option value="semanal">Semanal</option>
+    </select>
+  </div>
 
-      <p class="text-center text-muted mb-4">
-        Fecha:
-        {{
-          fechaInicio
-            ? (fechaInicio | date: "dd/MM/yyyy")
-            : (today | date: "dd/MM/yyyy")
-        }}
-      </p>
+  <!-- FECHA -->
+  <div class="col-12 col-sm-6 col-lg-4">
+    <label class="form-label small fw-semibold mb-1 fs-xs">Fecha Inicio</label>
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      [(ngModel)]="fechaInicio"
+    />
+  </div>
 
-      <div class="table-responsive">
-        <table
-          class="table table-hover table-bordered align-middle text-center"
-        >
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Fecha</th>
-              <th>Cuota</th>
-              <th>Interés</th>
-              <th>Amortización</th>
-              <th>Saldo</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let c of cuotas">
-              <td>{{ c.nro }}</td>
-              <td>{{ c.fecha | date: "dd/MM/yyyy" }}</td>
-              <td class="fw-bold text-primary">
-                {{ c.cuota | number: "1.2-2" }}
-              </td>
-              <td class="text-danger">
-                {{ c.interes | number: "1.2-2" }}
-              </td>
-              <td class="text-success">
-                {{ c.amortizacion | number: "1.2-2" }}
-              </td>
-              <td>
-                {{ c.saldo | number: "1.2-2" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- BOTONES -->
+  <div class="col-12 col-sm-8">
+    <label class="form-label d-none d-sm-block">&nbsp;</label>
+    <div class="d-flex gap-2">
+      <button class="btn btn-success btn-sm flex-fill" (click)="calcular()">
+        <i class="bi bi-calculator me-1"></i>Calcular
+      </button>
+      <button
+        class="btn btn-danger btn-sm flex-fill"
+        [disabled]="!cuotas.length"
+        (click)="generarPDF()"
+      >
+        <i class="bi bi-download me-1"></i>PDF
+      </button>
     </div>
   </div>
+</div>
+
+<!-- RESUMEN -->
+<div *ngIf="cuotas.length" class="row g-2 mb-3">
+  <div class="col-4">
+    <div class="alert alert-info py-2 text-center">
+      <small class="d-block text-muted">Total Pagado</small>
+      <strong class="fs-sm">Bs {{ totalPagado | number: "1.2-2" }}</strong>
+    </div>
+  </div>
+  <div class="col-4">
+    <div class="alert alert-warning py-2 text-center">
+      <small class="d-block text-muted">Intereses</small>
+      <strong class="fs-sm">Bs {{ totalIntereses | number: "1.2-2" }}</strong>
+    </div>
+  </div>
+  <div class="col-4">
+    <div
+      class="alert py-2 text-center"
+      [ngClass]="ganancia >= 0 ? 'alert-success' : 'alert-danger'"
+    >
+      <small class="d-block text-muted">Ganancia</small>
+      <strong class="fs-sm">Bs {{ ganancia | number: "1.2-2" }}</strong>
+    </div>
+  </div>
+</div>
+
+<!-- TABLA -->
+<div *ngIf="cuotas.length" class="table-responsive shadow-sm">
+  <table class="table table-sm table-hover align-middle mb-0">
+    <thead class="table-light sticky-top">
+      <tr class="fs-xs">
+        <th>#</th>
+        <th>Fecha</th>
+        <th class="text-end">Cuota</th>
+        <th class="text-end">Interés</th>
+        <th class="text-end">Amortización</th>
+        <th class="text-end">Saldo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of cuotas">
+        <td class="fs-xs">{{ c.nro }}</td>
+        <td class="fs-xxs">{{ c.fecha | date: "dd/MM/yyyy" }}</td>
+        <td class="fs-xs text-end text-primary fw-semibold">
+          {{ c.cuota | number: "1.2-2" }}
+        </td>
+        <td class="fs-xxs text-end text-danger">
+          {{ c.interes | number: "1.2-2" }}
+        </td>
+        <td class="fs-xxs text-end text-success">
+          {{ c.amortizacion | number: "1.2-2" }}
+        </td>
+        <td class="fs-xs text-end">{{ c.saldo | number: "1.2-2" }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
