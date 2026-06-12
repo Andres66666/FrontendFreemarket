@@ -22,6 +22,7 @@ import { forkJoin } from 'rxjs';
 import { ErrorComponent } from '../../../Mensajes/error/error.component';
 import { OkComponent } from '../../../Mensajes/ok/ok.component';
 import { EjBarraComponent } from '../../ej-barra/ej-barra.component';
+
 @Component({
   selector: 'app-listar-productos-empleado',
   standalone: true,
@@ -361,6 +362,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     this.ventaForm.patchValue({ total: this.totalVenta });
     this.calcularCambio();
   }
+
 
   calcularTotal() {
     this.totalVenta = this.detalleVenta.reduce(

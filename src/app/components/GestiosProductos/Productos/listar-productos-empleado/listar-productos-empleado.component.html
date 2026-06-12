@@ -1,427 +1,373 @@
-<div class="container-fluid py-3">
-  <div class="row g-3">
-    <!-- =========================
+<div class="row">
+  <!-- =========================
          IZQUIERDA: PRODUCTOS
     ========================== -->
-    <div class="col-12 col-lg-7">
-      <div
-        class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2"
-      >
-        <div>
-          <h4 class="mb-0 fw-semibold">
-            <i class="bi bi-box-seam me-2"></i>Productos
-          </h4>
-          <small class="text-muted">Busca, filtra y agrega al carrito.</small>
-        </div>
+  <div class="col-12 col-lg-7">
+    <!-- FILTROS -->
+    <div class="row g-2 align-items-end mb-4">
+      <h5 class="mb-0 fw-semibold text-center">Productos</h5>
 
-        <button
-          class="btn btn-outline-danger btn-sm"
-          type="button"
-          (click)="clearQuantities()"
-        >
-          <i class="bi bi-trash me-1"></i> Limpiar filtros/cantidades
-        </button>
-      </div>
+      <!-- CÓDIGO -->
+      <div class="col-12 col-sm-6 col-lg-3">
+        <label class="form-label small fw-semibold"> Código </label>
 
-      <!-- FILTROS -->
-      <div class="row g-3 mb-4">
-        <!-- BUSCAR POR CÓDIGO (Escáner) -->
-        <div class="col-12 col-md-6 col-lg-3">
-          <div class="input-group">
-            <span class="input-group-text">
-              <i class="bi bi-upc-scan"></i>
-            </span>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Escanear código..."
-              [(ngModel)]="searchCodigoProducto"
-              (keyup.enter)="buscarPorCodigoEscaneado(searchCodigoProducto)"
-            />
-            <button
-              class="btn btn-outline-secondary"
-              type="button"
-              (click)="buscarPorCodigoEscaneado(searchCodigoProducto)"
-              *ngIf="searchCodigoProducto"
-            >
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-        </div>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-upc-scan"></i>
+          </span>
 
-        <!-- SELECT CATEGORÍA -->
-        <div class="col-12 col-md-6 col-lg-3">
-          <select
-            class="form-select"
-            [(ngModel)]="searchCategoria"
-            (change)="onCategoriaChange()"
-          >
-            <option value="">Todas las categorías</option>
-            <option
-              *ngFor="let cat of categorias"
-              [value]="cat.nombre_categoria"
-            >
-              {{ cat.nombre_categoria }}
-            </option>
-          </select>
-        </div>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Escanear código..."
+            [(ngModel)]="searchCodigoProducto"
+            (keyup.enter)="buscarPorCodigoEscaneado(searchCodigoProducto)"
+          />
 
-        <!-- SELECT NOMBRE (Dinámico según categoría) -->
-        <div class="col-12 col-md-6 col-lg-3">
-          <select class="form-select" [(ngModel)]="searchNombreProducto">
-            <option value="">Todos los nombres</option>
-            <option
-              *ngFor="let prod of filterNamesByCategory()"
-              [value]="prod.nombre_producto"
-            >
-              {{ prod.nombre_producto }}
-            </option>
-          </select>
-        </div>
-
-        <!-- LIMPIAR FILTROS -->
-        <div class="col-12 col-md-6 col-lg-3">
           <button
-            class="btn btn-outline-danger w-100"
-            (click)="clearQuantities()"
+            *ngIf="searchCodigoProducto"
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="buscarPorCodigoEscaneado(searchCodigoProducto)"
           >
-            <i class="bi bi-x-circle me-2"></i>
-            Limpiar filtros
+            <i class="bi bi-search"></i>
           </button>
         </div>
       </div>
 
-      <!-- 🔥 GRID → TABLA (misma lógica) -->
-      <div class="table-responsive shadow-sm mb-3">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light sticky-top">
-            <tr>
-              <th>Producto</th>
-              <th>Código</th>
-              <th class="text-center">Stock</th>
-              <th class="text-end">Precio U</th>
-              <th class="text-end" *ngIf="mostrarPrecioMayor">Precio M</th>
-              <th class="text-center">Cantidad</th>
-              <th class="text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container
-              *ngFor="let producto of filteredProductos(); let i = index"
-            >
-              <tr class="align-middle">
-                <!-- Producto + Detalles -->
-                <td>
-                  <div>
-                    <div
-                      class="fw-semibold text-truncate mb-1"
-                      title="{{ producto.nombre_producto }}"
-                    >
-                      {{ producto.nombre_producto }}
-                    </div>
-                    <div *ngIf="!isMobile" class="small text-muted">
-                      <i class="bi bi-info-circle me-1"></i
-                      >{{ producto.descripcion }}
-                    </div>
-                  </div>
-                </td>
+      <!-- CATEGORÍA -->
+      <div class="col-12 col-sm-6 col-lg-2">
+        <label class="form-label small fw-semibold"> Categoría </label>
 
-                <!-- Código -->
-                <td>
-                  <code class="small">{{ producto.codigo_producto }}</code>
-                </td>
-                <!-- Stock -->
-                <td class="text-center">
-                  <span
-                    class="badge rounded-pill fs-6 px-2 py-1"
-                    [ngClass]="{
-                      'text-bg-danger': producto.stock === 0,
-                      'text-bg-warning':
-                        producto.stock > 0 && producto.stock <= 3,
-                      'text-bg-success': producto.stock > 3,
-                    }"
-                  >
-                    {{ producto.stock }}
-                  </span>
-                </td>
+        <select
+          class="form-select"
+          [(ngModel)]="searchCategoria"
+          (change)="onCategoriaChange()"
+        >
+          <option value="">Todas las categorías</option>
 
-                <!-- Precio Unitario -->
-                <td class="text-end fw-semibold text-success">
-                  Bs {{ producto.precio_unitario | number: "1.2-2" }}
-                </td>
+          <option *ngFor="let cat of categorias" [value]="cat.nombre_categoria">
+            {{ cat.nombre_categoria }}
+          </option>
+        </select>
+      </div>
 
-                <!-- Precio Mayor -->
-                <td *ngIf="mostrarPrecioMayor" class="text-end text-warning">
-                  Bs {{ producto.precio_mayor | number: "1.2-2" }}
-                </td>
+      <!-- PRODUCTO -->
+      <div class="col-12 col-sm-6 col-lg-3">
+        <label class="form-label small fw-semibold"> Producto </label>
 
-                <!-- Input Cantidad -->
-                <td class="text-center">
-                  <input
-                    type="number"
-                    class="form-control form-control-sm mx-auto"
-                    style="width: 80px"
-                    placeholder="Cant."
-                    min="1"
-                    [max]="producto.stock"
-                    [(ngModel)]="cantidadPorProducto[producto.id]"
-                    (ngModelChange)="
-                      actualizarCantidad(
-                        getDetalleVenta(producto.id),
-                        cantidadPorProducto[producto.id],
-                        isCategoriaConBotonUnidad(producto) ? 'mayor' : 'unidad'
-                      )
-                    "
-                  />
-                </td>
+        <select class="form-select" [(ngModel)]="searchNombreProducto">
+          <option value="">Todos los nombres</option>
 
-                <!-- Botones Acción -->
-                <td class="text-center">
-                  <div class="btn-group btn-group-sm" role="group">
-                    <button
-                      class="btn btn-success"
-                      [disabled]="!isCantidadValida(producto.id, 'unidad')"
-                      (click)="
-                        agregarAlCarrito(
-                          producto,
-                          cantidadPorProducto[producto.id],
-                          'unidad'
-                        )
-                      "
-                      title="Agregar al carrito (Unidad)"
-                    >
-                      <i class="bi bi-cart-plus"></i>
-                    </button>
-                    <button
-                      class="btn btn-warning"
-                      *ngIf="isCategoriaConBotonUnidad(producto)"
-                      [disabled]="!isCantidadValida(producto.id, 'mayor')"
-                      (click)="
-                        agregarAlCarrito(
-                          producto,
-                          cantidadPorProducto[producto.id],
-                          'mayor'
-                        )
-                      "
-                      title="Agregar al carrito (Mayorista)"
-                    >
-                      <i class="bi bi-cart-check"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+          <option
+            *ngFor="let prod of filterNamesByCategory()"
+            [value]="prod.nombre_producto"
+          >
+            {{ prod.nombre_producto }}
+          </option>
+        </select>
+      </div>
 
-              <!-- Fila detalles expandible (móvil) -->
-              <tr *ngIf="detallesAbiertos[i] && isMobile" class="table-light">
-                <td colspan="8" class="p-2">
-                  <div class="row g-2 small">
-                    <div class="col-6">
-                      <strong>Código:</strong> {{ producto.codigo_producto }}
-                    </div>
-                    <div class="col-6">
-                      <strong>Precio U:</strong> Bs
-                      {{ producto.precio_unitario }}
-                    </div>
-                    <div class="col-6" *ngIf="mostrarPrecioMayor">
-                      <strong>Precio M:</strong> Bs {{ producto.precio_mayor }}
-                    </div>
-                    <div class="col-12">
-                      <i class="bi bi-info-circle me-1 text-muted"></i>
-                      {{ producto.descripcion }}
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
+      <!-- ESCÁNER -->
+      <div class="col-12 col-sm-6 col-lg-3">
+        <app-ej-barra (codigoEscaneado)="buscarPorCodigoEscaneado($event)">
+        </app-ej-barra>
+      </div>
+
+      <!-- LIMPIAR -->
+      <div class="col-12 col-sm-6 col-lg-1">
+        <label class="form-label d-none d-lg-block"> &nbsp; </label>
+
+        <button
+          class="btn btn-outline-danger w-100"
+          (click)="clearQuantities()"
+        >
+          <i class="bi bi-trash"></i>
+        </button>
       </div>
     </div>
 
-    <!-- =========================
-         DERECHA: DETALLE VENTA
-    ========================== -->
-    <div class="col-12 col-lg-5">
-      <div class="card shadow-sm border-0 position-sticky" style="top: 90px">
-        <div
-          class="card-header bg-white border-0 d-flex align-items-center justify-content-between"
-        >
-          <div>
-            <h5 class="mb-0 fw-semibold">
-              <i class="bi bi-receipt me-2"></i>Detalle Venta
-            </h5>
-            <small class="text-muted">Revisa y confirma la venta.</small>
-          </div>
-
-          <span class="badge text-bg-primary rounded-pill">
-            Items: {{ detalleVenta.length }}
-          </span>
-        </div>
-
-        <div class="card-body">
-          <form [formGroup]="ventaForm" (ngSubmit)="registrarVenta()">
-            <div class="row g-2 align-items-end">
-              <!-- Estado -->
-              <div class="col-12 col-md-6">
-                <label for="estado" class="form-label small text-muted mb-1"
-                  >Estado</label
-                >
-                <select
-                  id="estado"
-                  class="form-select"
-                  formControlName="estado"
-                  required
-                >
-                  <option value="Completada">Completada</option>
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Cancelada">Cancelada</option>
-                </select>
-              </div>
-
-              <!-- Total -->
-              <div class="col-12 col-md-6">
-                <label class="form-label small text-muted mb-1">Total</label>
-                <div class="input-group">
-                  <span class="input-group-text">Bs</span>
-                  <input
-                    class="form-control fw-semibold"
-                    [value]="totalVenta | number: '1.2-2'"
-                    readonly
-                  />
+    <!-- GRID → TABLA (misma lógica) -->
+    <div class="table-responsive shadow-sm mb-3">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light sticky-top">
+          <tr>
+            <th>Producto</th>
+            <th>Código</th>
+            <th class="text-center">Stock</th>
+            <th class="text-end">Precio U</th>
+            <th class="text-end" *ngIf="mostrarPrecioMayor">Precio M</th>
+            <th class="text-center">Cantidad</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container
+            *ngFor="let producto of filteredProductos(); let i = index"
+          >
+            <tr class="align-middle">
+              <!-- Producto + Detalles -->
+              <td>
+                <div>
+                  <div
+                    class="fw-semibold text-truncate mb-1"
+                    title="{{ producto.nombre_producto }}"
+                  >
+                    {{ producto.nombre_producto }}
+                  </div>
+                  <div *ngIf="!isMobile" class="small text-muted">
+                    <i class="bi bi-info-circle me-1"></i
+                    >{{ producto.descripcion }}
+                  </div>
                 </div>
-              </div>
-            </div>
-          </form>
-        </div>
+              </td>
 
-        <!-- TABLA DETALLES -->
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th class="text-nowrap">Código</th>
-                <th>Producto</th>
-                <th class="text-center">Cant.</th>
-                <th class="text-end text-nowrap">Precio</th>
-                <th class="text-center">Venta</th>
-                <th class="text-end text-nowrap">Subtotal</th>
-                <th class="text-center">Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of detalleVenta">
-                <td class="text-nowrap">{{ item.producto.codigo_producto }}</td>
-                <td
-                  class="text-truncate"
-                  style="max-width: 180px"
-                  title="{{ item.producto.nombre_producto }}"
+              <!-- Código -->
+              <td>
+                <code class="small">{{ producto.codigo_producto }}</code>
+              </td>
+              <!-- Stock -->
+              <td class="text-center">
+                <span
+                  class="badge rounded-pill fs-6 px-2 py-1"
+                  [ngClass]="{
+                    'text-bg-danger': producto.stock === 0,
+                    'text-bg-warning':
+                      producto.stock > 0 && producto.stock <= 3,
+                    'text-bg-success': producto.stock > 3,
+                  }"
                 >
-                  {{ item.producto.nombre_producto }}
-                </td>
-                <td class="text-center">{{ item.cantidad }}</td>
-                <td class="text-end">Bs {{ item.precio | number: "1.2-2" }}</td>
-                <td class="text-center">
-                  <span
-                    class="badge"
-                    [ngClass]="
-                      item.tipo_venta === 'mayor'
-                        ? 'text-bg-warning'
-                        : 'text-bg-success'
-                    "
-                  >
-                    {{ item.tipo_venta }}
-                  </span>
-                </td>
-                <td class="text-end fw-semibold">
-                  Bs {{ item.subtotal | number: "1.2-2" }}
-                </td>
-                <td class="text-center">
-                  <button
-                    class="btn btn-outline-danger btn-sm"
-                    type="button"
-                    (click)="eliminarProducto(item)"
-                  >
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </td>
-              </tr>
+                  {{ producto.stock }}
+                </span>
+              </td>
 
-              <tr *ngIf="detalleVenta.length === 0">
-                <td colspan="7" class="text-center text-muted py-4">
-                  <i class="bi bi-cart-x me-1"></i> No hay productos en el
-                  carrito.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+              <!-- Precio Unitario -->
+              <td class="text-end fw-semibold text-success">
+                Bs {{ producto.precio_unitario | number: "1.2-2" }}
+              </td>
 
-        <div class="card-body border-top">
-          <!-- CAMBIO -->
-          <div class="row g-2 align-items-center mb-3">
-            <div class="col-12 col-md-6">
-              <label for="montoPagado" class="form-label small text-muted mb-1"
-                >Monto canceló</label
-              >
-              <div class="input-group">
-                <span class="input-group-text">Bs</span>
+              <!-- Precio Mayor -->
+              <td *ngIf="mostrarPrecioMayor" class="text-end text-warning">
+                Bs {{ producto.precio_mayor | number: "1.2-2" }}
+              </td>
+
+              <!-- Input Cantidad -->
+              <td class="text-center">
                 <input
-                  type="text"
-                  id="montoPagado"
-                  [(ngModel)]="montoPagado"
-                  class="form-control"
-                  (input)="calcularCambio()"
-                  placeholder="Monto..."
+                  type="number"
+                  class="form-control form-control-sm mx-auto"
+                  style="width: 80px"
+                  placeholder="Cant."
+                  min="1"
+                  [max]="producto.stock"
+                  [(ngModel)]="cantidadPorProducto[producto.id]"
+                  (ngModelChange)="
+                    actualizarCantidad(
+                      getDetalleVenta(producto.id),
+                      cantidadPorProducto[producto.id],
+                      isCategoriaConBotonUnidad(producto) ? 'mayor' : 'unidad'
+                    )
+                  "
                 />
-              </div>
-            </div>
+              </td>
 
-            <div class="col-12 col-md-6">
-              <label class="form-label small text-muted mb-1">Cambio</label>
-              <div
-                class="alert mb-0 py-2"
-                [ngClass]="cambio < 0 ? 'alert-danger' : 'alert-success'"
-              >
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="small">Total</span>
-                  <span class="fw-semibold"
-                    >Bs {{ cambio | number: "1.2-2" }}</span
+              <!-- Botones Acción -->
+              <td class="text-center">
+                <div class="btn-group btn-group-sm" role="group">
+                  <button
+                    class="btn btn-success"
+                    [disabled]="!isCantidadValida(producto.id, 'unidad')"
+                    (click)="
+                      agregarAlCarrito(
+                        producto,
+                        cantidadPorProducto[producto.id],
+                        'unidad'
+                      )
+                    "
+                    title="Agregar al carrito (Unidad)"
                   >
+                    <i class="bi bi-cart-plus"></i>
+                  </button>
+                  <button
+                    class="btn btn-warning"
+                    *ngIf="isCategoriaConBotonUnidad(producto)"
+                    [disabled]="!isCantidadValida(producto.id, 'mayor')"
+                    (click)="
+                      agregarAlCarrito(
+                        producto,
+                        cantidadPorProducto[producto.id],
+                        'mayor'
+                      )
+                    "
+                    title="Agregar al carrito (Mayorista)"
+                  >
+                    <i class="bi bi-cart-check"></i>
+                  </button>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </td>
+            </tr>
 
-        <!-- FOOTER -->
-        <div class="card-footer bg-white border-0 d-flex gap-2">
-          <button
-            type="button"
-            class="btn btn-outline-secondary w-50"
-            (click)="detalleVenta = []; totalVenta = 0; calcularCambio()"
-            [disabled]="detalleVenta.length === 0"
-          >
-            <i class="bi bi-x-circle me-1"></i> Vaciar
-          </button>
-
-          <button
-            type="submit"
-            class="btn btn-primary w-50"
-            [disabled]="ventaForm.invalid || detalleVenta.length === 0"
-            (click)="registrarVenta()"
-          >
-            <i class="bi bi-cash-coin me-1"></i> Vender
-          </button>
-        </div>
-      </div>
+            <!-- Fila detalles expandible (móvil) -->
+            <tr *ngIf="detallesAbiertos[i] && isMobile" class="table-light">
+              <td colspan="8" class="p-2">
+                <div class="row g-2 small">
+                  <div class="col-6">
+                    <strong>Código:</strong> {{ producto.codigo_producto }}
+                  </div>
+                  <div class="col-6">
+                    <strong>Precio U:</strong> Bs
+                    {{ producto.precio_unitario }}
+                  </div>
+                  <div class="col-6" *ngIf="mostrarPrecioMayor">
+                    <strong>Precio M:</strong> Bs {{ producto.precio_mayor }}
+                  </div>
+                  <div class="col-12">
+                    <i class="bi bi-info-circle me-1 text-muted"></i>
+                    {{ producto.descripcion }}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- MENSAJES -->
-  <app-ok *ngIf="ok" [mensaje]="ok" (close)="manejarOk()"></app-ok>
-  <app-error
-    *ngIf="error"
-    [mensaje]="error"
-    (close)="manejarError()"
-  ></app-error>
+  <!-- =========================
+         DERECHA: DETALLE VENTA
+    ========================== -->
+  <div class="col-12 col-lg-5">
+    <div class="card shadow-sm border-0 position-sticky" style="top: 90px">
+      <h5 class="mb-0 fw-semibold text-center">Detalle Venta</h5>
+
+      <!-- FORM (se mantiene para registrar datos) -->
+      <div class="card-body d-none">
+        <form [formGroup]="ventaForm">
+          <input formControlName="total" [value]="totalVenta" readonly />
+        </form>
+      </div>
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Código</th>
+              <th>Producto</th>
+              <th class="text-center">Cant.</th>
+              <th class="text-end">Precio</th>
+              <th class="text-center">Venta</th>
+              <th class="text-end">Subtotal</th>
+              <th class="text-center">Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let item of detalleVenta">
+              <td>{{ item.producto.codigo_producto }}</td>
+              <td>{{ item.producto.nombre_producto }}</td>
+              <td class="text-center">{{ item.cantidad }}</td>
+              <td class="text-end">Bs {{ item.precio | number: "1.2-2" }}</td>
+              <td class="text-center">
+                {{ item.tipo_venta }}
+              </td>
+              <td class="text-end fw-semibold">
+                Bs {{ item.subtotal | number: "1.2-2" }}
+              </td>
+              <td class="text-center">
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="eliminarProducto(item)"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="detalleVenta.length === 0">
+              <td colspan="7" class="text-center text-muted py-4">
+                No hay productos en el carrito
+              </td>
+            </tr>
+          </tbody>
+
+          <!-- TOTAL AL FINAL DE SUBTOTAL -->
+          <tfoot *ngIf="detalleVenta.length > 0">
+            <tr class="table-primary">
+              <td colspan="5" class="text-end fw-bold fs-5">TOTAL:</td>
+
+              <td class="text-end fw-bold fs-4">
+                Bs {{ totalVenta | number: "1.2-2" }}
+              </td>
+
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="card-body border-top">
+        <!-- CAMBIO -->
+        <div class="row g-2 align-items-center mb-3">
+          <div class="col-12 col-md-6">
+            <label for="montoPagado" class="form-label small text-muted mb-1"
+              >Monto canceló</label
+            >
+            <div class="input-group">
+              <span class="input-group-text">Bs</span>
+              <input
+                type="text"
+                id="montoPagado"
+                [(ngModel)]="montoPagado"
+                class="form-control"
+                (input)="calcularCambio()"
+                placeholder="Monto..."
+              />
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label small text-muted mb-1">Cambio</label>
+            <div
+              class="alert mb-0 py-2"
+              [ngClass]="cambio < 0 ? 'alert-danger' : 'alert-success'"
+            >
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="small">Total</span>
+                <span class="fw-semibold"
+                  >Bs {{ cambio | number: "1.2-2" }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="card-footer bg-white border-0 d-flex gap-2">
+        <button
+          type="button"
+          class="btn btn-outline-secondary w-50"
+          (click)="detalleVenta = []; totalVenta = 0; calcularCambio()"
+          [disabled]="detalleVenta.length === 0"
+        >
+          <i class="bi bi-x-circle me-1"></i> Vaciar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary w-50"
+          [disabled]="ventaForm.invalid || detalleVenta.length === 0"
+          (click)="registrarVenta()"
+        >
+          <i class="bi bi-cash-coin me-1"></i> Vender
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- MENSAJES -->
+<app-ok *ngIf="ok" [mensaje]="ok" (close)="manejarOk()"></app-ok>
+<app-error *ngIf="error" [mensaje]="error" (close)="manejarError()"></app-error>
