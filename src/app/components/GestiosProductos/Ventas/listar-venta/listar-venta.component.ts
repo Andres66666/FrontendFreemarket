@@ -17,8 +17,7 @@ export class ListarVentaComponent implements OnInit {
   searchUsuario: string = ''; // Campo de búsqueda para el usuario
   searchTotal: string = ''; // Campo de búsqueda para el total
   searchEstado: string = ''; // Campo de búsqueda para el estado
-  page: number = 1; // Página actual
-  pageSize: number = 5; // Tamaño de la página
+
   searchFechaInicio: string = ''; // Nueva propiedad para la fecha de inicio
   searchFechaFin: string = ''; // Nueva propiedad para la fecha de fin
 
@@ -38,64 +37,52 @@ export class ListarVentaComponent implements OnInit {
       });
     });
   }
-
-  filteredVentas(): Venta[] {
-    let filtered = this.ventas;
-
-    if (this.searchID) {
-      filtered = filtered.filter((venta) =>
-        venta.id.toString().includes(this.searchID)
-      );
+// Método para obtener usuarios únicos
+getUsuariosUnicos(): Venta[] {
+  const uniqueMap = new Map<number, Venta>();
+  this.ventas.forEach(venta => {
+    if (!uniqueMap.has(venta.usuario.id)) {
+      uniqueMap.set(venta.usuario.id, venta);
     }
-    if (this.searchUsuario) {
-      filtered = filtered.filter((venta) =>
-        (venta.usuario.nombre_usuario + ' ' + venta.usuario.apellido)
-          .toLowerCase()
-          .includes(this.searchUsuario.toLowerCase())
-      );
-    }
+  });
+  return Array.from(uniqueMap.values());
+}
+filteredVentas(): Venta[] {
+  let filtered = this.ventas;
 
-    if (this.searchTotal) {
-      filtered = filtered.filter((venta) =>
-        venta.total.toString().includes(this.searchTotal)
-      );
-    }
-
-    if (this.searchEstado) {
-      filtered = filtered.filter((venta) =>
-        venta.estado.toLowerCase().includes(this.searchEstado.toLowerCase())
-      );
-    }
-    // Filtrar por rango de fechas
-    if (this.searchFechaInicio) {
-      const fechaInicio = new Date(this.searchFechaInicio).getTime();
-      filtered = filtered.filter((detalle) =>
-        new Date(detalle.fecha_venta).getTime() >= fechaInicio
-      );
-    }
-
-    if (this.searchFechaFin) {
-      const fechaFin = new Date(this.searchFechaFin).getTime();
-      filtered = filtered.filter((detalle) =>
-        new Date(detalle.fecha_venta).getTime() <= fechaFin
-      );
-    }
-
-    return filtered.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
-    ); // Mostrar solo la página actual
+  if (this.searchID) {
+    filtered = filtered.filter(v => v.id.toString().includes(this.searchID));
   }
 
-  nextPage() {
-    this.page++;
+  if (this.searchUsuario) {
+    const term = this.searchUsuario.toLowerCase();
+    filtered = filtered.filter(v => 
+      (v.usuario.nombre_usuario + ' ' + v.usuario.apellido).toLowerCase().includes(term)
+    );
   }
 
-  previousPage() {
-    if (this.page > 1) {
-      this.page--;
-    }
+  if (this.searchTotal) {
+    filtered = filtered.filter(v => v.total.toString().includes(this.searchTotal));
   }
+
+  if (this.searchEstado) {
+    filtered = filtered.filter(v => v.estado.toLowerCase().includes(this.searchEstado.toLowerCase()));
+  }
+
+  if (this.searchFechaInicio) {
+    const fechaInicio = new Date(this.searchFechaInicio).getTime();
+    filtered = filtered.filter(v => new Date(v.fecha_venta).getTime() >= fechaInicio);
+  }
+
+  if (this.searchFechaFin) {
+    const fechaFin = new Date(this.searchFechaFin).getTime();
+    filtered = filtered.filter(v => new Date(v.fecha_venta).getTime() <= fechaFin + 86400000);
+  }
+
+  return filtered;
+}
+
+ 
   updateList() {
     this.searchID = '';
     this.searchUsuario = '';

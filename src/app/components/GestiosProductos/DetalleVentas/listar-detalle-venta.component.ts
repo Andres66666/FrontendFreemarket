@@ -186,17 +186,6 @@ export class ListarDetalleVentaComponent implements OnInit {
   // PAGINACIÓN
   // ==============================
 
-  limpiarFiltros() {
-    this.searchVenta = '';
-    this.searchProducto = '';
-    this.searchCodigo = '';
-    this.searchFechaInicio = '';
-    this.searchFechaFin = '';
-    this.selectedUsuarioId = '';
-    this.selectedCategoriaId = '';
-    this.selectedTipoVenta = '';
-    this.applyFilters();
-  }
   get totalPages(): number {
     return Math.ceil(this.filteredList.length / this.pageSize);
   }
@@ -324,5 +313,29 @@ export class ListarDetalleVentaComponent implements OnInit {
       (sum, d) => sum + this.getPrecioMayor(d) * d.cantidad,
       0,
     );
+  }
+  // En el componente:
+  getGananciaClass(ganancia: number): string {
+    if (ganancia > 100) return 'bg-success'; // Verde - buena
+    if (ganancia > 0) return 'bg-warning'; // Naranja - media
+    return 'bg-danger'; // Rojo - pérdida
+  }
+
+  getGananciaTextClass(ganancia: number): string {
+    if (ganancia > 100) return 'text-success';
+    if (ganancia > 0) return 'text-warning';
+    return 'text-danger';
+  }
+
+  limpiarFiltros() {
+    this.searchVenta = '';
+    this.searchProducto = '';
+    this.searchCodigo = '';
+    this.searchFechaInicio = '';
+    this.searchFechaFin = '';
+    this.selectedUsuarioId = '';
+    this.selectedCategoriaId = '';
+    this.selectedTipoVenta = '';
+    this.applyFilters();
   }
 }

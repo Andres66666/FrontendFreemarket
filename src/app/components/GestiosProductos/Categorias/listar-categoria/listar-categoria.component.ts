@@ -15,11 +15,11 @@ import { Router } from '@angular/router';
 export class ListarCategoriaComponent implements OnInit {
   categorias: Categoria[] = []; // Array para almacenar las categorías
   searchNombreCategoria: string = ''; // Campo de búsqueda para el nombre de la categoría
-  page: number = 1; // Página actual
-  pageSize: number = 5; // Tamaño de la página
+  
   paginatedCategorias: Categoria[] = []; // Categorías paginadas
   loading: boolean = true;
 
+  
   constructor(private servicesService: ServicesService,    private router: Router
   ) {}
 
@@ -32,7 +32,6 @@ export class ListarCategoriaComponent implements OnInit {
     this.servicesService.getCategorias().subscribe(
       (data) => {
       this.categorias = data; // Asignar las categorías obtenidas
-      this.updatePaginatedCategorias(); // Actualizar las categorías paginadas
       this.loading = false;
       },
       () => {
@@ -49,40 +48,26 @@ export class ListarCategoriaComponent implements OnInit {
     this.router.navigate(['panel-control/registrar-categorias']);
   }
 
+
   filteredCategorias(): Categoria[] {
     let filtered = this.categorias;
 
     if (this.searchNombreCategoria) {
-      filtered = this.categorias.filter((categoria) =>
-        categoria.nombre_categoria
-          .toLowerCase()
-          .includes(this.searchNombreCategoria.toLowerCase())
+      const term = this.searchNombreCategoria.toLowerCase().trim();
+      filtered = filtered.filter(c => 
+        c.nombre_categoria.toLowerCase().includes(term)
       );
     }
 
-    return filtered.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
-    ); // Mostramos solo la página actual
+    // Inactivos al final
+    const inactivos = filtered.filter(c => !c.estado_categoria);
+    const activos = filtered.filter(c => c.estado_categoria);
+    
+    return [...activos, ...inactivos];
   }
 
-  updatePaginatedCategorias() {
-    const start = (this.page - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedCategorias = this.categorias.slice(start, end);
-  }
 
-  nextPage() {
-    this.page++;
-    this.updatePaginatedCategorias();
-  }
 
-  previousPage() {
-    if (this.page > 1) {
-      this.page--;
-      this.updatePaginatedCategorias();
-    }
-  }
   toggleCategoriaActivo(Categoria: Categoria) {
     // Invertir el estado de 'estadoCategoria' del Categoria
     Categoria.estado_categoria = !Categoria.estado_categoria; // Cambiar el estado del Categoria
