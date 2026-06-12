@@ -34,7 +34,7 @@
         <app-ej-barra (codigoEscaneado)="buscarPorCodigoEscaneado($event)">
         </app-ej-barra>
       </div>
-      
+
       <!-- FILA 1: Código + Escáner -->
       <div class="col-12">
         <div class="row g-2">
@@ -128,12 +128,13 @@
       <table class="table table-sm table-hover align-middle mb-0">
         <thead class="table-light sticky-top">
           <tr class="fs-xs">
+            <th>Imagen</th>
             <th>Producto</th>
             <th>Código</th>
             <th class="text-center">Stock</th>
-            <th class="text-end">Precio U</th>
-            <th class="text-end" *ngIf="mostrarPrecioMayor">Precio M</th>
-            <th class="text-center">Cant.</th>
+            <th class="text-end">Precio Unitario</th>
+            <th class="text-end" *ngIf="mostrarPrecioMayor">Precio Mayor</th>
+            <th class="text-center">Cantidad</th>
             <th class="text-center">Acción</th>
           </tr>
         </thead>
@@ -142,6 +143,19 @@
             *ngFor="let producto of filteredProductos(); let i = index"
           >
             <tr class="align-middle">
+              <td class="text-center">
+                <img
+                  *ngIf="producto.imagen_productos"
+                  [src]="producto.imagen_productos"
+                  alt="Producto"
+                  class="producto-thumb"
+                  (click)="openModal(producto.imagen_productos)"
+                />
+
+                <div *ngIf="!producto.imagen_productos" class="sin-imagen">
+                  <i class="bi bi-image"></i>
+                </div>
+              </td>
               <td>
                 <div
                   class="fw-semibold text-truncate"
@@ -249,7 +263,7 @@
             <tr class="fs-xs">
               <th>Código</th>
               <th>Producto</th>
-              <th class="text-center">Cant.</th>
+              <th class="text-center">Cantidad</th>
               <th class="text-end">Precio</th>
               <th class="text-center">Venta</th>
               <th class="text-end">Subtotal</th>
@@ -351,7 +365,35 @@
     </div>
   </div>
 </div>
+<!-- Modal Imagen -->
+<div
+  *ngIf="modalVisible"
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background: rgba(0, 0, 0, 0.75)"
+  (click)="closeModal()"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-lg"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header">
+        <h5 class="modal-title">Vista previa</h5>
 
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <img
+          [src]="imageToShow"
+          class="img-fluid rounded"
+          style="max-height: 75vh"
+        />
+      </div>
+    </div>
+  </div>
+</div>
 <!-- MENSAJES -->
 <app-ok *ngIf="ok" [mensaje]="ok" (close)="manejarOk()"></app-ok>
 <app-error *ngIf="error" [mensaje]="error" (close)="manejarError()"></app-error>

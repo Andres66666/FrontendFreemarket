@@ -83,6 +83,8 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   cambio: number = 0;
 
   isDesktop: boolean = false;
+  modalVisible: boolean = false;
+  imageToShow: string = '';
   constructor(
     private productoService: ServicesService,
     private fb: FormBuilder,
@@ -500,7 +502,14 @@ export class ListarProductosEmpleadoComponent implements OnInit {
       elemento.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+  openModal(imageUrl: string) {
+    this.imageToShow = imageUrl;
+    this.modalVisible = true;
+  }
 
+  closeModal() {
+    this.modalVisible = false;
+  }
   manejarOk() {
     this.ok = '';
   }

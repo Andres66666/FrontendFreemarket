@@ -56,9 +56,10 @@ export interface Producto {
   stock: number;
   codigo_producto: string;
   categoria: Categoria;
+  imagen_productos: string;
+  imagen_public_id: string;
   fecha_creacion: Date;
   fecha_actualizacion: Date;
-  // imagen_productos: string;  ← QUITADO
   estado_equipo: boolean;
 }
 

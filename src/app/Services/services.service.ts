@@ -269,24 +269,26 @@ export class ServicesService {
     return this.http.get<Producto>(`${this.apiUrl}productos/${id}/`);
   }
 
-  // 🔥 CAMBIADO: Ya no usa FormData, usa objeto normal
-  crearProducto(producto: Producto): Observable<Producto> {
-    return this.http.post<Producto>(`${this.apiUrl}productos/`, producto);
+  crearProducto(formData: FormData): Observable<Producto> {
+    return this.http.post<Producto>(`${this.apiUrl}productos/`,formData);
   }
+  
 
-  // 🔥 CAMBIADO: Ya no usa FormData, usa objeto normal
-  actualizarProducto(id: number, producto: Producto): Observable<Producto> {
-    return this.http.put<Producto>(`${this.apiUrl}productos/${id}/`, producto);
-  }
-
-  actualizarEstadoProducto(
+  actualizarProducto(
     id: number,
-    estado_equipo: boolean,
-  ): Observable<any> {
+    formData: FormData
+  ): Observable<Producto> {
+    return this.http.put<Producto>(
+      `${this.apiUrl}productos/${id}/`,
+      formData
+    );
+  }
+  actualizarEstadoProducto(id: number,estado_equipo: boolean,): Observable<any> {
     return this.http.put(`${this.apiUrl}productos/${id}/`, {
       estado_equipo: estado_equipo ? 'true' : 'false',
     });
   }
+
   /* ---------------------------- VENTAS ---------------------------- */
 
   getVentas(): Observable<Venta[]> {

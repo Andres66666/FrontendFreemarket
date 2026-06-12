@@ -32,6 +32,8 @@ export class RegistrarProductoComponent {
 
   mensajeModal: string = ''; // Mensaje para el modal
   errorModal: string = '';
+  selectedFile: File | null = null;
+  previewImage: string | ArrayBuffer | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -89,13 +91,15 @@ export class RegistrarProductoComponent {
       );
 
       formData.append('categoria', this.productoForm.get('categoria')?.value);
-      formData.append(
-        'imagen_productos',
-        this.productoForm.get('imagen_productos')?.value,
-      );
+      if (this.selectedFile) {
+        formData.append(
+          'imagen_productos',
+          this.selectedFile
+        );
+      }
 
       this.productosService
-        .crearProducto(formData as unknown as Producto)
+        .crearProducto(formData)
         .subscribe(
           (response) => {
             this.mensajeModal = 'Producto registrado con éxito';
@@ -105,6 +109,17 @@ export class RegistrarProductoComponent {
             this.errorModal = 'Error al registrar el producto';
           },
         );
+    }
+  }
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewImage = reader.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
   volver(): void {

@@ -68,6 +68,7 @@
   <table class="table table-sm table-hover align-middle mb-0">
     <thead class="table-light sticky-top">
       <tr class="fs-xs">
+        <th>Img</th>
         <th>Nombre</th>
         <th>Código</th>
         <th class="d-none d-lg-table-cell">Descripción</th>
@@ -87,6 +88,22 @@
           'table-success': producto.estado_equipo,
         }"
       >
+        <td class="text-center">
+          <img
+            *ngIf="producto.imagen_productos"
+            [src]="producto.imagen_productos"
+            class="producto-thumb"
+            alt="{{ producto.nombre_producto }}"
+            (click)="openModal(producto.imagen_productos)"
+          />
+
+          <div
+            *ngIf="!producto.imagen_productos"
+            class="producto-thumb-placeholder"
+          >
+            <i class="bi bi-image"></i>
+          </div>
+        </td>
         <td class="fs-xs">{{ producto.nombre_producto }}</td>
         <td class="fs-xxs">
           <code>{{ producto.codigo_producto }}</code>
@@ -141,4 +158,7 @@
       </tr>
     </tbody>
   </table>
+</div>
+<div *ngIf="modalVisible" class="image-modal" (click)="closeModal()">
+  <img [src]="imageToShow" class="modal-image" alt="Producto" />
 </div>

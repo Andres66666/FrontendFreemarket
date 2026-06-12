@@ -25,7 +25,8 @@ export class EditarProductoComponent implements OnInit {
   form!: FormGroup;
   mensajeModal: string = '';
   errorModal: string = '';
-
+  imagenSeleccionada: File | null = null;
+  imagenPreview: string | null = null;
   constructor(
     private productosService: ServicesService,
     private route: ActivatedRoute,
@@ -44,15 +45,25 @@ export class EditarProductoComponent implements OnInit {
     this.productosService.getProductoById(id).subscribe({
       next: (data) => {
         this.producto = data;
+        this.imagenPreview = data.imagen_productos;
         this.initializeForm();
-        // Asegurar que la URL de la imagen sea correcta
       },
       error: (err) => {
         console.error('Error cargando producto:', err);
       },
     });
   }
-
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.imagenSeleccionada = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagenPreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
   loadCategorias() {
     this.productosService.getCategorias().subscribe({
       next: (data) => {
@@ -99,36 +110,71 @@ export class EditarProductoComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.valid) {
-      // 🔥 CAMBIADO: Objeto simple en lugar de FormData
-      const productoData: Producto = {
-        id: this.producto.id,
-        nombre_producto: this.form.value.nombre_producto,
-        descripcion: this.form.value.descripcion || '',
-        precio_compra: this.form.value.precio_compra,
-        precio_unitario: this.form.value.precio_unitario,
-        precio_mayor: this.form.value.precio_mayor,
-        stock: this.form.value.stock,
-        codigo_producto: this.form.value.codigo_producto,
-        categoria: { id: this.form.value.categoria } as Categoria,
-        estado_equipo: this.producto.estado_equipo,
-        fecha_creacion: this.producto.fecha_creacion,
-        fecha_actualizacion: new Date(),
-      };
+  if (this.form.valid) {
 
-      this.productosService
-        .actualizarProducto(this.producto.id, productoData) // 🔥 Ya no FormData
-        .subscribe({
-          next: () => {
-            this.mensajeModal = 'Producto actualizado con éxito';
-          },
-          error: (err) => {
-            console.error('Error actualizando producto:', err);
-            this.errorModal = 'Error al actualizar el producto';
-          },
-        });
+    const formData = new FormData();
+
+    formData.append(
+      'nombre_producto',
+      this.form.value.nombre_producto
+    );
+
+    formData.append(
+      'descripcion',
+      this.form.value.descripcion || ''
+    );
+
+    formData.append(
+      'precio_compra',
+      this.form.value.precio_compra
+    );
+
+    formData.append(
+      'precio_unitario',
+      this.form.value.precio_unitario
+    );
+
+    formData.append(
+      'precio_mayor',
+      this.form.value.precio_mayor
+    );
+
+    formData.append(
+      'stock',
+      this.form.value.stock
+    );
+
+    formData.append(
+      'codigo_producto',
+      this.form.value.codigo_producto
+    );
+
+    formData.append(
+      'categoria',
+      this.form.value.categoria
+    );
+
+    // Nueva imagen (opcional)
+    if (this.imagenSeleccionada) {
+      formData.append(
+        'imagen_productos',
+        this.imagenSeleccionada
+      );
     }
+
+    this.productosService
+      .actualizarProducto(this.producto.id, formData)
+      .subscribe({
+        next: () => {
+          this.mensajeModal = 'Producto actualizado con éxito';
+        },
+        error: (err) => {
+          console.error(err);
+          this.errorModal = 'Error al actualizar el producto';
+        },
+      });
   }
+}
   manejarOk(): void {
     this.mensajeModal = '';
     this.router.navigate(['panel-control/listar-productos']);
