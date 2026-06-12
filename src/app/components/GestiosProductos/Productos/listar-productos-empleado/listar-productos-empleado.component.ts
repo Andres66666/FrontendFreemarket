@@ -57,7 +57,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   searchCategoria: string = '';
   searchPrecio: string = '';
   searchCodigoProducto: string = '';
-
+  categoriaSeleccionada: Categoria | null = null;
 
 
   detalleVenta: DetalleVenta[] = [];
@@ -65,7 +65,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
   // cantidad por producto (input)
   cantidadPorProducto: { [key: number]: number } = {};
-
+  nombresPorCategoria: string[] = [];
   // Forms
   ventaForm: FormGroup;
   detalleVentaForm: FormGroup;
@@ -112,6 +112,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
     this.checkScreenSize();
     window.addEventListener('resize', () => this.checkScreenSize());
+    this.actualizarNombresPorCategoria();
   }
 
   getVentas() {
@@ -178,37 +179,49 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     const rolesOcultarPrecio = ['Empleado', 'Cajero', 'JefeDeEmpleado'];
     return roles.some((rol) => rolesOcultarPrecio.includes(rol));
   }
-
-  filteredProductos(): Producto[] {
-    let filtered = this.productos.filter(
-      (producto) => producto.estado_equipo !== false,
+  onCategoriaChange() {
+    this.searchNombreProducto = '';
+    this.actualizarNombresPorCategoria();
+  }
+  filterNamesByCategory(): Producto[] {
+    if (!this.searchCategoria) {
+      return this.productos.filter(p => p.estado_equipo !== false);
+    }
+    return this.productos.filter(
+      p => p.estado_equipo !== false && 
+      p.categoria.nombre_categoria.toLowerCase() === this.searchCategoria.toLowerCase()
     );
+  }
+  actualizarNombresPorCategoria() {
+    const productos = this.filterNamesByCategory();
+    this.nombresPorCategoria = [...new Set(productos.map(p => p.nombre_producto))].sort();
+  }
+  filteredProductos(): Producto[] {
+    let filtered = this.productos.filter(p => p.estado_equipo !== false);
 
+    // 1. Filtrar por categoría
     if (this.searchCategoria) {
-      filtered = filtered.filter((producto) =>
-        producto.categoria.nombre_categoria
-          .toLowerCase()
-          .includes(this.searchCategoria.toLowerCase()),
+      filtered = filtered.filter(p => 
+        p.categoria.nombre_categoria.toLowerCase() === this.searchCategoria.toLowerCase()
       );
     }
 
+    // 2. Filtrar por nombre
     if (this.searchNombreProducto) {
-      filtered = filtered.filter((producto) =>
-        producto.nombre_producto
-          .toLowerCase()
-          .includes(this.searchNombreProducto.toLowerCase()),
+      filtered = filtered.filter(p => 
+        p.nombre_producto.toLowerCase() === this.searchNombreProducto.toLowerCase()
       );
     }
 
+    // 3. Filtrar por código
     if (this.searchCodigoProducto) {
-      filtered = filtered.filter((producto) =>
-        producto.codigo_producto
-          .toLowerCase()
-          .includes(this.searchCodigoProducto.toLowerCase()),
+      const searchTerm = this.searchCodigoProducto.toLowerCase().trim();
+      filtered = filtered.filter(p => 
+        p.codigo_producto.toLowerCase().includes(searchTerm)
       );
     }
-    return filtered;
 
+    return filtered;
   }
 
   buscarPorCodigoEscaneado(codigo: string) {
@@ -226,13 +239,12 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   }
 
   clearQuantities() {
-    this.cantidadPorProducto = {};
     this.searchCategoria = '';
     this.searchNombreProducto = '';
     this.searchCodigoProducto = '';
-    this.searchPrecio = '';
+    this.cantidadPorProducto = {};
+    this.actualizarNombresPorCategoria();
   }
-
   agregarAlCarrito(producto: Producto, cantidad: number, tipoPrecio: string) {
     if (cantidad <= 0 || cantidad > producto.stock) {
       this.error =

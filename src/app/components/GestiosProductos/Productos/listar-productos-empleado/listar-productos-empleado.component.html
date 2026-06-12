@@ -24,75 +24,70 @@
       </div>
 
       <!-- FILTROS -->
-      <div class="card shadow-sm border-0 mb-3">
-        <div class="card-body">
-          <div class="row g-2 align-items-end">
-            <div class="col-12">
-              <app-ej-barra
-                (codigoEscaneado)="buscarPorCodigoEscaneado($event)"
-              ></app-ej-barra>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-              <label
-                class="form-label small text-muted mb-1"
-                for="categoriaSelect"
-                >Categoría</label
-              >
-              <select
-                id="categoriaSelect"
-                class="form-select"
-                [(ngModel)]="searchCategoria"
-                (change)="filteredProductos()"
-              >
-                <option value="">Todas</option>
-                <option
-                  *ngFor="let categoria of categorias"
-                  [value]="categoria.nombre_categoria"
-                >
-                  {{ categoria.nombre_categoria }}
-                </option>
-              </select>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-              <label class="form-label small text-muted mb-1" for="nombreInput"
-                >Nombre</label
-              >
-              <input
-                id="nombreInput"
-                type="text"
-                class="form-control"
-                placeholder="Buscar por nombre"
-                [(ngModel)]="searchNombreProducto"
-              />
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-              <label class="form-label small text-muted mb-1" for="codigoInput"
-                >Código</label
-              >
-              <input
-                id="codigoInput"
-                type="text"
-                class="form-control"
-                placeholder="Buscar por código"
-                [(ngModel)]="searchCodigoProducto"
-              />
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-              <div class="d-grid">
-                <button
-                  class="btn btn-danger"
-                  type="button"
-                  (click)="clearQuantities()"
-                >
-                  <i class="bi bi-eraser me-1"></i> Borrar
-                </button>
-              </div>
-            </div>
+      <div class="row g-3 mb-4">
+        <!-- BUSCAR POR CÓDIGO (Escáner) -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="bi bi-upc-scan"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Escanear código..."
+              [(ngModel)]="searchCodigoProducto"
+              (keyup.enter)="buscarPorCodigoEscaneado(searchCodigoProducto)"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              (click)="buscarPorCodigoEscaneado(searchCodigoProducto)"
+              *ngIf="searchCodigoProducto"
+            >
+              <i class="bi bi-search"></i>
+            </button>
           </div>
+        </div>
+
+        <!-- SELECT CATEGORÍA -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <select
+            class="form-select"
+            [(ngModel)]="searchCategoria"
+            (change)="onCategoriaChange()"
+          >
+            <option value="">Todas las categorías</option>
+            <option
+              *ngFor="let cat of categorias"
+              [value]="cat.nombre_categoria"
+            >
+              {{ cat.nombre_categoria }}
+            </option>
+          </select>
+        </div>
+
+        <!-- SELECT NOMBRE (Dinámico según categoría) -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <select class="form-select" [(ngModel)]="searchNombreProducto">
+            <option value="">Todos los nombres</option>
+            <option
+              *ngFor="let prod of filterNamesByCategory()"
+              [value]="prod.nombre_producto"
+            >
+              {{ prod.nombre_producto }}
+            </option>
+          </select>
+        </div>
+
+        <!-- LIMPIAR FILTROS -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <button
+            class="btn btn-outline-danger w-100"
+            (click)="clearQuantities()"
+          >
+            <i class="bi bi-x-circle me-2"></i>
+            Limpiar filtros
+          </button>
         </div>
       </div>
 
