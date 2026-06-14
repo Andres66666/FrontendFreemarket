@@ -40,7 +40,7 @@ export class DashboardComponent {
       alt: 'Yape Andres',
     },
     {
-      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1773860535/yasta_v3vrmk.jpg',
+      src: 'https://res.cloudinary.com/dz45dhxii/image/upload/v1781474048/yasta_rpbkbd.jpg',
       category: 'bancos',
       alt: 'Yasta Andres',
     },

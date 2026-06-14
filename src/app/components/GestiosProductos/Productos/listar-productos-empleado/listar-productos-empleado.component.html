@@ -356,10 +356,19 @@
         <button
           type="submit"
           class="btn btn-primary btn-sm w-50"
-          [disabled]="ventaForm.invalid || detalleVenta.length === 0"
+          [disabled]="
+            ventaForm.invalid || detalleVenta.length === 0 || isProcessingVenta
+          "
           (click)="registrarVenta()"
         >
-          <i class="bi bi-cash-coin me-1"></i>Vender
+          <span
+            *ngIf="isProcessingVenta"
+            class="spinner-border spinner-border-sm me-1"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <i *ngIf="!isProcessingVenta" class="bi bi-cash-coin me-1"></i>
+          {{ isProcessingVenta ? "Procesando..." : "Vender" }}
         </button>
       </div>
     </div>

@@ -20,9 +20,6 @@ export class ListarUsuarioComponent implements OnInit {
   searchci: string = ''; // Nuevo campo para la marca
   searchdepartamento: string = ''; // Nuevo campo para la marca
 
-  page: number = 1;
-  pageSize: number = 5;
-  paginatedUsuario: Usuario[] = [];
   sucursal: Sucursales | null = null;
   
   constructor(private servicesService: ServicesService,private router: Router,) {}
@@ -35,7 +32,6 @@ export class ListarUsuarioComponent implements OnInit {
       console.log(data);
       this.usuarios = data;
       this.ordenarUsuariosPorId();
-      this.updatePaginatedUsuario();
     });
   }
   
@@ -85,28 +81,9 @@ export class ListarUsuarioComponent implements OnInit {
       );
     }
 
-    return filtered.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
-    ); 
+    return filtered
   }
-  updatePaginatedUsuario() {
-    const start = (this.page - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedUsuario = this.usuarios.slice(start, end);
-  }
-
-  nextPage() {
-    this.page++;
-    this.updatePaginatedUsuario();
-  }
-
-  previousPage() {
-    if (this.page > 1) {
-      this.page--;
-      this.updatePaginatedUsuario();
-    }
-  }
+  
   toggleUsuarioActivo(usuario: any) {
     usuario.estado_Usuario = !usuario.estado_Usuario; 
     this.servicesService

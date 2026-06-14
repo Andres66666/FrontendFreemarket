@@ -3,3 +3,54 @@
   height: 100px;
   border-radius: 50%;
 }
+/* ==========================================================================
+   FUENTES RESPONSIVE - BASE
+   ========================================================================== */
+
+.fs-xxs { font-size: 0.65rem; }
+.fs-xs  { font-size: 0.75rem; }
+.fs-sm  { font-size: 0.85rem; }
+.fs-md  { font-size: 0.95rem; }
+.fs-lg  { font-size: 1rem; }
+
+/* ==========================================================================
+   BREAKPOINTS - Solo Sobrescribe lo necesario
+   ========================================================================== */
+
+/* Móvil muy pequeño (menor a 400px) */
+@media (max-width: 400px) {
+  .fs-xxs { font-size: 0.55rem; }
+  .fs-xs  { font-size: 0.6rem; }
+  .fs-sm  { font-size: 0.7rem; }
+}
+
+/* Móvil estándar (menor a 576px) */
+@media (max-width: 575.98px) {
+  .fs-xs { font-size: 0.7rem; }
+  .fs-sm { font-size: 0.8rem; }
+}
+
+/* Tablet pequeña (576px a 768px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .fs-xs { font-size: 0.75rem; }
+  .fs-sm { font-size: 0.85rem; }
+}
+
+/* Tablet/Escritorio pequeño (768px+) */
+@media (min-width: 768px) {
+  .fs-xs { font-size: 0.85rem; }
+  .fs-sm { font-size: 0.95rem; }
+}
+
+/* ==========================================================================
+   UTILIDADES EXTRA (solo móvil)
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .py-xs { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+  .px-xs { padding-left: 0.25rem; padding-right: 0.25rem; }
+  .gap-xs { gap: 0.25rem; }
+  
+  .table-sm, .table-sm * { font-size: 0.7rem !important; }
+}
+

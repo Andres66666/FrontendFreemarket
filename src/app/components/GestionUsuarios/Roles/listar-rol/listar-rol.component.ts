@@ -16,9 +16,7 @@ export class ListarRolComponent implements OnInit {
   roles: Role[] = [];
 
   searchNombreRol: string = '';
-  page: number = 1;
-  pageSize: number = 5;
-  paginatedRoles: Role[] = [];
+  
 
   constructor(
     private servicesService: ServicesService,
@@ -32,7 +30,7 @@ export class ListarRolComponent implements OnInit {
   getRoles(): void {
     this.servicesService.getRoles().subscribe((data) => {
       this.roles = data;
-      this.updatePaginatedRoles();
+
     });
   }
 
@@ -56,31 +54,9 @@ export class ListarRolComponent implements OnInit {
       );
     }
 
-    return filtered.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
-    );
+    return filtered
   }
 
-  updatePaginatedRoles(): void {
-    const start = (this.page - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedRoles = this.roles.slice(start, end);
-  }
-
-  nextPage(): void {
-    if (this.page * this.pageSize < this.roles.length) {
-      this.page++;
-      this.updatePaginatedRoles();
-    }
-  }
-
-  previousPage(): void {
-    if (this.page > 1) {
-      this.page--;
-      this.updatePaginatedRoles();
-    }
-  }
 
   toggleRolActivo(rol: Role): void {
     const nuevoEstado = !rol.estado_Rol;

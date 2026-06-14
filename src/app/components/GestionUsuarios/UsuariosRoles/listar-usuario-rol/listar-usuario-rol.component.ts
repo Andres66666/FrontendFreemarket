@@ -15,9 +15,7 @@ import { Router } from '@angular/router';
 export class ListarUsuarioRolComponent implements OnInit {
   usuarioRoles: UsuarioRol[] = []; // Array para almacenar los usuarios y roles
   searchNombreUsuario: string = ''; // Campo de búsqueda para el nombre del usuario
-  page: number = 1; // Página actual
-  pageSize: number = 5; // Tamaño de la página
-  paginatedUsuarioRoles: UsuarioRol[] = []; // UsuarioRoles paginados
+  
   loading: boolean = true; // Propiedad para manejar el estado de carga
 
   
@@ -32,7 +30,6 @@ export class ListarUsuarioRolComponent implements OnInit {
     this.servicesService.getUsuariosRoles().subscribe(
       (data) => {
         this.usuarioRoles = data; 
-        this.updatePaginatedUsuarioRoles(); 
         this.loading = false; 
       },
       () => {
@@ -58,29 +55,11 @@ export class ListarUsuarioRolComponent implements OnInit {
           .includes(this.searchNombreUsuario.toLowerCase())
       );
     }
-    return filtered.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
-    ); // Mostramos solo la página actual
+    return filtered
   }
 
-  updatePaginatedUsuarioRoles() {
-    const start = (this.page - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedUsuarioRoles = this.usuarioRoles.slice(start, end);
-  }
 
-  nextPage() {
-    this.page++;
-    this.updatePaginatedUsuarioRoles();
-  }
 
-  previousPage() {
-    if (this.page > 1) {
-      this.page--;
-      this.updatePaginatedUsuarioRoles();
-    }
-  }
 
   toggleUsuarioRolActivo(usuarioRol: UsuarioRol) {
     // Invertir el estado de 'estado_Usuario' del usuario

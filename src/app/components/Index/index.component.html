@@ -1,91 +1,75 @@
-<!-- NAVBAR PROFESIONAL -->
-<header class="fixed-top bg-white border-0 shadow-none w-100 px-3 px-lg-5">
-  <div class="d-flex justify-content-between align-items-center py-2">
-    <div>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold">
       <img
         src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
-        alt="Logo Malla Finita"
-        class="img-fluid"
-        style="max-width: 100px"
+        height="55"
       />
-    </div>
+    </a>
 
-    <div class="text-end">
-      <button (click)="navigateToLogin()" class="btn btn-success me-2">
-        <i class="bi bi-door-open"></i>
-        <span class="d-none d-sm-inline">Iniciar Sesión</span>
-      </button>
-    </div>
+    <button
+      class="btn btn-success rounded-pill px-4"
+      (click)="navigateToLogin()"
+    >
+      <i class="bi bi-box-arrow-in-right me-2"></i>
+      Iniciar Sesión
+    </button>
   </div>
-</header>
+</nav>
 
-<!-- HERO PRINCIPAL -->
+<!-- HERO -->
 <section class="hero-section">
   <div class="container">
-    <div class="row align-items-center">
+    <div class="row align-items-center min-vh-100">
       <div class="col-lg-6 text-white">
-        <h1 class="hero-title">Accesorios para celulares</h1>
+        <span class="badge bg-success px-3 py-2 mb-3">
+          Tecnología Premium
+        </span>
 
-        <p class="hero-text">
-          Encuentra cargadores, audífonos, protectores, cables, power banks y
-          los mejores accesorios tecnológicos al mejor precio.
+        <h1 class="display-4 fw-bold mb-3">
+          Los mejores accesorios para tu celular
+        </h1>
+
+        <p class="lead mb-4">
+          Cargadores, audífonos, fundas, cables, power banks y mucho más.
         </p>
+
+        <button
+          class="btn btn-light btn-lg rounded-pill px-4"
+          onclick="
+            document
+              .getElementById('catalogo')
+              ?.scrollIntoView({ behavior: 'smooth' })
+          "
+        >
+          Ver Catálogo
+        </button>
       </div>
 
-      <!-- CARRUSEL -->
       <div class="col-lg-6">
-        <div
-          id="carouselProductos"
-          class="carousel slide"
-          data-bs-ride="carousel"
-        >
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="carousel-frame">
+            <div
+              *ngFor="let celular of celularesHero; let i = index"
+              class="carousel-item"
+              [class.active]="i === 0"
+            >
+              <div class="hero-carousel-container">
                 <img
-                  src="https://storage.comprasmartphone.com/smartphones/samsung-galaxy-s23.png"
-                />
-              </div>
-            </div>
-
-            <div class="carousel-item">
-              <div class="carousel-frame">
-                <img
-                  src="https://d13pvy8xd75yde.cloudfront.net/global/phones/spark10/blue.png"
-                />
-              </div>
-            </div>
-
-            <div class="carousel-item">
-              <div class="carousel-frame">
-                <img
-                  src="https://www.honor.com/content/dam/honor/common/product-list/product-series/honor-400/honor-400-gold-list.png"
-                />
-              </div>
-            </div>
-
-            <div class="carousel-item">
-              <div class="carousel-frame">
-                <img
-                  src="https://storage.googleapis.com/images-production-egx/products/elgeniox-store/2025-07-28-audifonos-huavi-over-ear-fh710-pro--471756--2620250728T185014212.jpg"
-                />
-              </div>
-            </div>
-
-            <div class="carousel-item">
-              <div class="carousel-frame">
-                <img
-                  src="https://shop-cdncname.huawei.com/mx/uomcdn/MXHW/pms/202412/gbom/6942103138768/428_428_CC37797D4978E945A7AAAA50DD9EAA81mp.png"
+                  [src]="celular.imagen_productos"
+                  [alt]="celular.nombre_producto"
+                  class="hero-phone"
+                  (error)="imagenError($event)"
                 />
               </div>
             </div>
           </div>
 
-          <!-- BOTONES -->
           <button
             class="carousel-control-prev"
             type="button"
-            data-bs-target="#carouselProductos"
+            data-bs-target="#heroCarousel"
             data-bs-slide="prev"
           >
             <span class="carousel-control-prev-icon"></span>
@@ -94,7 +78,7 @@
           <button
             class="carousel-control-next"
             type="button"
-            data-bs-target="#carouselProductos"
+            data-bs-target="#heroCarousel"
             data-bs-slide="next"
           >
             <span class="carousel-control-next-icon"></span>
@@ -105,97 +89,175 @@
   </div>
 </section>
 
-<!-- SECCION INFORMACION -->
-<section class="container my-5">
-  <div class="row align-items-center">
-    <div class="col-lg-5 text-center">
-      <img
-        src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124479/perfil_pyer5j.png"
-        class="img-fluid rounded-circle shadow"
-        width="250"
-      />
+<!-- ESTADÍSTICAS -->
+<section class="container py-5">
+  <div class="row text-center g-4">
+    <div class="col-6 col-lg-3">
+      <h2 class="text-success fw-bold">
+        {{ productos.length }}
+      </h2>
+      <p>Productos</p>
     </div>
 
-    <div class="col-lg-7">
-      <h2 class="mb-4">Sobre Nosotros</h2>
+    <div class="col-6 col-lg-3">
+      <h2 class="text-success fw-bold">
+        {{ categorias.length }}
+      </h2>
+      <p>Categorías</p>
+    </div>
 
-      <p class="text-muted">
-        En Freemarket somos una tienda especializada en accesorios para
-        celulares y tecnología. Nuestro objetivo es ofrecer productos de calidad
-        con precios accesibles y un servicio confiable.
-      </p>
+    <div class="col-6 col-lg-3">
+      <h2 class="text-success fw-bold">24/7</h2>
+      <p>Atención</p>
+    </div>
 
-      <p class="text-muted">
-        Contamos con cargadores, audífonos, fundas, cables USB, power banks,
-        soportes para autos y muchos más accesorios tecnológicos.
-      </p>
+    <div class="col-6 col-lg-3">
+      <h2 class="text-success fw-bold">100%</h2>
+      <p>Garantía</p>
     </div>
   </div>
 </section>
 
-<!-- MISION Y VISION -->
-<section class="bg-light py-5">
-  <div class="container">
-    <div class="row g-4">
-      <div class="col-lg-6">
-        <div class="card shadow h-100 border-0">
-          <div class="card-body text-center">
-            <h3 class="mb-3">Misión</h3>
+<!-- PRODUCTOS -->
+<section id="catalogo" class="container py-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">Productos Destacados</h2>
 
-            <p class="text-muted">
-              Brindar a nuestros clientes accesorios tecnológicos de calidad con
-              precios accesibles y excelente atención.
-            </p>
-          </div>
-        </div>
+    <p class="text-muted">Explora nuestro catálogo</p>
+  </div>
+  <!-- FILTROS -->
+  <section class="container py-4">
+    <div class="row g-3">
+      <!-- Buscar -->
+      <div class="col-12 col-md-4">
+        <label class="form-label fw-semibold"> Buscar producto </label>
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Ej. Audífono Bluetooth"
+          [(ngModel)]="buscar"
+        />
       </div>
 
-      <div class="col-lg-6">
-        <div class="card shadow h-100 border-0">
-          <div class="card-body text-center">
-            <h3 class="mb-3">Visión</h3>
+      <!-- Categorías -->
+      <div class="col-12 col-md-4">
+        <label class="form-label fw-semibold"> Categoría </label>
 
-            <p class="text-muted">
-              Convertirnos en una tienda líder en venta de accesorios para
-              celulares ofreciendo innovación y confianza.
-            </p>
-          </div>
+        <select class="form-select" [(ngModel)]="categoriaSeleccionada">
+          <option [ngValue]="0">Todas las categorías</option>
+
+          <option *ngFor="let categoria of categorias" [ngValue]="categoria.id">
+            {{ categoria.nombre_categoria }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Sucursales -->
+      <div class="col-12 col-md-4">
+        <label class="form-label fw-semibold"> Sucursal </label>
+
+        <select class="form-select" [(ngModel)]="sucursalSeleccionada">
+          <option [ngValue]="0">Todas las sucursales</option>
+
+          <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.id">
+            {{ sucursal.nombre }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <div class="row g-4">
+    <div
+      class="col-6 col-md-4 col-lg-3"
+      *ngFor="let producto of productosFiltrados"
+    >
+      <div class="card producto-card h-100 border-0 shadow-sm">
+        <div class="text-center p-3">
+          <img
+            [src]="producto.imagen_productos"
+            class="img-fluid producto-img"
+          />
         </div>
+
+        <div class="card-body">
+          <span class="badge bg-light text-dark mb-2">
+            {{ producto.categoria.nombre_categoria }}
+          </span>
+
+          <h6 class="fw-bold">
+            {{ producto.nombre_producto }}
+          </h6>
+
+          <p class="text-muted small">
+            {{ producto.sucursal.nombre }}
+          </p>
+
+          <h5 class="text-success fw-bold">
+            Bs {{ producto.precio_unitario }}
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE NOSOTROS -->
+<section class="bg-light py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-5 text-center">
+        <img
+          src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124479/perfil_pyer5j.png"
+          class="img-fluid rounded-circle shadow"
+          width="250"
+        />
+      </div>
+
+      <div class="col-lg-7">
+        <h2 class="fw-bold mb-4">Sobre Nosotros</h2>
+
+        <p class="text-muted">
+          FreeMarket ofrece productos tecnológicos con garantía y excelente
+          atención.
+        </p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="bg-dark text-white mt-5">
+<footer class="bg-dark text-white">
   <div class="container py-5">
     <div class="row">
-      <div class="col-lg-4">
+      <div class="col-lg-4 mb-4">
         <img
           src="https://res.cloudinary.com/dlrpns8z7/image/upload/v1744124754/logo.png_w4ofbg.png"
           width="140"
-          class="mb-3"
         />
 
-        <p>Tu tienda confiable de accesorios para celulares y tecnología.</p>
+        <p class="mt-3">Tu tienda tecnológica de confianza.</p>
       </div>
 
-      <div class="col-lg-4">
+      <div class="col-lg-4 mb-4">
         <h5>Contacto</h5>
 
-        <p>Email: freemarket0620gmail.com</p>
-        <p>Tel: +591 72937437</p>
+        <p>freemarket0620&#64;gmail.com</p>
+
+        <p>+591 72937437</p>
+
         <p>Beni - Bolivia</p>
       </div>
 
       <div class="col-lg-4">
         <h5>Redes Sociales</h5>
 
-        <div class="d-flex gap-3 mt-3">
-          <i class="fab fa-facebook fa-2x"></i>
-          <i class="fab fa-instagram fa-2x"></i>
-          <i class="fab fa-whatsapp fa-2x"></i>
-          <i class="fab fa-tiktok fa-2x"></i>
+        <div class="d-flex gap-3">
+          <i class="bi bi-facebook fs-3"></i>
+          <i class="bi bi-instagram fs-3"></i>
+          <i class="bi bi-whatsapp fs-3"></i>
+          <i class="bi bi-tiktok fs-3"></i>
         </div>
       </div>
     </div>

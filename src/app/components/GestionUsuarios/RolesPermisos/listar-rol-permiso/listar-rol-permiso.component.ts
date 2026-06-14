@@ -15,8 +15,7 @@ import { Router } from '@angular/router';
 export class ListarRolPermisoComponent implements OnInit {
   rolePermisos: RolePermiso[] = []; // Array para almacenar los roles y permisos
   searchNombreRol: string = ''; // Campo de búsqueda para el nombre del rol
-  page: number = 1; // Página actual
-  pageSize: number = 5; // Tamaño de la página
+  
   paginatedRolePermisos: RolePermiso[] = []; // RolePermisos paginados
   loading: boolean = true; // Propiedad para manejar el estado de carga
 
@@ -31,7 +30,6 @@ export class ListarRolPermisoComponent implements OnInit {
     this.servicesService.getRolesPermisos().subscribe(
       (data) => {
         this.rolePermisos = data; // Asignar los roles y permisos obtenidos
-        this.updatePaginatedRolePermisos(); // Actualizar los roles y permisos paginados
         this.loading = false; // Finalizar el estado de carga
       },
       () => {
@@ -58,27 +56,9 @@ export class ListarRolPermisoComponent implements OnInit {
           .includes(this.searchNombreRol.toLowerCase())
       );
     }
-    return filtered.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
-    ); // Mostramos solo la página actual
+    return filtered
   }
 
-  updatePaginatedRolePermisos() {
-    const start = (this.page - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedRolePermisos = this.rolePermisos.slice(start, end);
-  }
 
-  nextPage() {
-    this.page++;
-    this.updatePaginatedRolePermisos();
-  }
-
-  previousPage() {
-    if (this.page > 1) {
-      this.page--;
-      this.updatePaginatedRolePermisos();
-    }
-  }
+ 
 }

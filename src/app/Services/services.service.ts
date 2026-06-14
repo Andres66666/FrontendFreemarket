@@ -35,8 +35,8 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class ServicesService {
-/*     private apiUrl = 'http://localhost:8000/api/'; */
-  private apiUrl = 'https://backendfreemarket-1.onrender.com/api/';
+    private apiUrl = 'http://localhost:8000/api/';
+/*   private apiUrl = 'https://backendfreemarket-1.onrender.com/api/'; */
 
   private productosSubject = new BehaviorSubject<Producto[]>([]);
   productos$ = this.productosSubject.asObservable();
@@ -139,7 +139,28 @@ export class ServicesService {
 
   /* ---------------------------- usuario ---------------------------- */
   getUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.apiUrl}usuarios/`);
+    const cacheKey = 'usuarios_list';
+    const cached = typeof window !== 'undefined' ? window.sessionStorage.getItem(cacheKey) : null;
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached) as Usuario[];
+        return new Observable<Usuario[]>((observer) => {
+          observer.next(parsed);
+          observer.complete();
+        });
+      } catch {
+        // ignorar
+      }
+    }
+
+    return this.http.get<Usuario[]>(`${this.apiUrl}usuarios/`).pipe(
+      tap((usuarios) => {
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem(cacheKey, JSON.stringify(usuarios));
+        }
+      }),
+    );
   }
   getUserById(id: number): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}usuarios/${id}/`);
@@ -165,7 +186,28 @@ export class ServicesService {
   }
 
   getRoles(): Observable<Role[]> {
-    return this.http.get<Role[]>(`${this.apiUrl}roles/`);
+    const cacheKey = 'roles_list';
+    const cached = typeof window !== 'undefined' ? window.sessionStorage.getItem(cacheKey) : null;
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached) as Role[];
+        return new Observable<Role[]>((observer) => {
+          observer.next(parsed);
+          observer.complete();
+        });
+      } catch {
+        // ignorar
+      }
+    }
+
+    return this.http.get<Role[]>(`${this.apiUrl}roles/`).pipe(
+      tap((roles) => {
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem(cacheKey, JSON.stringify(roles));
+        }
+      }),
+    );
   }
   // Obtener un rol por ID
   getRolesById(id: number): Observable<Role> {
@@ -186,7 +228,28 @@ export class ServicesService {
   /* ---------------------------- permisos ---------------------------- */
 
   getPermisos(): Observable<Permiso[]> {
-    return this.http.get<Permiso[]>(`${this.apiUrl}permisos/`);
+    const cacheKey = 'permisos_list';
+    const cached = typeof window !== 'undefined' ? window.sessionStorage.getItem(cacheKey) : null;
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached) as Permiso[];
+        return new Observable<Permiso[]>((observer) => {
+          observer.next(parsed);
+          observer.complete();
+        });
+      } catch {
+        // ignorar
+      }
+    }
+
+    return this.http.get<Permiso[]>(`${this.apiUrl}permisos/`).pipe(
+      tap((permisos) => {
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem(cacheKey, JSON.stringify(permisos));
+        }
+      }),
+    );
   }
   // Obtener un rol por ID
   getPermisosById(id: number): Observable<Permiso> {
@@ -237,7 +300,28 @@ export class ServicesService {
   /* ---------------------------- UsuarioRol ---------------------------- */
 
   getUsuariosRoles(): Observable<UsuarioRol[]> {
-    return this.http.get<UsuarioRol[]>(`${this.apiUrl}usuariosroles/`);
+    const cacheKey = 'usuarios_roles_list';
+    const cached = typeof window !== 'undefined' ? window.sessionStorage.getItem(cacheKey) : null;
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached) as UsuarioRol[];
+        return new Observable<UsuarioRol[]>((observer) => {
+          observer.next(parsed);
+          observer.complete();
+        });
+      } catch {
+        // ignorar
+      }
+    }
+
+    return this.http.get<UsuarioRol[]>(`${this.apiUrl}usuariosroles/`).pipe(
+      tap((usuariosRoles) => {
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem(cacheKey, JSON.stringify(usuariosRoles));
+        }
+      }),
+    );
   }
 
   getUsuarioRolById(id: number): Observable<UsuarioRol> {
@@ -261,7 +345,28 @@ export class ServicesService {
   /* ---------------------------- RolePermiso ---------------------------- */
 
   getRolesPermisos(): Observable<RolePermiso[]> {
-    return this.http.get<RolePermiso[]>(`${this.apiUrl}rolespermisos/`);
+    const cacheKey = 'roles_permisos_list';
+    const cached = typeof window !== 'undefined' ? window.sessionStorage.getItem(cacheKey) : null;
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached) as RolePermiso[];
+        return new Observable<RolePermiso[]>((observer) => {
+          observer.next(parsed);
+          observer.complete();
+        });
+      } catch {
+        // ignorar
+      }
+    }
+
+    return this.http.get<RolePermiso[]>(`${this.apiUrl}rolespermisos/`).pipe(
+      tap((rolesPermisos) => {
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem(cacheKey, JSON.stringify(rolesPermisos));
+        }
+      }),
+    );
   }
 
   getRolePermisoById(id: number): Observable<RolePermiso> {
@@ -359,10 +464,82 @@ export class ServicesService {
   actualizarVenta(id: number, venta: Venta): Observable<Venta> {
     return this.http.put<Venta>(`${this.apiUrl}ventas/${id}/`, venta);
   }
+  getVentasPorSucursal(
+    sucursalId: number
+  ): Observable<Venta[]> {
+    const cacheKey = `ventas_sucursal_${sucursalId}`;
+    let cachedVentas: Venta[] | null = null;
 
+    if (typeof window !== 'undefined') {
+      const cachedValue = window.sessionStorage.getItem(cacheKey);
+      if (cachedValue) {
+        try {
+          cachedVentas = JSON.parse(cachedValue) as Venta[];
+        } catch {
+          cachedVentas = null;
+        }
+      }
+    }
+
+    return new Observable<Venta[]>((observer) => {
+      if (cachedVentas) {
+        observer.next(cachedVentas);
+      }
+
+      this.http.get<Venta[]>(`${this.apiUrl}ventas/sucursal/${sucursalId}/`).subscribe({
+        next: (ventas) => {
+          if (typeof window !== 'undefined') {
+            window.sessionStorage.setItem(cacheKey, JSON.stringify(ventas));
+          }
+          observer.next(ventas);
+          observer.complete();
+        },
+        error: (error) => observer.error(error),
+      });
+    });
+  }
   /* ---------------------------- DETALLES DE VENTAS ---------------------------- */
   getDetalleVentas(): Observable<DetalleVenta[]> {
-    return this.http.get<DetalleVenta[]>(`${this.apiUrl}detallesventas/`);
+    const sucursal = this.getSucursalLocalStorage();
+    const sucursalId = sucursal?.id;
+
+    if (!sucursalId) {
+      return new Observable<DetalleVenta[]>((observer) => {
+        observer.next([]);
+        observer.complete();
+      });
+    }
+
+    const cacheKey = `detalles_ventas_sucursal_${sucursalId}`;
+    let cachedDetalles: DetalleVenta[] | null = null;
+
+    if (typeof window !== 'undefined') {
+      const cachedValue = window.sessionStorage.getItem(cacheKey);
+      if (cachedValue) {
+        try {
+          cachedDetalles = JSON.parse(cachedValue) as DetalleVenta[];
+        } catch {
+          cachedDetalles = null;
+        }
+      }
+    }
+
+    return new Observable<DetalleVenta[]>((observer) => {
+      if (cachedDetalles) {
+        observer.next(cachedDetalles);
+      }
+
+      this.http.get<DetalleVenta[]>(`${this.apiUrl}detallesventas/sucursal/${sucursalId}/`).subscribe({
+        next: (detalles) => {
+          if (typeof window !== 'undefined') {
+            window.sessionStorage.setItem(cacheKey, JSON.stringify(detalles));
+          }
+          observer.next(detalles);
+          observer.complete();
+        },
+        error: (error) => observer.error(error),
+      });
+    });
   }
 
   getDetalleVentaById(id: number): Observable<DetalleVenta> {
@@ -383,6 +560,7 @@ export class ServicesService {
       detallesVenta,
     );
   }
+
   /* SECCION DE VENTAS  Y DE TALLE VENTAS  */
   verificarUsuario(usuario_id: number): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}usuarios/${usuario_id}`);

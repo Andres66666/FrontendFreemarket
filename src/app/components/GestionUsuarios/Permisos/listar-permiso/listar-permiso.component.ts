@@ -15,9 +15,7 @@ import { Router } from '@angular/router';
 export class ListarPermisoComponent implements OnInit {
   permisos: Permiso[] = []; // Array para almacenar los permisos
   searchNombrePermiso: string = ''; // Campo de búsqueda para el nombre del permiso
-  page: number = 1; // Página actual
-  pageSize: number = 5; // Tamaño de la página
-  paginatedPermisos: Permiso[] = []; // Permisos paginados
+
 
   constructor(private servicesService: ServicesService, private router: Router) {}
 
@@ -28,7 +26,6 @@ export class ListarPermisoComponent implements OnInit {
   getPermisos() {
     this.servicesService.getPermisos().subscribe((data) => {
       this.permisos = data; 
-      this.updatePaginatedPermisos(); 
     });
   }
 
@@ -51,28 +48,7 @@ export class ListarPermisoComponent implements OnInit {
       );
     }
 
-    return filtered.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize
-    );
-  }
-
-  updatePaginatedPermisos() {
-    const start = (this.page - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedPermisos = this.permisos.slice(start, end);
-  }
-
-  nextPage() {
-    this.page++;
-    this.updatePaginatedPermisos();
-  }
-
-  previousPage() {
-    if (this.page > 1) {
-      this.page--;
-      this.updatePaginatedPermisos();
-    }
+    return filtered
   }
 
   togglePermisoActivo(permiso: Permiso) {

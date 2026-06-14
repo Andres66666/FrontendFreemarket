@@ -13,7 +13,13 @@
     <div class="ms-auto d-flex align-items-center gap-2 gap-lg-3">
       <!-- BOTÓN PANEL DE CONTROL -->
       <button class="btn-panel" (click)="panelDeControl()">
-        <i class="bi bi-shop-window"></i>
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/7068/7068006.png"
+          width="30"
+          height="30"
+          class="me-2"
+          alt="Ventas"
+        />
         <span class="d-none d-md-inline ms-1">Panel</span>
       </button>
 
@@ -33,7 +39,13 @@
 
       <!-- BOTÓN CERRAR SESIÓN -->
       <button class="btn-logout" (click)="confirmarCerrarSesion()">
-        <i class="bi bi-box-arrow-right"></i>
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/4034/4034229.png"
+          width="30"
+          height="30"
+          class="me-2"
+          alt="Ventas"
+        />
         <span class="d-none d-md-inline ms-1">Salir</span>
       </button>
     </div>
@@ -52,7 +64,13 @@
         (click)="toggleSection('usuarios')"
       >
         <div>
-          <i class="bi bi-people-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/7169/7169824.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           <span>Gestión Usuarios</span>
         </div>
 
@@ -73,7 +91,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-roles')"
         >
-          <i class="bi bi-person-vcard-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/8964/8964949.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Roles
         </li>
 
@@ -82,7 +106,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-permisos')"
         >
-          <i class="bi bi-shield-lock-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/2172/2172839.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Permisos
         </li>
 
@@ -91,7 +121,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-usuarios')"
         >
-          <i class="bi bi-person-lines-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/863/863823.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Usuarios
         </li>
 
@@ -100,7 +136,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-usuarios-roles')"
         >
-          <i class="bi bi-diagram-3-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/10307/10307344.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Usuarios - Roles
         </li>
 
@@ -109,7 +151,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-roles-permisos')"
         >
-          <i class="bi bi-diagram-2-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/18841/18841862.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Roles - Permisos
         </li>
       </ul>
@@ -120,7 +168,13 @@
         (click)="toggleSection('productos')"
       >
         <div>
-          <i class="bi bi-bag-check-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/10103/10103182.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           <span>Productos y Ventas</span>
         </div>
 
@@ -137,11 +191,32 @@
         *ngIf="isActive('productos') && (isSidebarOpen || windowWidth >= 992)"
       >
         <li
+          *ngIf="puedeVer('Sucursales')"
+          class="list-group-item"
+          (click)="navegarYRegresar('/panel-control/listar-sucursales')"
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/11354/11354482.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
+
+          Sucursales
+        </li>
+        <li
           *ngIf="puedeVer('registrarCategorias')"
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-categorias')"
         >
-          <i class="bi bi-tags-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/9304/9304546.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Categorías
         </li>
 
@@ -150,7 +225,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-productos')"
         >
-          <i class="bi bi-box-seam-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/10608/10608872.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Productos
         </li>
 
@@ -159,8 +240,14 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-ventas')"
         >
-          <i class="bi bi-cart-check-fill me-2"></i>
-          Ventas
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1151/1151250.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
+          <span>Ventas</span>
         </li>
 
         <li
@@ -173,7 +260,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-detalle-ventas')"
         >
-          <i class="bi bi-receipt-cutoff me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/17387/17387875.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Detalle Ventas
         </li>
 
@@ -187,7 +280,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/listar-productos-empleado')"
         >
-          <i class="bi bi-bag-plus-fill me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/4459/4459384.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Vender Productos
         </li>
 
@@ -196,7 +295,13 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/efectivo')"
         >
-          <i class="bi bi-cash-stack me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/2534/2534191.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Efectivo
         </li>
 
@@ -205,21 +310,20 @@
           class="list-group-item"
           (click)="navegarYRegresar('/panel-control/prestamo')"
         >
-          <i class="bi bi-cash-coin me-2"></i>
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/3529/3529028.png"
+            width="35"
+            height="35"
+            class="me-2"
+            alt="Ventas"
+          />
           Prestamos
-        </li>
-        <li
-          class="list-group-item"
-          (click)="navegarYRegresar('/panel-control/listar-sucursales')"
-        >
-          <i class="bi bi-shield-lock-fill me-2"></i>
-          Sucursales
         </li>
       </ul>
     </ul>
   </aside>
 
-  <!-- OVERLAY -->
+  <!-- OVERLAY  Sucursales-->
   <div
     *ngIf="windowWidth < 992 && isSidebarOpen"
     class="overlay"

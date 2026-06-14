@@ -1,60 +1,104 @@
 .hero-section{
-height:100vh;
-display:flex;
-align-items:center;
-background: linear-gradient(120deg,#111,#2c3e50);
-padding-top:80px;
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e293b,
+    #059669
+  );
+  padding-top: 100px;
+  overflow: hidden;
 }
 
-.hero-title{
-font-size:48px;
-font-weight:bold;
+.hero-card{
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
 }
-
-.hero-text{
-font-size:18px;
-opacity:0.9;
-}
-
-/* MARCO DEL CARRUSEL */
 
 .carousel-frame{
-height:420px;
-width:100%;
-display:flex;
-align-items:center;
-justify-content:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:500px;
 }
-
-/* IMAGENES */
 
 .carousel-frame img{
-max-height:100%;
-max-width:100%;
-object-fit:contain;
+  max-height:450px;
+  object-fit:contain;
 }
 
-/* CONTROLES MAS VISIBLES */
+.card{
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-10px);
+}
+
+footer a{
+  transition:.3s;
+}
+
+footer a:hover{
+  transform:scale(1.15);
+}
+
+
+
+
+.hero-carousel-container{
+  height: 550px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.hero-phone{
+  max-height: 500px;
+  max-width: 100%;
+  object-fit: contain;
+
+  filter: drop-shadow(0 25px 35px rgba(0,0,0,.35));
+
+  animation: floatPhone 4s ease-in-out infinite;
+}
+
+@keyframes floatPhone{
+  0%{
+    transform: translateY(0);
+  }
+
+  50%{
+    transform: translateY(-15px);
+  }
+
+  100%{
+    transform: translateY(0);
+  }
+}
+
+.carousel-control-prev,
+.carousel-control-next{
+  width: 45px;
+}
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon{
-filter: invert(1);
+  background-size: 70%;
 }
 
-/* RESPONSIVE */
+@media (max-width: 768px){
 
-@media (max-width:768px){
+  .hero-carousel-container{
+    height: 350px;
+    margin-top: 2rem;
+  }
 
-.hero-title{
-font-size:32px;
-}
-
-.hero-section{
-text-align:center;
-}
-
-.carousel-frame{
-height:260px;
-}
+  .hero-phone{
+    max-height: 300px;
+  }
 
 }

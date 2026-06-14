@@ -81,6 +81,7 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   isDesktop: boolean = false;
   modalVisible: boolean = false;
   imageToShow: string = '';
+  isProcessingVenta = false;
 
   sucursal_id: number = 0;
   sucursal_nombre: string = '';
@@ -391,7 +392,13 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   }
 
   registrarVenta() {
+    if (this.isProcessingVenta) return;
     if (!(this.ventaForm.valid && this.detalleVenta.length > 0)) return;
+
+    this.isProcessingVenta = true;
+    this.error = '';
+    this.ok = '';
+
     const { usuario, estado } = this.ventaForm.value;
     const nuevaVenta: Venta = {
       id: 0,
@@ -407,25 +414,29 @@ export class ListarProductosEmpleadoComponent implements OnInit {
       total: this.totalVenta,
       fecha_venta: new Date(),
     };
-    this.productoService.crearVenta(nuevaVenta).subscribe(
-      (response) => {
+
+    this.productoService.crearVenta(nuevaVenta).subscribe({
+      next: (response) => {
         this.idVentaActual = response.id;
         this.registrarDetallesVenta();
       },
-      (error) => {
+      error: (error) => {
+        this.isProcessingVenta = false;
         console.error('Error al registrar la venta:', error);
         this.error = 'Error al registrar la venta.';
       },
-    );
+    });
   }
 
   registrarDetallesVenta() {
     if (this.detalleVenta.length === 0) {
+      this.isProcessingVenta = false;
       this.error = 'No hay detalles de venta para registrar.';
       return;
     }
 
     if (this.idVentaActual === null) {
+      this.isProcessingVenta = false;
       this.error = 'No se ha registrado ninguna venta.';
       return;
     }
@@ -457,10 +468,12 @@ export class ListarProductosEmpleadoComponent implements OnInit {
         this.idVentaActual = null;
         this.montoPagado = '';
         this.cambio = 0;
+        this.isProcessingVenta = false;
 
         this.ok = 'Venta registrada correctamente.';
       },
       error: (error) => {
+        this.isProcessingVenta = false;
         console.error('❌ Error al registrar detalles:', error);
         this.error = 'Error al registrar detalles.';
       },

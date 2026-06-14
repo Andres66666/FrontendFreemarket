@@ -20,23 +20,34 @@ export class ListarVentaComponent implements OnInit {
 
   searchFechaInicio: string = ''; // Nueva propiedad para la fecha de inicio
   searchFechaFin: string = ''; // Nueva propiedad para la fecha de fin
-
+  sucursalId: number = 0;
   constructor(private servicesService: ServicesService) {}
 
+
   ngOnInit(): void {
-    this.getVentas(); // Obtener las ventas al inicializar el componente
+    const sucursal = this.servicesService.getSucursalLocalStorage();
+
+    if (sucursal) {
+      this.sucursalId = sucursal.id;
+    }
+
+    this.getVentas();
   }
 
-  getVentas() {
-    this.servicesService.getVentas().subscribe((data) => {
-      this.ventas = data.sort((a, b) => {
-        // Ordenar por fecha_venta en orden descendente
-        return (
-          new Date(b.fecha_venta).getTime() - new Date(a.fecha_venta).getTime()
-        );
-      });
+
+getVentas() {
+  this.servicesService
+    .getVentasPorSucursal(this.sucursalId)
+    .subscribe((data) => {
+
+      this.ventas = data.sort(
+        (a, b) =>
+          new Date(b.fecha_venta).getTime() -
+          new Date(a.fecha_venta).getTime()
+      );
+
     });
-  }
+}
 // Método para obtener usuarios únicos
 getUsuariosUnicos(): Venta[] {
   const uniqueMap = new Map<number, Venta>();
