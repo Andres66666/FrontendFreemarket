@@ -15,7 +15,7 @@
         [ngClass]="{
           'is-invalid':
             editarForm.get('nombre_usuario')?.invalid &&
-            editarForm.get('nombre_usuario')?.touched
+            editarForm.get('nombre_usuario')?.touched,
         }"
       />
       <div *ngIf="mensajeNombre" class="invalid-feedback">
@@ -34,7 +34,7 @@
         [ngClass]="{
           'is-invalid':
             editarForm.get('apellido')?.invalid &&
-            editarForm.get('apellido')?.touched
+            editarForm.get('apellido')?.touched,
         }"
       />
       <div
@@ -59,7 +59,7 @@
         [ngClass]="{
           'is-invalid':
             editarForm.get('fecha_nacimiento')?.invalid &&
-            editarForm.get('fecha_nacimiento')?.touched
+            editarForm.get('fecha_nacimiento')?.touched,
         }"
       />
     </div>
@@ -75,7 +75,7 @@
         [ngClass]="{
           'is-invalid':
             editarForm.get('telefono')?.invalid &&
-            editarForm.get('telefono')?.touched
+            editarForm.get('telefono')?.touched,
         }"
       />
     </div>
@@ -91,7 +91,7 @@
         [ngClass]="{
           'is-invalid':
             editarForm.get('correo')?.invalid &&
-            editarForm.get('correo')?.touched
+            editarForm.get('correo')?.touched,
         }"
       />
     </div>
@@ -120,6 +120,21 @@
         <option value="CH">Chuquisaca</option>
         <option value="OR">Oruro</option>
         <option value="PT">Potosí</option>
+      </select>
+    </div>
+    <div class="form-group d-flex flex-column align-items-start">
+      <label for="sucursal_id">Sucursal</label>
+
+      <select
+        id="sucursal_id"
+        formControlName="sucursal_id"
+        class="form-control"
+      >
+        <option value="">Seleccione una sucursal</option>
+
+        <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
+          {{ sucursal.nombre }}
+        </option>
       </select>
     </div>
 

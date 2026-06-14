@@ -1,0 +1,96 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4 class="mb-0">Editar Sucursal</h4>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="editarForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input
+            id="nombre"
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+          />
+
+          <div
+            class="text-danger mt-1"
+            *ngIf="
+              editarForm.get('nombre')?.invalid &&
+              editarForm.get('nombre')?.touched
+            "
+          >
+            El nombre es obligatorio.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="direccion" class="form-label">Dirección</label>
+          <input
+            id="direccion"
+            type="text"
+            class="form-control"
+            formControlName="direccion"
+          />
+
+          <div
+            class="text-danger mt-1"
+            *ngIf="
+              editarForm.get('direccion')?.invalid &&
+              editarForm.get('direccion')?.touched
+            "
+          >
+            La dirección es obligatoria.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="telefono" class="form-label">Teléfono</label>
+          <input
+            id="telefono"
+            type="text"
+            class="form-control"
+            formControlName="telefono"
+          />
+
+          <div
+            class="text-danger mt-1"
+            *ngIf="
+              editarForm.get('telefono')?.invalid &&
+              editarForm.get('telefono')?.touched
+            "
+          >
+            El teléfono es obligatorio.
+          </div>
+        </div>
+
+        <div class="form-check mb-4">
+          <input
+            id="estado"
+            type="checkbox"
+            class="form-check-input"
+            formControlName="estado"
+          />
+
+          <label class="form-check-label" for="estado"> Sucursal Activa </label>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="editarForm.invalid"
+          >
+            Guardar Cambios
+          </button>
+
+          <button type="button" class="btn btn-secondary" (click)="volver()">
+            Volver
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -31,6 +31,9 @@ import { IndexComponent } from './components/Index/index.component';
 import { LoginComponent } from './components/Login/login.component';
 import { PanelControlComponent } from './components/PanelControl/panel-control.component';
 import { authGuard } from './guards/auth.guard';
+import { Registrar } from './components/GestiosProductos/sucursales/registrar/registrar';
+import { Editar } from './components/GestiosProductos/sucursales/editar/editar';
+import { Listar } from './components/GestiosProductos/sucursales/listar/listar';
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -105,6 +108,12 @@ export const routes: Routes = [
 
       /* ================= TARJETAS ================= */
       { path: 'prestamo', component: PrestamosComponent },
+
+      
+      /* ================= PERMISOS ================= */
+      { path: 'registrar-sucursales', component: Registrar },
+      { path: 'editar-sucursales/:id', component: Editar },
+      { path: 'listar-sucursales', component: Listar },
 
       /* ================= DEFAULT ================= */
       { path: '', component: DashboardComponent }, // Cambiado: Usa DashboardComponent como default (asegúrate de que exista)

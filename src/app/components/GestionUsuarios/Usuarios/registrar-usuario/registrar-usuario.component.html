@@ -17,7 +17,7 @@
         *ngIf="mensajeNombre"
         [ngClass]="{
           'alert alert-danger': !exitoNombre,
-          'alert alert-success': exitoNombre
+          'alert alert-success': exitoNombre,
         }"
       >
         {{ mensajeNombre }}
@@ -38,7 +38,7 @@
         *ngIf="mensajeApellido"
         [ngClass]="{
           'alert alert-danger': !exitoApellido,
-          'alert alert-success': exitoApellido
+          'alert alert-success': exitoApellido,
         }"
       >
         {{ mensajeApellido }}
@@ -62,7 +62,7 @@
         *ngIf="mensajeFechaNacimiento"
         [ngClass]="{
           'alert alert-danger': !exitoFechaNacimiento,
-          'alert alert-success': exitoFechaNacimiento
+          'alert alert-success': exitoFechaNacimiento,
         }"
       >
         {{ mensajeFechaNacimiento }}
@@ -85,7 +85,7 @@
         *ngIf="mensajeTelefono"
         [ngClass]="{
           'alert alert-danger': !exitoTelefono,
-          'alert alert-success': exitoTelefono
+          'alert alert-success': exitoTelefono,
         }"
       >
         {{ mensajeTelefono }}
@@ -109,7 +109,7 @@
         *ngIf="mensajeCorreo"
         [ngClass]="{
           'alert alert-danger': !exitoCorreo,
-          'alert alert-success': exitoCorreo
+          'alert alert-success': exitoCorreo,
         }"
       >
         {{ mensajeCorreo }}
@@ -163,7 +163,7 @@
         *ngIf="mensajePassword"
         [ngClass]="{
           'alert alert-success': exitoContrasenia,
-          'alert alert-danger': !exitoContrasenia
+          'alert alert-danger': !exitoContrasenia,
         }"
       >
         {{ mensajePassword }}
@@ -201,7 +201,7 @@
             (blur)="onSelectChange()"
             [ngClass]="{
               'is-invalid': !exitoDepaCI && mensajeDepaCI,
-              'is-valid': exitoDepaCI
+              'is-valid': exitoDepaCI,
             }"
           >
             <option value="">Seleccione un departamento</option>
@@ -224,7 +224,7 @@
       *ngIf="mensajeCI"
       [ngClass]="{
         'alert alert-danger': !exitoCI,
-        'alert alert-success': exitoCI
+        'alert alert-success': exitoCI,
       }"
     >
       {{ mensajeCI }}
@@ -235,10 +235,21 @@
       *ngIf="mensajeDepaCI"
       [ngClass]="{
         'alert alert-danger': !exitoDepaCI,
-        'alert alert-success': exitoDepaCI
+        'alert alert-success': exitoDepaCI,
       }"
     >
       {{ mensajeDepaCI }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label"> Sucursal </label>
+
+      <select class="form-select" formControlName="sucursal_id">
+        <option value="">Seleccione una sucursal</option>
+
+        <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
+          {{ sucursal.nombre }}
+        </option>
+      </select>
     </div>
     <!-- imagenes -->
     <div class="form-group" style="padding-bottom: 30px">

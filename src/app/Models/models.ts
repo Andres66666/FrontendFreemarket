@@ -11,20 +11,29 @@ export interface Permiso {
   estado_Permiso: boolean;
 }
 
+export interface Sucursales {
+  id: number;
+  nombre: string;
+  direccion: string;
+  telefono: string;
+  estado: boolean;
+}
+
 export interface Usuario {
   id: number;
   nombre_usuario: string;
   apellido: string;
-  fecha_nacimiento: Date;
+  fecha_nacimiento: string;
   telefono: string;
   correo: string;
   password: string;
   ci: string;
   ci_departamento: string;
-  fecha_creacion: Date;
-  fecha_actualizacion: Date;
+  fecha_creacion: string;
+  fecha_actualizacion: string;
   estado_Usuario: boolean;
   imagen_url: string;
+  sucursal: Sucursales;
 }
 
 export interface UsuarioRol {
@@ -61,12 +70,14 @@ export interface Producto {
   fecha_creacion: Date;
   fecha_actualizacion: Date;
   estado_equipo: boolean;
+  sucursal: Sucursales;
 }
 
 export interface Venta {
   id: number;
   fecha_venta: Date;
   usuario: Usuario;
+  sucursal: Sucursales;
   estado: string;
   total: number;
 }

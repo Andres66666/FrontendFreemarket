@@ -1,0 +1,129 @@
+<div class="container mt-4">
+  <div class="card shadow-sm border-0">
+
+    <div class="card-header">
+      <h4 class="mb-0">
+        <i class="bi bi-shop me-2"></i>
+        Registrar Sucursal
+      </h4>
+    </div>
+
+    <div class="card-body">
+
+      <form [formGroup]="sucursalForm" (ngSubmit)="register()">
+
+        <!-- Nombre -->
+        <div class="mb-3">
+          <label for="nombre" class="form-label">
+            Nombre de la sucursal
+          </label>
+
+          <input
+            id="nombre"
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            placeholder="Ej: Sucursal Central"
+          />
+
+          <small
+            class="text-danger"
+            *ngIf="
+              sucursalForm.get('nombre')?.invalid &&
+              sucursalForm.get('nombre')?.touched
+            "
+          >
+            El nombre es obligatorio.
+          </small>
+        </div>
+
+        <!-- Dirección -->
+        <div class="mb-3">
+          <label for="direccion" class="form-label">
+            Dirección
+          </label>
+
+          <input
+            id="direccion"
+            type="text"
+            class="form-control"
+            formControlName="direccion"
+            placeholder="Ingrese la dirección"
+          />
+
+          <small
+            class="text-danger"
+            *ngIf="
+              sucursalForm.get('direccion')?.invalid &&
+              sucursalForm.get('direccion')?.touched
+            "
+          >
+            La dirección es obligatoria.
+          </small>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="mb-4">
+          <label for="telefono" class="form-label">
+            Teléfono
+          </label>
+
+          <input
+            id="telefono"
+            type="text"
+            class="form-control"
+            formControlName="telefono"
+            placeholder="77777777"
+          />
+
+          <small
+            class="text-danger"
+            *ngIf="
+              sucursalForm.get('telefono')?.invalid &&
+              sucursalForm.get('telefono')?.touched
+            "
+          >
+            Ingrese un teléfono válido.
+          </small>
+        </div>
+
+        <!-- Botones -->
+        <div class="d-flex gap-2">
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="sucursalForm.invalid"
+          >
+            <i class="bi bi-save me-1"></i>
+            Registrar
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="volver()"
+          >
+            <i class="bi bi-arrow-left me-1"></i>
+            Volver
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<app-ok
+  *ngIf="mensajeModal"
+  [mensaje]="mensajeModal"
+  (close)="manejarOk()">
+</app-ok>
+
+<app-error
+  *ngIf="errorModal"
+  [mensaje]="errorModal"
+  (close)="manejarError()">
+</app-error>

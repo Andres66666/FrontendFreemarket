@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { Usuario } from '../../../../Models/models';
+import { Sucursales, Usuario } from '../../../../Models/models';
 
 @Component({
   selector: 'app-listar-usuario',
@@ -23,7 +23,8 @@ export class ListarUsuarioComponent implements OnInit {
   page: number = 1;
   pageSize: number = 5;
   paginatedUsuario: Usuario[] = [];
-
+  sucursal: Sucursales | null = null;
+  
   constructor(private servicesService: ServicesService,private router: Router,) {}
 
   ngOnInit(): void {
@@ -31,10 +32,22 @@ export class ListarUsuarioComponent implements OnInit {
   }
   getUsuarios() {
     this.servicesService.getUsuarios().subscribe((data) => {
+      console.log(data);
       this.usuarios = data;
       this.ordenarUsuariosPorId();
       this.updatePaginatedUsuario();
     });
+  }
+  
+  getSucursalById(id: number) {
+    this.servicesService.getSucursalesById(id).subscribe(
+      (data) => {
+        this.sucursal = data;
+      },
+      (error) => {
+        console.error('Error al obtener la sucursal:', error);
+      }
+    );
   }
   editarUsuario(id: number) {
     this.router.navigate(['panel-control/editar-usuarios', id]);

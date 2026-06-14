@@ -8,6 +8,7 @@ import {
   Producto,
   Role,
   RolePermiso,
+  Sucursales,
   Usuario,
   UsuarioRol,
   Venta,
@@ -25,13 +26,16 @@ interface LoginResponse {
   apellido: string; // Agregar esta línea
   imagen_url: string; // Agregar esta línea
   usuario_id: number; // Agregar esta línea
+
+    sucursal_id: number;
+  sucursal_nombre: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ServicesService {
-  /*   private apiUrl = 'http://localhost:8000/api/'; */
+/*     private apiUrl = 'http://localhost:8000/api/'; */
   private apiUrl = 'https://backendfreemarket-1.onrender.com/api/';
 
   private productosSubject = new BehaviorSubject<Producto[]>([]);
@@ -70,11 +74,29 @@ export class ServicesService {
                 imagen_url: response.imagen_url,
                 usuario_id: response.usuario_id,
                 rol: response.roles[0],
+
+                // NUEVO
+                sucursal_id: response.sucursal_id,
+                sucursal_nombre: response.sucursal_nombre,
               }),
             );
           }
         }),
       );
+  }
+
+  getSucursalLocalStorage() {
+    const usuario = localStorage.getItem('usuario');
+    if (!usuario) {
+      return null;
+    }
+
+    const data = JSON.parse(usuario);
+
+    return {
+      id: data.sucursal_id,
+      nombre: data.sucursal_nombre,
+    };
   }
   getRolesFromLocalStorage(): string[] {
     const roles = localStorage.getItem('roles');
@@ -84,6 +106,7 @@ export class ServicesService {
     const user = localStorage.getItem('usuario');
     return user ? JSON.parse(user) : null;
   }
+
   isAuthenticated(): boolean {
     return localStorage.getItem('token') !== null;
   }
@@ -135,6 +158,7 @@ export class ServicesService {
       estado_Usuario: estado_Usuario ? 'true' : 'false',
     });
   }
+  
   // Cambia el nombre de editarUsuario a actualizarUsuario
   actualizarUsuario(id: number, usuario: Usuario): Observable<Usuario> {
     return this.http.put<Usuario>(`${this.apiUrl}usuarios/${id}/`, usuario);
@@ -183,6 +207,32 @@ export class ServicesService {
       estado_Permiso: estado_Permiso ? 'true' : 'false',
     });
   }
+   /* ---------------------------- Sucursales ---------------------------- */
+
+    getSucursales(): Observable<Sucursales[]> {
+      return this.http.get<Sucursales[]>(`${this.apiUrl}sucursales/`);
+    }
+    
+    // Obtener una sucursal por ID
+    getSucursalesById(id: number): Observable<Sucursales> {
+      return this.http.get<Sucursales>(`${this.apiUrl}sucursales/${id}/`);
+    }
+
+    registrarSucursales(sucursales: Sucursales): Observable<Sucursales> {
+      return this.http.post<Sucursales>(`${this.apiUrl}sucursales/`, sucursales);
+    }
+    editarSucursales(id: number, sucursales: Sucursales): Observable<Sucursales> {
+      return this.http.put<Sucursales>(`${this.apiUrl}sucursales/${id}/`, sucursales);
+    }
+    actualizarEstadoSucursales(
+      id: number,
+      estado_Sucursal: boolean,
+    ): Observable<any> {
+      return this.http.put(`${this.apiUrl}sucursales/${id}/`, {
+        estado_Sucursal: estado_Sucursal ? 'true' : 'false',
+      });
+    }
+
 
   /* ---------------------------- UsuarioRol ---------------------------- */
 
@@ -288,7 +338,13 @@ export class ServicesService {
       estado_equipo: estado_equipo ? 'true' : 'false',
     });
   }
-
+  getProductosPorSucursal(
+    sucursalId: number
+  ): Observable<Producto[]> {
+    return this.http.get<Producto[]>(
+      `${this.apiUrl}productos/sucursal/${sucursalId}/`
+    );
+  }
   /* ---------------------------- VENTAS ---------------------------- */
 
   getVentas(): Observable<Venta[]> {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ServicesService } from '../../../../Services/services.service';
-import { Usuario } from '../../../../Models/models';
+import { Sucursales, Usuario } from '../../../../Models/models';
 import { CommonModule } from '@angular/common';
 import { OkComponent } from "../../../Mensajes/ok/ok.component";
 import { ErrorComponent } from "../../../Mensajes/error/error.component";
@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
   templateUrl: './registrar-usuario.component.html',
   styleUrl: './registrar-usuario.component.css',
 })
-export class RegistrarUsuarioComponent {
+export class RegistrarUsuarioComponent implements OnInit {
   usuarioForm: FormGroup; // Formulario reactivo para registrar un usuario
 
   mensajeNombre: string = '';
@@ -55,6 +55,7 @@ export class RegistrarUsuarioComponent {
 
   mensajeModal: string = ''; // Mensaje para el modal
   errorModal: string = '';
+  sucursales: Sucursales[] = [];
 
   constructor(private fb: FormBuilder, private userService: ServicesService,private router: Router) {
     this.usuarioForm = this.fb.group({
@@ -67,6 +68,22 @@ export class RegistrarUsuarioComponent {
       ci: ['', Validators.required],
       ci_departamento: ['', Validators.required],
       imagen_url: [''],
+      sucursal_id: ['', Validators.required],
+    });
+  }
+  ngOnInit(): void {
+    this.listarSucursales();
+  }
+  listarSucursales(): void {
+    this.userService.getSucursales().subscribe({
+      next: (data) => {
+        this.sucursales = data.filter(
+          (s) => s.estado === true
+        );
+      },
+      error: (error) => {
+        console.error(error);
+      }
     });
   }
   // Método para registrar un nuevo usuario

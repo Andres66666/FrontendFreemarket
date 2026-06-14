@@ -73,6 +73,7 @@
         <th>Código</th>
         <th class="d-none d-lg-table-cell">Descripción</th>
         <th>Categoría</th>
+        <th>Sucursal</th>
         <th>Precio</th>
         <th class="d-none d-lg-table-cell">Mayor</th>
         <th (click)="ordenarPorStock()" style="cursor: pointer">Stock</th>
@@ -112,6 +113,9 @@
           {{ producto.descripcion }}
         </td>
         <td class="fs-xxs">{{ producto.categoria.nombre_categoria }}</td>
+        <td class="fs-xxs">
+          {{ producto.sucursal.nombre || "Sin sucursal" }}
+        </td>
         <td class="fs-xs text-success">Bs {{ producto.precio_unitario }}</td>
         <td class="d-none d-lg-table-cell fs-xs text-warning">
           Bs {{ producto.precio_mayor }}

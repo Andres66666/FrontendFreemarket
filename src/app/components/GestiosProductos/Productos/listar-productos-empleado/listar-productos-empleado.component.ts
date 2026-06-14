@@ -13,7 +13,6 @@ import {
   Categoria,
   DetalleVenta,
   Producto,
-  Usuario,
   Venta,
 } from '../../../../Models/models';
 import { ServicesService } from '../../../../Services/services.service';
@@ -41,9 +40,6 @@ import { EjBarraComponent } from '../../ej-barra/ej-barra.component';
 export class ListarProductosEmpleadoComponent implements OnInit {
   productos: Producto[] = [];
   categorias: Categoria[] = [];
-  ventas: Venta[] = [];
-  usuarios: Usuario[] = [];
-  detalleVentas: DetalleVenta[] = [];
 
   ok: string = '';
   error: string = '';
@@ -85,6 +81,9 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   isDesktop: boolean = false;
   modalVisible: boolean = false;
   imageToShow: string = '';
+
+  sucursal_id: number = 0;
+  sucursal_nombre: string = '';
   constructor(
     private productoService: ServicesService,
     private fb: FormBuilder,
@@ -105,29 +104,29 @@ export class ListarProductosEmpleadoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUsuarios();
-    this.getProductos();
-    this.getCategorias();
-    this.getVentas();
-
     this.recuperarUsuario();
-
+    this.getCategorias();
     this.detallesAbiertos = new Array(200).fill(false);
 
     this.checkScreenSize();
     window.addEventListener('resize', () => this.checkScreenSize());
-    this.actualizarNombresPorCategoria();
   }
 
-  getVentas() {
-    this.productoService.getVentas().subscribe((data) => {
-      this.ventas = data;
-    });
-  }
+  cargarProductosSucursal() {
+    if (!this.sucursal_id) {
+      this.error = 'Usuario sin sucursal asignada';
+      return;
+    }
 
-  getProductos() {
-    this.productoService.getProductos().subscribe((data) => {
-      this.productos = data;
+    this.productoService.getProductosPorSucursal(this.sucursal_id).subscribe({
+      next: (productos) => {
+        this.productos = productos;
+        this.actualizarNombresPorCategoria();
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Error al cargar productos de la sucursal';
+      },
     });
   }
 
@@ -137,35 +136,28 @@ export class ListarProductosEmpleadoComponent implements OnInit {
     });
   }
 
-  getUsuarios() {
-    this.productoService.getUsuarios().subscribe((data) => {
-      this.usuarios = data;
-    });
-  }
-
   recuperarUsuario() {
     const usuario = this.getUsuarioLocalStorage();
+
     if (!usuario) return;
 
     this.nombre_usuario = usuario.nombre_usuario || '';
     this.apellido = usuario.apellido || '';
     this.usuario_id = usuario.usuario_id || 0;
+    this.sucursal_id = usuario.sucursal_id || 0;
+    this.sucursal_nombre = usuario.sucursal_nombre || '';
+
+    this.cargarProductosSucursal();
 
     const roles = this.productoService.getRolesFromLocalStorage();
+
     this.mostrarPrecioMayor = !this.tieneRolOcultarPrecio(roles);
 
-    this.productoService
-      .verificarUsuario(this.usuario_id)
-      .subscribe((usuarioExistente) => {
-        if (!usuarioExistente) return;
-
-        const usuarioSeleccionado = this.usuarios.find(
-          (u) => u.id === this.usuario_id,
-        );
-        if (usuarioSeleccionado) {
-          this.ventaForm.patchValue({ usuario: usuarioSeleccionado });
-        }
+    this.productoService.getUserById(this.usuario_id).subscribe((usuario) => {
+      this.ventaForm.patchValue({
+        usuario: usuario,
       });
+    });
   }
 
   private getUsuarioLocalStorage() {
@@ -400,17 +392,21 @@ export class ListarProductosEmpleadoComponent implements OnInit {
 
   registrarVenta() {
     if (!(this.ventaForm.valid && this.detalleVenta.length > 0)) return;
-
     const { usuario, estado } = this.ventaForm.value;
-
     const nuevaVenta: Venta = {
       id: 0,
       usuario: { ...usuario },
+      sucursal: {
+        id: this.sucursal_id,
+        nombre: this.sucursal_nombre,
+        direccion: '',
+        telefono: '',
+        estado: true,
+      },
       estado,
       total: this.totalVenta,
       fecha_venta: new Date(),
     };
-
     this.productoService.crearVenta(nuevaVenta).subscribe(
       (response) => {
         this.idVentaActual = response.id;
@@ -454,10 +450,8 @@ export class ListarProductosEmpleadoComponent implements OnInit {
       next: (responses) => {
         console.log('✅ Todos los detalles creados', responses);
 
-        // ✅ AHORA SÍ actualiza correctamente
-        this.getProductos();
+        this.cargarProductosSucursal();
 
-        // Reset
         this.detalleVenta = [];
         this.totalVenta = 0;
         this.idVentaActual = null;

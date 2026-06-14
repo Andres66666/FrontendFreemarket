@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Categoria, Producto } from '../../../../Models/models';
+import { Categoria, Producto, Sucursales } from '../../../../Models/models';
 import { ServicesService } from '../../../../Services/services.service';
 import { ErrorComponent } from '../../../Mensajes/error/error.component';
 import { OkComponent } from '../../../Mensajes/ok/ok.component';
@@ -22,6 +22,7 @@ import { OkComponent } from '../../../Mensajes/ok/ok.component';
 export class EditarProductoComponent implements OnInit {
   producto!: Producto;
   categorias: Categoria[] = [];
+  sucursales: Sucursales[] = [];
   form!: FormGroup;
   mensajeModal: string = '';
   errorModal: string = '';
@@ -33,14 +34,29 @@ export class EditarProductoComponent implements OnInit {
     private router: Router,
   ) {}
 
+
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.loadCategorias();
+    this.loadSucursales();
+
     if (id) {
       this.loadProductoData(id);
-      this.loadCategorias();
     }
   }
-
+  loadSucursales(): void {
+    this.productosService.getSucursales().subscribe({
+      next: (data) => {
+        this.sucursales = data.filter(
+          (sucursal) => sucursal.estado
+        );
+      },
+      error: (err) => {
+        console.error('Error cargando sucursales:', err);
+      },
+    });
+  }
   loadProductoData(id: number) {
     this.productosService.getProductoById(id).subscribe({
       next: (data) => {
@@ -79,36 +95,50 @@ export class EditarProductoComponent implements OnInit {
     this.form = new FormGroup({
       nombre_producto: new FormControl(
         this.producto.nombre_producto,
-        Validators.required,
+        Validators.required
       ),
-      descripcion: new FormControl(this.producto.descripcion),
-      precio_compra: new FormControl(this.producto.precio_compra, [
-        Validators.required,
-        Validators.min(0),
-      ]),
-      precio_unitario: new FormControl(this.producto.precio_unitario, [
-        Validators.required,
-        Validators.min(0),
-      ]),
-      precio_mayor: new FormControl(this.producto.precio_mayor, [
-        Validators.required,
-        Validators.min(0),
-      ]),
-      stock: new FormControl(this.producto.stock, [
-        Validators.required,
-        Validators.min(0),
-      ]),
+
+      descripcion: new FormControl(
+        this.producto.descripcion
+      ),
+
+      precio_compra: new FormControl(
+        this.producto.precio_compra,
+        [Validators.required, Validators.min(0)]
+      ),
+
+      precio_unitario: new FormControl(
+        this.producto.precio_unitario,
+        [Validators.required, Validators.min(0)]
+      ),
+
+      precio_mayor: new FormControl(
+        this.producto.precio_mayor,
+        [Validators.required, Validators.min(0)]
+      ),
+
+      stock: new FormControl(
+        this.producto.stock,
+        [Validators.required, Validators.min(0)]
+      ),
+
       codigo_producto: new FormControl(
         this.producto.codigo_producto,
-        Validators.required,
+        Validators.required
       ),
+
       categoria: new FormControl(
         this.producto.categoria.id,
-        Validators.required,
+        Validators.required
+      ),
+
+      // NUEVO
+      sucursal_id: new FormControl(
+        this.producto.sucursal?.id,
+        Validators.required
       ),
     });
   }
-
   onSubmit(): void {
   if (this.form.valid) {
 
@@ -152,6 +182,10 @@ export class EditarProductoComponent implements OnInit {
     formData.append(
       'categoria',
       this.form.value.categoria
+    );
+    formData.append(
+      'sucursal_id',
+      this.form.value.sucursal_id
     );
 
     // Nueva imagen (opcional)

@@ -1,4 +1,5 @@
-import { ServicesService } from '../../../../Services/services.service';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -6,13 +7,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../../../../Models/models';
-import { CommonModule } from '@angular/common';
+import { ServicesService } from '../../../../Services/services.service';
+import { Sucursales, Usuario } from '../../../../Models/models';
+
 import { OkComponent } from '../../../Mensajes/ok/ok.component';
 import { ErrorComponent } from '../../../Mensajes/error/error.component';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-editar-usuario',
@@ -29,15 +30,59 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class EditarUsuarioComponent implements OnInit {
   usuario!: Usuario;
-  editarForm!: FormGroup;
 
-  mensajeNombre: string = '';
-  exitoNombre: boolean = false;
+  sucursales: Sucursales[] = [];
+
+  mensajeNombre = '';
+  exitoNombre = false;
 
   imagenPreview: string | ArrayBuffer | null = null;
 
-  mensajeModal: string = '';
-  errorModal: string = '';
+  mensajeModal = '';
+  errorModal = '';
+
+  editarForm = new FormGroup({
+    nombre_usuario: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+
+    apellido: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+
+    fecha_nacimiento: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+
+    telefono: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+
+    correo: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+
+    ci: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+
+    ci_departamento: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+
+    sucursal_id: new FormControl<number | null>(null, {
+      validators: [Validators.required],
+    }),
+
+    imagen_url: new FormControl<File | string | null>(null),
+  });
 
   constructor(
     private servicesService: ServicesService,
@@ -47,99 +92,150 @@ export class EditarUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.getSucursales();
+
     if (id) {
       this.loadUserData(id);
     }
+  }
+
+  getSucursales(): void {
+    this.servicesService.getSucursales().subscribe({
+      next: (data) => {
+        this.sucursales = data.filter((s) => s.estado);
+      },
+      error: (error) => {
+        console.error('Error al cargar sucursales', error);
+        this.errorModal = 'Error al cargar sucursales';
+      },
+    });
   }
 
   loadUserData(id: number): void {
     this.servicesService.getUserById(id).subscribe({
       next: (data) => {
         this.usuario = data;
-        this.initializeForm();
-        this.imagenPreview = this.usuario.imagen_url;
+
+        const fecha = data.fecha_nacimiento
+          ? new Date(data.fecha_nacimiento)
+              .toISOString()
+              .split('T')[0]
+          : '';
+
+        this.editarForm.patchValue({
+          nombre_usuario: data.nombre_usuario,
+          apellido: data.apellido,
+          fecha_nacimiento: fecha,
+          telefono: data.telefono,
+          correo: data.correo,
+          ci: data.ci,
+          ci_departamento: data.ci_departamento,
+          sucursal_id: data.sucursal?.id ?? null,
+          imagen_url: data.imagen_url,
+        });
+
+        this.imagenPreview = data.imagen_url;
       },
-      error: () => {
+      error: (error) => {
+        console.error(error);
         this.errorModal = 'Error al cargar los datos del usuario';
       },
     });
   }
 
-  initializeForm(): void {
-    this.editarForm = new FormGroup({
-      nombre_usuario: new FormControl(
-        this.usuario.nombre_usuario,
-        Validators.required
-      ),
-      apellido: new FormControl(this.usuario.apellido, Validators.required),
-      fecha_nacimiento: new FormControl(
-        this.usuario.fecha_nacimiento,
-        Validators.required
-      ),
-      telefono: new FormControl(this.usuario.telefono, Validators.required),
-      correo: new FormControl(this.usuario.correo, [
-        Validators.required,
-        Validators.email,
-      ]),
-      ci: new FormControl(this.usuario.ci, Validators.required),
-      ci_departamento: new FormControl(
-        this.usuario.ci_departamento,
-        Validators.required
-      ),
-      imagen_url: new FormControl(this.usuario.imagen_url),
-    });
-  }
-
   onImageChange(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagenPreview = reader.result;
-      };
-      reader.readAsDataURL(file);
-      this.editarForm.patchValue({ imagen_url: file });
-    }
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.imagenPreview = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+
+    this.editarForm.patchValue({
+      imagen_url: file,
+    });
   }
 
   onSubmit(): void {
     if (this.editarForm.invalid) {
       this.editarForm.markAllAsTouched();
-      this.errorModal = 'Por favor, complete todos los campos requeridos.';
+
+      this.errorModal =
+        'Por favor complete todos los campos requeridos';
+
+      return;
+    }
+
+    if (!this.usuario) {
+      this.errorModal = 'Usuario no encontrado';
       return;
     }
 
     const updateUsuario = new FormData();
-    updateUsuario.append('id', this.usuario.id.toString());
+
     updateUsuario.append(
       'nombre_usuario',
-      this.editarForm.value.nombre_usuario
-    );
-    updateUsuario.append('apellido', this.editarForm.value.apellido);
-    updateUsuario.append(
-      'fecha_nacimiento',
-      this.editarForm.value.fecha_nacimiento
-    );
-    updateUsuario.append('telefono', this.editarForm.value.telefono);
-    updateUsuario.append('correo', this.editarForm.value.correo);
-    updateUsuario.append('ci', this.editarForm.value.ci);
-    updateUsuario.append(
-      'ci_departamento',
-      this.editarForm.value.ci_departamento
+      this.editarForm.controls.nombre_usuario.value
     );
 
-    if (this.editarForm.value.imagen_url instanceof File) {
-      updateUsuario.append('imagen_url', this.editarForm.value.imagen_url);
+    updateUsuario.append(
+      'apellido',
+      this.editarForm.controls.apellido.value
+    );
+
+    updateUsuario.append(
+      'fecha_nacimiento',
+      this.editarForm.controls.fecha_nacimiento.value
+    );
+
+    updateUsuario.append(
+      'telefono',
+      this.editarForm.controls.telefono.value
+    );
+
+    updateUsuario.append(
+      'correo',
+      this.editarForm.controls.correo.value
+    );
+
+    updateUsuario.append(
+      'ci',
+      this.editarForm.controls.ci.value
+    );
+
+    updateUsuario.append(
+      'ci_departamento',
+      this.editarForm.controls.ci_departamento.value
+    );
+
+    updateUsuario.append(
+      'sucursal_id',
+      String(this.editarForm.controls.sucursal_id.value)
+    );
+
+    const imagen = this.editarForm.controls.imagen_url.value;
+
+    if (imagen instanceof File) {
+      updateUsuario.append('imagen_url', imagen);
     }
 
     this.servicesService
       .editarUsuario(this.usuario.id, updateUsuario)
       .subscribe({
         next: () => {
-          this.mensajeModal = 'Usuario actualizado exitosamente';
+          this.mensajeModal =
+            'Usuario actualizado exitosamente';
         },
-        error: () => {
-          this.errorModal = 'Error al actualizar el usuario';
+        error: (error) => {
+          console.error(error);
+          this.errorModal =
+            'Error al actualizar el usuario';
         },
       });
   }
@@ -157,37 +253,52 @@ export class EditarUsuarioComponent implements OnInit {
     this.errorModal = '';
   }
 
-  /* VALIDACIÓN NOMBRE */
-  validarNombre(event: FocusEvent | KeyboardEvent | null = null): boolean {
+  validarNombre(
+    event: FocusEvent | KeyboardEvent | null = null
+  ): boolean {
     let inputElement: HTMLInputElement | null;
 
     inputElement = event
       ? (event.target as HTMLInputElement)
-      : (document.getElementById('nombre_usuario') as HTMLInputElement);
+      : (document.getElementById(
+          'nombre_usuario'
+        ) as HTMLInputElement);
 
     const nombre = inputElement.value.trim();
 
     if (event instanceof FocusEvent && !nombre) {
-      this.mensajeNombre = 'Ingresa su nombre, por favor';
+      this.mensajeNombre =
+        'Ingresa su nombre, por favor';
+
       inputElement.classList.add('is-invalid');
+
       return false;
     }
 
     if (event instanceof KeyboardEvent) {
       const char = String.fromCharCode(event.keyCode);
-      if (!/^[a-zA-Z ]$/.test(char)) {
+
+      if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]$/.test(char)) {
         event.preventDefault();
-        this.mensajeNombre = 'No se puede ingresar datos numéricos';
+
+        this.mensajeNombre =
+          'No se puede ingresar datos numéricos';
+
         inputElement.classList.add('is-invalid');
+
         return false;
       }
     }
 
     if (nombre) {
       this.mensajeNombre = 'Datos correctos';
+
       inputElement.classList.remove('is-invalid');
       inputElement.classList.add('is-valid');
-      setTimeout(() => (this.mensajeNombre = ''), 2000);
+
+      setTimeout(() => {
+        this.mensajeNombre = '';
+      }, 2000);
     }
 
     return true;
