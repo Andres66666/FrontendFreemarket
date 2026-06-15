@@ -19,7 +19,6 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./perfil.component.css'],
 })
 export class PerfilComponent implements OnInit {
-  usuarios: Usuario[] = [];
   usuario_id: number = 0;
   usuarioSeleccionado: Usuario | null = null;
   form: FormGroup;
@@ -45,14 +44,9 @@ export class PerfilComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUsuarios();
     this.recuperarUsuario();
   }
-  getUsuarios() {
-    this.perfilService.getUsuarios().subscribe((data) => {
-      this.usuarios = data;
-    });
-  }
+
   private getUsuarioLocalStorage() {
     if (typeof window !== 'undefined') {
       try {
@@ -65,26 +59,24 @@ export class PerfilComponent implements OnInit {
     }
     return null;
   }
-
   recuperarUsuario() {
     const usuario = this.getUsuarioLocalStorage();
-    if (usuario) {
-      this.usuario_id = usuario.usuario_id || 0;
 
-      this.perfilService
-        .verificarUsuario(this.usuario_id)
-        .subscribe((usuarioExistente) => {
-          if (usuarioExistente) {
-            const usuarioSeleccionado = this.usuarios.find(
-              (u) => u.id === this.usuario_id
-            );
-            if (usuarioSeleccionado) {
-              this.usuarioSeleccionado = usuarioSeleccionado;
-              this.cargarDatosEnFormulario(usuarioSeleccionado);
-            }
-          }
-        });
-    }
+    if (!usuario) return;
+
+    this.usuario_id = usuario.usuario_id;
+
+    this.perfilService
+      .getUserById(this.usuario_id)
+      .subscribe({
+        next: (data) => {
+          this.usuarioSeleccionado = data;
+          this.cargarDatosEnFormulario(data);
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
   }
 
   private cargarDatosEnFormulario(usuario: Usuario) {
