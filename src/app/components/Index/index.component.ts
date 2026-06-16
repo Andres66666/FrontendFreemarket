@@ -118,14 +118,22 @@ export class IndexComponent implements OnInit {
       },
     });
   }
+
   get celularesHero(): Producto[] {
     return this.productos
-      .filter(
-        p =>
+      .filter((p) => {
+        const tieneImagen =
+          p.imagen_productos &&
+          typeof p.imagen_productos === 'string' &&
+          p.imagen_productos.trim().length > 0;
+
+        const esCelular =
           p.categoria?.nombre_categoria
             ?.toLowerCase()
-            .includes('celular')
-      )
+            .includes('celulares');
+
+        return esCelular && tieneImagen;
+      })
       .slice(0, 5);
   }
   // ==========================
