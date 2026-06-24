@@ -2,10 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   Categoria,
+  Cliente,
+  Credito,
   DetalleVenta,
   Efectivo,
+  PagoCredito,
   Permiso,
   Producto,
+  ReciboCredito,
   Role,
   RolePermiso,
   Sucursales,
@@ -623,4 +627,159 @@ export class ServicesService {
   actualizarEfectivo(id: number, efectivo: Efectivo): Observable<Efectivo> {
     return this.http.put<Efectivo>(`${this.apiUrl}efectivo/${id}/`, efectivo);
   }
+
+
+  /* nueva seccion de celulares a creditos  */
+  /* ==================== CLIENTES ==================== */
+
+getClientes(): Observable<Cliente[]> {
+  return this.http.get<Cliente[]>(`${this.apiUrl}clientes/`);
 }
+
+getClienteById(id: number): Observable<Cliente> {
+  return this.http.get<Cliente>(`${this.apiUrl}clientes/${id}/`);
+}
+
+buscarClientePorCi(ci: string): Observable<Cliente> {
+  return this.http.get<Cliente>(
+    `${this.apiUrl}clientes/buscar/${ci}/`
+  );
+}
+
+crearCliente(cliente: Cliente): Observable<Cliente> {
+  return this.http.post<Cliente>(
+    `${this.apiUrl}clientes/`,
+    cliente
+  );
+}
+
+actualizarCliente(
+  id: number,
+  cliente: Cliente
+): Observable<Cliente> {
+  return this.http.put<Cliente>(
+    `${this.apiUrl}clientes/${id}/`,
+    cliente
+  );
+}
+
+  /* ========================= CREDITOS ========================= */
+
+  getCreditos(): Observable<Credito[]> {
+    return this.http.get<Credito[]>(`${this.apiUrl}creditos/`);
+  }
+
+  getCreditoById(id: number): Observable<Credito> {
+    return this.http.get<Credito>(`${this.apiUrl}creditos/${id}/`);
+  }
+
+  crearCredito(data: any): Observable<Credito> {
+    return this.http.post<Credito>(
+      `${this.apiUrl}creditos/`,
+      data
+    );
+  }
+
+  actualizarCredito(
+    id: number,
+    data: any
+  ): Observable<Credito> {
+    return this.http.put<Credito>(
+      `${this.apiUrl}creditos/${id}/`,
+      data
+    );
+  }
+
+  eliminarCredito(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}creditos/${id}/`);
+  }
+
+
+  /* ========================= PAGOS DE CREDITO ========================= */
+
+  getPagosCredito(): Observable<PagoCredito[]> {
+    return this.http.get<PagoCredito[]>(
+      `${this.apiUrl}pagoscredito/`
+    );
+  }
+
+  getPagoCreditoById(id: number): Observable<PagoCredito> {
+    return this.http.get<PagoCredito>(
+      `${this.apiUrl}pagoscredito/${id}/`
+    );
+  }
+
+  crearPagoCredito(data: any): Observable<PagoCredito> {
+    return this.http.post<PagoCredito>(
+      `${this.apiUrl}pagoscredito/`,
+      data
+    );
+  }
+
+  actualizarPagoCredito(
+    id: number,
+    data: any
+  ): Observable<PagoCredito> {
+    return this.http.put<PagoCredito>(
+      `${this.apiUrl}pagoscredito/${id}/`,
+      data
+    );
+  }
+
+  eliminarPagoCredito(id: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}pagoscredito/${id}/`
+    );
+  }
+
+  
+  /* ========================= RECIBOS DE CREDITO ========================= */
+
+  getRecibosCredito(): Observable<ReciboCredito[]> {
+    return this.http.get<ReciboCredito[]>(
+      `${this.apiUrl}reciboscredito/`
+    );
+  }
+
+  getReciboCreditoById(
+    id: number
+  ): Observable<ReciboCredito> {
+    return this.http.get<ReciboCredito>(
+      `${this.apiUrl}reciboscredito/${id}/`
+    );
+  }
+
+  crearReciboCredito(data: any): Observable<ReciboCredito> {
+    return this.http.post<ReciboCredito>(
+      `${this.apiUrl}reciboscredito/`,
+      data
+    );
+  }
+
+  actualizarReciboCredito(
+    id: number,
+    data: any
+  ): Observable<ReciboCredito> {
+    return this.http.put<ReciboCredito>(
+      `${this.apiUrl}reciboscredito/${id}/`,
+      data
+    );
+  }
+
+  eliminarReciboCredito(id: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}reciboscredito/${id}/`
+    );
+  }
+  /* ==================== RECIBOS ==================== */
+
+  getReciboById(
+    id: number
+  ): Observable<ReciboCredito> {
+    return this.http.get<ReciboCredito>(
+      `${this.apiUrl}reciboscredito/${id}/`
+    );
+  }
+}
+
+

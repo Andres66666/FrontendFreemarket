@@ -108,3 +108,44 @@ export interface Efectivo {
   total: number;
   fecha_creacion: Date;
 }
+
+/* nueva seccion de creditos  */
+export interface Cliente {
+  id: number;
+  nombre: string;
+  apellido: string;
+  ci: string;
+  telefono: string;
+  descripcion: string;
+}
+
+export interface Credito {
+  id: number;
+  cliente: Cliente;
+  producto: Producto;
+  usuario: Usuario;
+  fecha_credito: Date;
+  precio_total: number;
+  cantidad_cuotas: number;
+  cuota_mensual: number;
+  cuotas_pagadas: number;
+  saldo_pendiente: number;
+  estado: 'PENDIENTE' | 'PAGANDO' | 'PAGADO';
+  stock_descontado: boolean;
+}
+
+export interface PagoCredito {
+  id: number;
+  credito: Credito;
+  numero_cuota: number;
+  monto_pagado: number;
+  fecha_pago: Date;
+  observacion: string;
+}
+
+export interface ReciboCredito {
+  id: number;
+  pago: PagoCredito;
+  numero_recibo: string;
+  fecha_emision: Date;
+}

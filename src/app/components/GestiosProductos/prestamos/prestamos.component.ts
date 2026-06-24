@@ -40,6 +40,9 @@ export class PrestamosComponent {
   totalIntereses = 0;
   ganancia = 0;
 
+  nombreCliente: string = '';
+  carnetCliente: string = '';
+  celularCliente: string = '';
   // ================== FORMATEO ==================
   formatearNumero(valor: number): string {
     return new Intl.NumberFormat('es-BO', {
@@ -160,35 +163,80 @@ export class PrestamosComponent {
       align: 'center',
     });
 
-    // ================== DATOS ==================
+    // ================== DATOS CLIENTE ==================
     doc.setFontSize(10);
-    doc.text(`Monto: Bs ${this.montoRaw.toFixed(2)}`, 14, 25);
-    doc.text(`Interés: ${this.interes}%`, 14, 30);
-    doc.text(`Periodo: ${this.anios} ${this.periodoTipo}`, 14, 35);
+
+    doc.text(`Nombre Cliente: ${this.nombreCliente}`, 14, 25);
+    doc.text(`Carnet: ${this.carnetCliente}`, 14, 31);
+    doc.text(`Celular: ${this.celularCliente}`, 14, 37);
+
+    // ================== DATOS DEL PRESTAMO ==================
+    doc.text(
+      `Monto (Bs): ${this.montoRaw.toLocaleString('es-BO', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`,
+      110,
+      25
+    );
+
+    doc.text(`Interés (%): ${this.interes}`, 110, 31);
 
     doc.text(
-      `Fecha inicio: ${
-        this.fechaInicio
-          ? new Date(this.fechaInicio).toLocaleDateString()
-          : new Date().toLocaleDateString()
+      `Tiempo: ${this.anios} ${
+        this.periodoTipo === 'anios'
+          ? 'Años'
+          : this.periodoTipo === 'meses'
+          ? 'Meses'
+          : 'Semanas'
       }`,
-      14,
-      40,
+      110,
+      37
+    );
+
+    doc.text(
+      `Tipo Interés: ${
+        this.tipoInteres === 'anual'
+          ? 'Anual'
+          : this.tipoInteres === 'mensual'
+          ? 'Mensual'
+          : 'Semanal'
+      }`,
+      110,
+      43
+    );
+
+    doc.text(
+      `Forma Pago: ${
+        this.tipoPago === 'mensual' ? 'Mensual' : 'Semanal'
+      }`,
+      110,
+      49
+    );
+
+    doc.text(
+      `Fecha Inicio: ${
+        this.fechaInicio
+          ? new Date(this.fechaInicio).toLocaleDateString('es-BO')
+          : new Date().toLocaleDateString('es-BO')
+      }`,
+      110,
+      55
     );
 
     // ================== TABLA ==================
     const body = this.cuotas.map((c) => [
-      '', // columna checkbox
+      '',
       c.nro,
-      new Date(c.fecha).toLocaleDateString(),
-      c.cuota.toFixed(2),
-      c.interes.toFixed(2),
-      c.amortizacion.toFixed(2),
-      c.saldo.toFixed(2),
+      new Date(c.fecha).toLocaleDateString('es-BO'),
+      this.formatearNumero(c.cuota),
+      this.formatearNumero(c.interes),
+      this.formatearNumero(c.amortizacion),
+      this.formatearNumero(c.saldo),
     ]);
 
     autoTable(doc, {
-      startY: 45,
+      startY: 50,
       head: [['✔', '#', 'Fecha', 'Cuota', 'Interés', 'Amortización', 'Saldo']],
       body: body,
       styles: {
@@ -196,20 +244,51 @@ export class PrestamosComponent {
         halign: 'center',
       },
       columnStyles: {
-        0: { cellWidth: 10 }, // checkbox
+        0: { cellWidth: 10 },
       },
       didDrawCell: (data) => {
-        // SOLO columna checkbox
         if (data.column.index === 0 && data.cell.section === 'body') {
           const x = data.cell.x + 2;
           const y = data.cell.y + 2;
 
-          // dibujar cuadrado
           doc.rect(x, y, 4, 4);
         }
       },
     });
 
+    // ================== RESUMEN ==================
+    const finalTableY = (doc as any).lastAutoTable.finalY + 10;
+    // ================== FIRMA CLIENTE ==================
+    const firmaY = finalTableY + 35;
+
+    // línea firma
+    doc.line(60, firmaY, 150, firmaY);
+
+    doc.setFontSize(10);
+
+    doc.text(
+      this.nombreCliente || 'NOMBRE DEL CLIENTE',
+      105,
+      firmaY + 8,
+      { align: 'center' }
+    );
+
+    doc.text(
+      `C.I. ${this.carnetCliente}`,
+      105,
+      firmaY + 14,
+      { align: 'center' }
+    );
+
+    doc.text(
+      `Cel. ${this.celularCliente}`,
+      105,
+      firmaY + 20,
+      { align: 'center' }
+    );
+
+    doc.setFontSize(11);
+   
     // ================== GUARDAR ==================
     doc.save('plan-pagos.pdf');
   }

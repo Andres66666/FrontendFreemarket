@@ -1,0 +1,11 @@
+.table-success {
+  background-color: #d1e7dd !important;
+}
+
+.table-success td {
+  vertical-align: middle;
+}
+
+.badge {
+  font-size: 0.85rem;
+}

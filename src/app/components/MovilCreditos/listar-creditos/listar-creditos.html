@@ -1,0 +1,126 @@
+<div class="container-fluid py-4">
+  <!-- HEADER -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <div>
+        <h3 class="fw-bold text-dark mb-1">Créditos de Celulares</h3>
+
+        <small class="text-secondary">
+          Administración y seguimiento de créditos
+        </small>
+      </div>
+
+      <button class="btn btn-primary px-4" (click)="nuevoCredito()">
+        Nuevo Crédito
+      </button>
+    </div>
+  </div>
+
+  <!-- BUSCADOR -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <div class="input-group">
+        <span class="input-group-text bg-white"> 🔍 </span>
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar cliente..."
+          (input)="buscar($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  @if (cargando) {
+
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-3 text-muted">Cargando créditos...</p>
+  </div>
+
+  } @else {
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Producto</th>
+              <th>Fecha</th>
+              <th>Total</th>
+              <th>Cuotas</th>
+              <th>Pagadas</th>
+              <th>Saldo</th>
+              <th>Estado</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (credito of creditosFiltrados; track credito.id) {
+
+            <tr>
+              <td class="fw-bold text-dark">#{{ credito.id }}</td>
+
+              <td class="text-dark">
+                {{ credito.cliente.nombre }} {{ credito.cliente.apellido }}
+              </td>
+
+              <td class="text-dark">{{ credito.producto.nombre_producto }}</td>
+
+              <td class="text-dark">
+                {{ credito.fecha_credito | date:'dd/MM/yyyy' }}
+              </td>
+
+              <td class="fw-semibold text-success">
+                {{ credito.precio_total | number:'1.2-2' }} Bs
+              </td>
+
+              <td>
+                <span class="badge bg-light text-dark border">
+                  {{ credito.cantidad_cuotas }}
+                </span>
+              </td>
+
+              <td>
+                <span class="badge bg-light text-dark border">
+                  {{ credito.cuotas_pagadas }}
+                </span>
+              </td>
+
+              <td class="fw-semibold text-danger">
+                {{ credito.saldo_pendiente | number:'1.2-2' }} Bs
+              </td>
+
+              <td>
+                <span
+                  class="badge px-3 py-2 text-dark fw-semibold"
+                  [ngClass]="getEstadoClass(credito.estado)"
+                >
+                  {{ credito.estado }}
+                </span>
+              </td>
+
+              <td class="text-center">
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="verDetalle(credito.id)"
+                >
+                  Ver Detalle
+                </button>
+              </td>
+            </tr>
+
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  }
+</div>

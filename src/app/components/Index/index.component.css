@@ -1,3 +1,40 @@
+/* ==========================================================================
+   FUENTES RESPONSIVE - BASE
+   ========================================================================== */
+
+.fs-xxs { font-size: 0.65rem; }
+.fs-xs  { font-size: 0.75rem; }
+.fs-sm  { font-size: 0.85rem; }
+.fs-md  { font-size: 0.95rem; }
+.fs-lg  { font-size: 1rem; }
+
+/* ==========================================================================
+   CONFIGURACIÓN GLOBAL
+   ========================================================================== */
+
+html,
+body{
+  overflow-x: hidden;
+}
+
+img{
+  max-width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   NAVBAR
+   ========================================================================== */
+
+.navbar-brand img{
+  height: 55px;
+  transition: .3s;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+
 .hero-section{
   background: linear-gradient(
     135deg,
@@ -17,40 +54,8 @@
   box-shadow: 0 20px 60px rgba(0,0,0,.25);
 }
 
-.carousel-frame{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:500px;
-}
-
-.carousel-frame img{
-  max-height:450px;
-  object-fit:contain;
-}
-
-.card{
-  transition:.3s;
-}
-
-.card:hover{
-  transform:translateY(-10px);
-}
-
-footer a{
-  transition:.3s;
-}
-
-footer a:hover{
-  transform:scale(1.15);
-}
-
-
-
-
 .hero-carousel-container{
   height: 550px;
-
   display:flex;
   align-items:center;
   justify-content:center;
@@ -60,13 +65,12 @@ footer a:hover{
   max-height: 500px;
   max-width: 100%;
   object-fit: contain;
-
   filter: drop-shadow(0 25px 35px rgba(0,0,0,.35));
-
   animation: floatPhone 4s ease-in-out infinite;
 }
 
 @keyframes floatPhone{
+
   0%{
     transform: translateY(0);
   }
@@ -80,6 +84,22 @@ footer a:hover{
   }
 }
 
+/* ==========================================================================
+   CAROUSEL
+   ========================================================================== */
+
+.carousel-frame{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:500px;
+}
+
+.carousel-frame img{
+  max-height:450px;
+  object-fit:contain;
+}
+
 .carousel-control-prev,
 .carousel-control-next{
   width: 45px;
@@ -90,7 +110,135 @@ footer a:hover{
   background-size: 70%;
 }
 
-@media (max-width: 768px){
+/* ==========================================================================
+   PRODUCTOS
+   ========================================================================== */
+
+.producto-card{
+  transition: .3s;
+}
+
+.producto-card:hover{
+  transform: translateY(-10px);
+}
+
+.producto-img{
+  height: 180px;
+  object-fit: contain;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+footer a{
+  transition: .3s;
+}
+
+footer a:hover{
+  transform: scale(1.15);
+}
+
+/* ==========================================================================
+   BREAKPOINTS GENERALES DE FUENTES
+   ========================================================================== */
+
+/* Móvil muy pequeño */
+@media (max-width: 400px){
+
+  .fs-xxs{
+    font-size: 0.55rem;
+  }
+
+  .fs-xs{
+    font-size: 0.6rem;
+  }
+
+  .fs-sm{
+    font-size: 0.7rem;
+  }
+}
+
+/* Móvil estándar */
+@media (max-width: 575.98px){
+
+  .fs-xs{
+    font-size: 0.7rem;
+  }
+
+  .fs-sm{
+    font-size: 0.8rem;
+  }
+}
+
+/* Tablet pequeña */
+@media (min-width: 576px) and (max-width: 767.98px){
+
+  .fs-xs{
+    font-size: 0.75rem;
+  }
+
+  .fs-sm{
+    font-size: 0.85rem;
+  }
+}
+
+/* Tablet y escritorio */
+@media (min-width: 768px){
+
+  .fs-xs{
+    font-size: 0.85rem;
+  }
+
+  .fs-sm{
+    font-size: 0.95rem;
+  }
+}
+
+/* ==========================================================================
+   UTILIDADES EXTRA PARA MÓVIL
+   ========================================================================== */
+
+@media (max-width: 767.98px){
+
+  .py-xs{
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .px-xs{
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .gap-xs{
+    gap: 0.25rem;
+  }
+
+  .table-sm,
+  .table-sm *{
+    font-size: 0.7rem !important;
+  }
+}
+
+/* ==========================================================================
+   TABLET Y MÓVIL
+   ========================================================================== */
+
+@media (max-width: 991.98px){
+
+  .hero-section{
+    text-align: center;
+    padding-top: 120px;
+  }
+
+  .hero-section h1{
+    font-size: 2rem;
+  }
+
+  .hero-section .lead{
+    font-size: .95rem;
+  }
 
   .hero-carousel-container{
     height: 350px;
@@ -100,5 +248,67 @@ footer a:hover{
   .hero-phone{
     max-height: 300px;
   }
+}
 
+/* ==========================================================================
+   MÓVIL
+   ========================================================================== */
+
+@media (max-width: 768px){
+
+  .producto-img{
+    height: 130px;
+  }
+
+  .producto-card .card-body{
+    padding: .75rem;
+  }
+
+  .producto-card h6{
+    font-size: .8rem;
+  }
+
+  .producto-card h5{
+    font-size: .95rem;
+  }
+
+  footer{
+    text-align: center;
+  }
+
+  footer .d-flex{
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   MÓVIL PEQUEÑO
+   ========================================================================== */
+
+@media (max-width: 576px){
+
+  .navbar-brand img{
+    height: 42px;
+  }
+
+  .navbar .btn{
+    padding: .4rem .8rem;
+    font-size: .8rem;
+  }
+
+  .hero-section h1{
+    font-size: 1.7rem;
+  }
+
+  .hero-section .lead{
+    font-size: .85rem;
+  }
+
+  .hero-phone{
+    max-height: 250px;
+  }
+
+  .badge{
+    font-size: .65rem;
+  }
 }

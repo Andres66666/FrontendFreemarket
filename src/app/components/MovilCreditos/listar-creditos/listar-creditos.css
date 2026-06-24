@@ -1,0 +1,40 @@
+.table thead th {
+  font-weight: 600;
+  color: #212529;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.estado-pagado {
+  background-color: #d1e7dd;
+  color: #000 !important;
+  border: 1px solid #badbcc;
+}
+
+.estado-pagando {
+  background-color: #fff3cd;
+  color: #000 !important;
+  border: 1px solid #ffecb5;
+}
+
+.estado-pendiente {
+  background-color: #e2e3e5;
+  color: #000 !important;
+  border: 1px solid #d3d6d8;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.btn {
+  border-radius: 8px;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}

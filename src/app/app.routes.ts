@@ -35,6 +35,11 @@ import { Registrar } from './components/GestiosProductos/sucursales/registrar/re
 import { Editar } from './components/GestiosProductos/sucursales/editar/editar';
 import { Listar } from './components/GestiosProductos/sucursales/listar/listar';
 
+/* ================= CREDITOS ================= */
+import { ListarCreditos } from './components/MovilCreditos/listar-creditos/listar-creditos';
+import { RegistrarCredito } from './components/MovilCreditos/registrar-credito/registrar-credito';
+import { DetalleCredito } from './components/MovilCreditos/detalle-credito/detalle-credito';
+
 export const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'index', component: IndexComponent },
@@ -110,11 +115,24 @@ export const routes: Routes = [
       { path: 'prestamo', component: PrestamosComponent },
 
       
-      /* ================= PERMISOS ================= */
+      /* ================= Sucursales  ================= */
       { path: 'registrar-sucursales', component: Registrar },
       { path: 'editar-sucursales/:id', component: Editar },
       { path: 'listar-sucursales', component: Listar },
 
+      /* ================= CREDITOS ================= */
+      {
+        path: 'listar-creditos',
+        component: ListarCreditos,
+      },
+      {
+        path: 'registrar-credito',
+        component: RegistrarCredito,
+      },
+      {
+        path: 'detalle-credito/:id',
+        component: DetalleCredito,
+      },
       /* ================= DEFAULT ================= */
       { path: '', component: DashboardComponent }, // Cambiado: Usa DashboardComponent como default (asegúrate de que exista)
     ],

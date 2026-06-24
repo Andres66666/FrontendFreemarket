@@ -1,0 +1,166 @@
+<div class="container mt-4">
+  <!-- LOADING -->
+  @if(cargando){
+  <div class="text-center">
+    <div class="spinner-border"></div>
+  </div>
+  } @else {
+
+  <!-- CARD PRINCIPAL -->
+  <div class="card shadow">
+    <div class="card-header">
+      <h3>Crédito #{{credito.id}}</h3>
+    </div>
+
+    <div class="card-body">
+      <!-- CLIENTE + PRODUCTO -->
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Cliente</h5>
+          <p>{{credito.cliente.nombre}} {{credito.cliente.apellido}}</p>
+          <p>CI: {{credito.cliente.ci}}</p>
+          <p>Teléfono: {{credito.cliente.telefono}}</p>
+        </div>
+
+        <div class="col-md-6">
+          <h5>Producto</h5>
+          <p>{{credito.producto.nombre_producto}}</p>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- RESUMEN -->
+      <div class="row text-center">
+        <div class="col-md-3">
+          <div class="card resumen">
+            <h6>Total</h6>
+            <h4>{{credito.precio_total}} Bs</h4>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card resumen">
+            <h6>Pagado</h6>
+            <h4>{{getTotalPagado()}} Bs</h4>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card resumen">
+            <h6>Saldo</h6>
+            <h4>{{credito.saldo_pendiente}} Bs</h4>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card resumen">
+            <h6>Estado</h6>
+            <h4>{{credito.estado}}</h4>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- CUOTAS (MÁS IMPORTANTE ARRIBA) -->
+      <h5>Cuotas del Crédito</h5>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let c of cuotas">
+            <td>
+              <strong>#{{ c.numero }}</strong>
+            </td>
+
+            <td>{{ c.monto }} Bs</td>
+
+            <td>
+              <span class="badge bg-warning"> PENDIENTE </span>
+            </td>
+
+            <td>
+              <button
+                class="btn btn-success btn-sm"
+                [disabled]="creditoFinalizado"
+                (click)="registrarPagoCuota(c.numero, c.monto)"
+              >
+                Pagar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr />
+
+      <!-- FORMULARIO -->
+      <h5>Registrar Pago Manual</h5>
+
+      <form [formGroup]="formPago" (ngSubmit)="registrarPago()">
+        <div class="row">
+          <div class="col-md-4">
+            <input
+              type="number"
+              class="form-control"
+              formControlName="monto_pagado"
+              placeholder="Monto pagado"
+            />
+          </div>
+
+          <div class="col-md-6">
+            <input
+              class="form-control"
+              formControlName="observacion"
+              placeholder="Observación"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <button class="btn btn-success w-100">Guardar</button>
+          </div>
+        </div>
+      </form>
+
+      <hr />
+
+      <!-- HISTORIAL -->
+      <h5>Historial de Pagos</h5>
+
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Cuota</th>
+              <th>Monto</th>
+              <th>Fecha</th>
+              <th>Observación</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (pago of pagos; track pago.id) {
+            <tr>
+              <td>{{pago.numero_cuota}}</td>
+              <td>{{pago.monto_pagado}} Bs</td>
+              <td>{{pago.fecha_pago | date:'dd/MM/yyyy HH:mm'}}</td>
+              <td>{{pago.observacion}}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  }
+</div>
