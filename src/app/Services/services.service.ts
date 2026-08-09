@@ -40,7 +40,7 @@ interface LoginResponse {
 })
 export class ServicesService {
 /* private apiUrl = 'http://localhost:8000/api/'; */
-  private apiUrl = 'https://backendfreemarket-jecd.onrender.com/api/';
+  private apiUrl = 'https://backendfreemarket-p01c.onrender.com';
 
   
   private productosSubject = new BehaviorSubject<Producto[]>([]);
